@@ -1,0 +1,279 @@
+body {
+	color: #797979;
+	background: #FFFFFF;
+	font-family: "微软雅黑", "Microsoft Yahei", "PT Sans", Arial, serif;
+	padding: 0px !important;
+	margin: 0px !important;
+	font-size: 13px;
+}
+
+ul li {
+	list-style: none;
+}
+
+a,
+a:hover,
+a:focus {
+	text-decoration: none;
+	outline: none;
+}
+
+a:link {
+	background-color: transparent;
+}
+
+a:visited {
+	background-color: transparent;
+}
+
+a:hover {
+	background-color: transparent;
+}
+
+a:active {
+	background-color: transparent;
+}
+
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+	font-family: "微软雅黑", "Microsoft Yahei", "PT Sans", Arial, serif;
+}
+
+.user-head {
+	padding: 15px;
+	color: #fff;
+	min-height: 60px;
+}
+
+.user-head button {
+	margin-top: 3px;
+	background-color: #438fed;
+	border-color: #438fed;
+}
+
+.user-head .inbox-avatar {
+	width: 128px;
+	float: left;
+}
+
+.user-head .inbox-avatar img {
+	width: 100%;
+}
+
+.user-head span{
+	display: -webkit-inline-box; 
+	margin-top: 4px; 
+	margin-left: 20px; 
+	padding: .6em;
+	font-size: 14px;
+}
+
+.user-name {
+	display: inline-block;
+	margin-top: 20px;
+	width:100%;
+}
+
+.user-name h3 {
+	font-size: 18px;
+	margin-top: 0px;
+	margin-bottom: 0;
+	font-weight: 300;
+	color: #438fed;
+}
+
+.user-name p {
+	font-size: 14px;
+	color: #666666;
+}
+
+.user-name p span {
+	font-size: 12px;
+	color: #999999;
+}
+
+.twt-feed {
+	border-radius: 10px 10px 10px 10px;
+	-webkit-border-radius: 10px 10px 10px 10px;
+	color: #FFFFFF;
+	padding: 5px 10px 5px 10px;
+	position: relative;
+	text-align: center;
+}
+
+.twt-feed.blue-bg {
+	background: -ms-linear-gradient(right top, #6a74ec, #00c7fe);
+	/* IE 10 */
+	background: -moz-linear-gradient(right top, #6a74ec, #00c7fe);
+	/*火狐*/
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6a74ec), to(#00c7fe));
+	/*谷歌*/
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6a74ec), to(#00c7fe));
+	/* Safari 4-5, Chrome 1-9*/
+	background: -webkit-linear-gradient(right top, #6a74ec, #00c7fe);
+	/*Safari5.1 Chrome 10+*/
+	background: -o-linear-gradient(right top, #6a74ec, #00c7fe);
+	/*Opera 11.10+*/
+}
+
+.twt-feed h1 {
+	font-weight: 300;
+	margin-top: 5px;
+	font-size: 24px;
+}
+
+.twt-feed p {
+	font-size: 12px;
+	font-weight: 300;
+	margin-top: 4px;
+}
+
+.twt-feed h1 span {
+	font-size: 12px;
+}
+
+.twt-category {
+	display: inline-block;
+	width: 100%;
+}
+
+.weather-category {
+	/*padding: 10px 0;*/
+	color: #74829C;
+}
+
+.twt-category ul {
+	padding-left: 0px;
+}
+
+.twt-category h5{
+	font-size:9px ;
+}
+
+
+.twt-category ul li {
+	color: #FFFFFF;
+	font-size: 14px;
+}
+
+ul, ol {
+    margin-top: 0;
+    margin-bottom: 0px;
+}
+
+.weather-category ul li {
+	display: inline-block;
+	width: 48%;
+	text-align: center;
+	display: inline-block;
+}
+
+.nav-tabs .col-xs-6 {
+	padding-left: 0px;
+	padding-right: 0px;
+	text-align: center;
+}
+
+.tab-pane h3 {
+	font-size: 16px;
+	color: #666666;
+	margin-top: 10px;
+}
+
+.tab-pane hr {
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.btn-lg,
+.btn-group-lg>.btn {
+	border-radius: 50px;
+}
+
+.btn-primary {
+	background-color: #428bca;
+	border-color: #357ebd;
+}
+
+.text-center .col-xs-6 {
+	float: none;
+}
+
+.text-center .btn-primary {
+	background-color: #00c7fe;
+	border-color: inherit;
+}
+
+.dingwei {
+	position: fixed;
+	bottom: 0px;
+	left: 30px;
+	right: 30px;
+	background-color: #FFFFFF;
+	padding-top: 10px;
+}
+
+.input-group {
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+.col-lg-12 .btn-primary {
+	background-color: #00c7fe;
+	border-color: inherit;
+}
+
+.img-box {
+	text-align: center;
+	margin-top: 40px;
+}
+
+.input-group .form-control {
+	position: static;
+}
+
+.input {
+	padding: 5px;
+	margin: 0;
+	border: 1px solid #beceeb;
+}
+
+.clear {
+	display: none;
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	margin: 10px 0 0 -20px;
+	background: url(../img/clear.png);
+}
+
+.input::-ms-clear {
+	display: none;
+}
+
+.input:valid+.clear {
+	display: inline;
+}
+
+.taocan {
+	background: -webkit-linear-gradient(right top, #6a74ec, #00c7fe);
+	-webkit-border-radius: 10px 10px 10px 10px;
+	color: #FFFFFF;
+	padding: 5px 10px 5px 10px;
+}
+
+.taocan h3{
+	color: #FFFFFF;
+}

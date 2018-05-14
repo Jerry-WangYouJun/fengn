@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.HistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.model.UnicomHistory" >
+    <result column="iccid" property="iccid" jdbcType="VARCHAR" />
+    <result column="imsi" property="imsi" jdbcType="VARCHAR" />
+     <result column="money" property="money" jdbcType="DOUBLE" />
+    <result column="update_date" property="updateDate" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">  
+    insert into u_history_temp (iccid ,money,update_date ,remark  )  
+    values   
+    <foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.iccid},#{item.money},#{item.updateDate} , #{item.remark})  
+    </foreach>  
+  </insert>  
+  <insert id="insertData"  useGeneratedKeys="true">  
+  		insert into u_history  (  iccid , money ,update_date ,remark )  
+	     select distinct  iccid , money ,update_date  ,remark from u_history_temp 
+		  where iccid not in (select iccid  from  u_history ) 
+		  and update_date not in (select update_date  from  u_history)
+  </insert> 
+  <delete id="deleteAll" >
+	  delete from u_history_temp
+  </delete>
+</mapper>
