@@ -37,14 +37,14 @@ public class TreeController {
 	@Autowired
 	CardAgentService cardAgentService;
 
-	@RequestMapping("/tree")
+	@RequestMapping("/card")
 	public void getTreeData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
 			TreeNode treeNode = new TreeNode();
 			treeNode.setText("移动SIM卡管理");
 			getTreeDataBytype(session, response, request, "card", treeNode);
 	}
 	
-	@RequestMapping("/tree_unicom")
+	@RequestMapping("/card_unicom")
 	public void getUnicomTreeData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
 			TreeNode treeNode = new TreeNode();
 			treeNode.setText("联通SIM卡管理");

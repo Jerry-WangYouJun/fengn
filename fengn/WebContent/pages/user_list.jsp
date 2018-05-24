@@ -27,11 +27,31 @@
 			            <button id="btn_delete" type="button" class="btn btn-default" onclick="delDish()">  
 			                <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>删除  
 			            </button>  
+			            <button id="btn_delete" type="button" class="btn btn-default" onclick="add()">  
+			            	<span class="glyphicon glyphicon-plus" aria-hidden="true" ></span>新增
+			            </button>
 			        </div>  
 				  </div>
 			</div>
 		</div>
-	
+		
+			<div id="stack1" class="modal hide fade" tabindex="-1" data-focus-on="input:first">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						<h3>Stack One</h3>
+					</div>
+					<div class="modal-body">
+						<p>One fine body…</p>
+						<p>One fine body…</p>
+						<input type="text" class="m-wrap" data-tabindex="1">
+						<input type="text" class="m-wrap" data-tabindex="2">
+						<a class="btn green" data-toggle="modal" href="#stack2">Launch modal</a>
+					</div>
+					<div class="modal-footer">
+						<button type="button" data-dismiss="modal" class="btn">Close</button>
+						<button type="button" class="btn red">Ok</button>
+					</div>
+				</div>
 </body>
 <script type="text/javascript">
 		$(function(){
@@ -43,8 +63,8 @@
 			        sidePagination : "client", // 分页方式：client客户端分页，server服务端分页（*）  
 			        pagination : true, // 是否显示分页（*）  
 			        pageNumber: 1,    //如果设置了分页，首页页码  
-			        pageSize: 4,                       //每页的记录行数（*）  
-			        pageList: [10,30,60],        //可供选择的每页的行数（*）  
+			        pageSize: 50,                       //每页的记录行数（*）  
+			        pageList: [100,300,600],        //可供选择的每页的行数（*）  
 			        showRefresh : true, // 是否显示刷新按钮  
 			        clickToSelect : true, // 是否启用点击选中行  
 			        showToggle : false, // 是否显示详细视图和列表视图的切换按钮  
@@ -73,10 +93,8 @@
 			    });  
 		});
 		
-		function addUser(){
-			var path = "${basePath}/addInit";
-			document.getElementById('frameContent').src = path;
-			$('#dlg-frame').dialog('open');
+		function add(){
+			 $("#stack1").modal("show");
 		}
 		
 		function updateUser(){
@@ -136,4 +154,6 @@
 			return id;
 		}
 	</script>
+	
+		
 </html>

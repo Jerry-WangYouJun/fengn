@@ -17,7 +17,57 @@
 	<link href="${pageContext.request.contextPath}/media/css/fullcalendar.css" rel="stylesheet" type="text/css"/>
 	<link href="${pageContext.request.contextPath}/media/css/jqvmap.css" rel="stylesheet" type="text/css" media="screen"/>
 	<link href="${pageContext.request.contextPath}/media/css/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css" media="screen"/>
+	<script src="${pageContext.request.contextPath}/media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
 <title>Insert title here</title>
+<script type="text/javascript">
+		function getTreeData(datas){
+			var htmlStr = '' ;
+			for(var childNode in datas){
+				if(datas[childNode].children.length>0){
+					console.info(datas[childNode]);
+					  htmlStr += '<li><a ' 
+					  + 'onclick="addTab(\'' + datas[childNode].attributes.agentId + '\',\''
+					  +   datas[childNode].attributes.priUrl + '\',\'' +datas[childNode].text  +'\')"'
+					  + 'style="padding-left:25px" href="javascript:;">' + datas[childNode].text
+					  + '<span class="arrow"></span></a>'
+					  +'<ul class="sub-menu">' +  getTreeData(datas[childNode].children)
+					  +'</ul></li>';
+				}else{
+					 htmlStr += '<li><a ' 
+					  + 'onclick="addTab(\'' + datas[childNode].attributes.agentId + '\',\''
+					  +   datas[childNode].attributes.priUrl + '\',\'' +datas[childNode].text  +'\')"'
+					  + ' style="padding-left:25px" href="javascript:;">' + datas[childNode].text
+					  + '</a></li>';
+				}
+			  }
+			return htmlStr ;
+		}
+		
+		function getMenu(name){
+			$.ajax( {
+				url : "${pageContext.request.contextPath}/treeindex/" + name,
+				type : 'post',
+				dataType : 'json',
+				success : function(data) {
+					 var htmlStr = getTreeData(data[0].children);
+					 $("#" + name).html(htmlStr);
+				},
+				error : function(transport) {
+					$.messager.alert('提示', "系统产生错误,请联系管理员!", "error");
+				}
+			});
+		}
+		$(function(){
+			if("${groupId}"=="1" || "${groupId}"=="3"){
+				getMenu("card");
+				getMenu("kickback");
+			}
+			if("${groupId}"=="2" || "${groupId}"=="3"){
+				getMenu("card_unicom");
+				getMenu("kickback_unicom");
+			}
+		});
+</script>
 </head>
 <body class="page-header-fixed">
 	<!-- BEGIN HEADER -->
@@ -29,240 +79,114 @@
 				<a class="brand" href="index.html">
 					<img src="${pageContext.request.contextPath}/media/image/logo.png" alt="logo"/>
 				</a>
-				<!-- END LOGO -->
-
-				<!-- BEGIN RESPONSIVE MENU TOGGLER -->
 
 				<a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
-
 					<img src="${pageContext.request.contextPath}/media/image/menu-toggler.png" alt="" />
-
 				</a>          
 
 				<!-- END RESPONSIVE MENU TOGGLER -->            
 
 				<!-- BEGIN TOP NAVIGATION MENU -->              
-
 				<ul class="nav pull-right">
-
-
 					<li class="dropdown user">
-
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-
 						<img alt="" src="${pageContext.request.contextPath}/media/image/avatar1_small.jpg" />
-
-						<span class="username">Bob Nilson</span>
-
+						<span class="username">${sessionScope.user}</span>
 						<i class="icon-angle-down"></i>
-
 						</a>
-
 						<ul class="dropdown-menu">
-
 							<li><a href="extra_profile.html"><i class="icon-user"></i> </a></li>
-
 							<li><a href="page_calendar.html"><i class="icon-calendar"></i> My Calendar</a></li>
-
 							<li><a href="inbox.html"><i class="icon-envelope"></i> My Inbox(3)</a></li>
-
 							<li><a href="#"><i class="icon-tasks"></i> My Tasks</a></li>
-
 							<li class="divider"></li>
-
 							<li><a href="extra_lock.html"><i class="icon-lock"></i> Lock Screen</a></li>
-
 							<li><a href="login.html"><i class="icon-key"></i> Log Out</a></li>
-
 						</ul>
-
 					</li>
-
-					<!-- END USER LOGIN DROPDOWN -->
-
 				</ul>
-
-				<!-- END TOP NAVIGATION MENU --> 
-
 			</div>
-
 		</div>
-
 		<!-- END TOP NAVIGATION BAR -->
-
 	</div>
-
 	<!-- END HEADER -->
 
 	<!-- BEGIN CONTAINER -->
-
 	<div class="page-container">
-
 		<!-- BEGIN SIDEBAR -->
-
 		<div class="page-sidebar nav-collapse collapse">
-
 			<!-- BEGIN SIDEBAR MENU -->        
-
 			<ul class="page-sidebar-menu">
-
 				<li>
-
 					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-
 					<div class="sidebar-toggler hidden-phone"></div>
-
 					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-
 				</li>
-
 				<li class="start active ">
-
-					<a href="index.html">
-
-					<i class="icon-home"></i> 
-
-					<span class="title">Dashboard</span>
-
-					<span class="selected"></span>
-
+					<a href="index.html"><i class="icon-home"></i> 
+						<span class="title">Dashboard</span>
+						<span class="selected"></span>
 					</a>
 
 				</li>
 
 				<li class="">
-
 					<a href="javascript:;">
-
-					<i class="icon-cogs"></i> 
-
-					<span class="title">基本信息管理</span>
-
-					<span class="arrow "></span>
-
+						<i class="icon-cogs"></i> 
+						<span class="title">基本信息管理</span>
+						<span class="arrow "></span>
 					</a>
-
 					<ul class="sub-menu">
-
 						<li >
-
-							<a href="#" onclick='addTab("user","${pageContext.request.contextPath}/pages/user_list.jsp","用户管理")'>
-
+							<a href="#" onclick='addTab("user","${pageContext.request.contextPath}/pages/user_list.jsp","代理商管理")'>
 							代理商管理</a>
-
 						</li>
-
 						<li >
 							<a href="#" onclick='addTab("user2","${pageContext.request.contextPath}/jsp/table_advanced.html","用户管理2")'>
 							套餐管理</a>
 						</li>
 					</ul>
-
 				</li>
 
-
-
-
-
-				<li>
-
+				<li >
 					<a class="active" href="javascript:;">
-
-					<i class="icon-sitemap"></i> 
-
-					<span class="title">3 Level Menu</span>
-
+					<!-- <i class="icon-sitemap"></i>  -->
+					<span class="title">移动卡信息</span>
 					<span class="arrow "></span>
-
 					</a>
-
-					<ul class="sub-menu">
-						<li>
-							<a href="javascript:;">
-							Item 1
-							<span class="arrow"></span>
-							</a>
-							<ul class="sub-menu">
-								<li><a href="#">Sample Link 1</a></li>
-								<li><a href="#">Sample Link 2</a></li>
-								<li><a href="#">Sample Link 3</a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="javascript:;">
-							Item 1
-							<span class="arrow"></span>
-							</a>
-							<ul class="sub-menu">
-								<li><a href="#">Sample Link 1</a></li>
-								<li><a href="#">Sample Link 1</a></li>
-								<li><a href="#">Sample Link 1</a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="#">
-							Item 3
-							</a>
-						</li>
+					<ul class="sub-menu" id="card">
+						  
 					</ul>
 				</li>
-
 				<li>
-					<a href="javascript:;">
-					<i class="icon-folder-open"></i> 
-					<span class="title">4 Level Menu</span>
+					<a class="active" href="javascript:;">
+					<!-- <i class="icon-sitemap"></i>  -->
+					<span class="title">移动返佣信息</span>
 					<span class="arrow "></span>
 					</a>
-					<ul class="sub-menu">
-						<li>
-							<a href="javascript:;">
-							<i class="icon-cogs"></i> 
-							Item 1
-							<span class="arrow"></span>
-							</a>
-							<ul class="sub-menu">
-								<li>
-									<a href="javascript:;">
-									<i class="icon-user"></i>
-									Sample Link 1
-									<span class="arrow"></span>
-									</a>
-									<ul class="sub-menu">
-										<li><a href="#"><i class="icon-remove"></i> Sample Link 1<span class="arrow"></span></a>
-											<ul class="sub-menu">
-												<li><a href="#"><i class="icon-remove"></i> Sample Link 1<span class="arrow"></span></a></li>
-												<li><a href="#"><i class="icon-pencil"></i> Sample Link 1</a></li>
-												<li><a href="#"><i class="icon-edit"></i> Sample Link 1</a></li>
-											</ul>	
-										</li>
-										<li><a href="#"><i class="icon-pencil"></i> Sample Link 1</a></li>
-										<li><a href="#"><i class="icon-edit"></i> Sample Link 1</a></li>
-									</ul>
-								</li>
-								<li><a href="#"><i class="icon-user"></i>  Sample Link 1</a></li>
-								<li><a href="#"><i class="icon-external-link"></i>  Sample Link 2</a></li>
-								<li><a href="#"><i class="icon-bell"></i>  Sample Link 3</a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="javascript:;">
-							<i class="icon-globe"></i> 
-							Item 2
-							<span class="arrow"></span>
-							</a>
-							<ul class="sub-menu">
-								<li><a href="#"><i class="icon-user"></i>  Sample Link 1</a></li>
-								<li><a href="#"><i class="icon-external-link"></i>  Sample Link 1</a></li>
-								<li><a href="#"><i class="icon-bell"></i>  Sample Link 1</a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="#">
-							<i class="icon-folder-open"></i>
-							Item 3
-							</a>
-						</li>
+					<ul class="sub-menu" id="kickback">
+						  
+					</ul>	
+				</li>
+				<li >
+					<a class="active" href="javascript:;">
+					<!-- <i class="icon-sitemap"></i>  -->
+					<span class="title">联通卡信息</span>
+					<span class="arrow "></span>
+					</a>
+					<ul class="sub-menu" id="card_unicom">
+						  
 					</ul>
+				</li>
+				<li>
+					<a class="active" href="javascript:;">
+					<!-- <i class="icon-sitemap"></i>  -->
+					<span class="title">联通返佣信息</span>
+					<span class="arrow "></span>
+					</a>
+					<ul class="sub-menu" id="kickback_unicom">
+						  
+					</ul>	
 				</li>
 			</ul>
 
@@ -405,26 +329,18 @@
 	<!-- END FOOTER -->
 
 	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-
 	<!-- BEGIN CORE PLUGINS -->
-
-	<script src="${pageContext.request.contextPath}/media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
-
 	<script src="${pageContext.request.contextPath}/media/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
-
 	<!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-
 	<script src="${pageContext.request.contextPath}/media/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>      
 	<script src="${pageContext.request.contextPath}/media/js/bootstrap.min.js" type="text/javascript"></script>
 	<script src="${pageContext.request.contextPath}/media/js/jquery.slimscroll.min.js" type="text/javascript"></script>
 	<script src="${pageContext.request.contextPath}/media/js/jquery.blockui.min.js" type="text/javascript"></script>  
 	<script src="${pageContext.request.contextPath}/media/js/jquery.cookie.min.js" type="text/javascript"></script>
 	<script src="${pageContext.request.contextPath}/media/js/jquery.uniform.min.js" type="text/javascript" ></script>
-
 	<!-- END CORE PLUGINS -->
 
 	<!-- BEGIN PAGE LEVEL PLUGINS -->
-
 	<script src="${pageContext.request.contextPath}/media/js/jquery.vmap.js" type="text/javascript"></script>   
 	<script src="${pageContext.request.contextPath}/media/js/jquery.vmap.russia.js" type="text/javascript"></script>
 	<script src="${pageContext.request.contextPath}/media/js/jquery.vmap.world.js" type="text/javascript"></script>
@@ -452,12 +368,13 @@
 	<!-- END PAGE LEVEL SCRIPTS -->  
 
 	<script>
+	
+		
 
 		jQuery(document).ready(function() {    
 
 		   App.init(); // initlayout and core plugins
 		   Index.init();
-		   Index.initJQVMAP(); // init index page's custom scripts
 		   Index.initCalendar(); // init index page's custom scripts
 		   Index.initCharts(); // init index page's custom scripts
 		   Index.initChat();

@@ -155,30 +155,30 @@ var App = function () {
     }
 
     var handleSidebarMenu = function () {
-        jQuery('.page-sidebar').on('click', 'li > a', function (e) {
-                if ($(this).next().hasClass('sub-menu') == false) {
+        jQuery('.page-sidebar').on('click', 'li span', function (e) {
+                if ($(this).parent().next().hasClass('sub-menu') == false) {
                     if ($('.btn-navbar').hasClass('collapsed') == false) {
                         $('.btn-navbar').click();
                     }
                     return;
                 }
 
-                var parent = $(this).parent().parent();
+                var parent = $(this).parent().parent().parent();
 
                 parent.children('li.open').children('a').children('.arrow').removeClass('open');
                 parent.children('li.open').children('.sub-menu').slideUp(200);
                 parent.children('li.open').removeClass('open');
 
-                var sub = jQuery(this).next();
+                var sub = jQuery(this).parent().next();
                 if (sub.is(":visible")) {
-                    jQuery('.arrow', jQuery(this)).removeClass("open");
-                    jQuery(this).parent().removeClass("open");
+                    jQuery('.arrow', jQuery(this).parent()).removeClass("open");
+                    jQuery(this).parent().parent().removeClass("open");
                     sub.slideUp(200, function () {
                             handleSidebarAndContentHeight();
                         });
                 } else {
-                    jQuery('.arrow', jQuery(this)).addClass("open");
-                    jQuery(this).parent().addClass("open");
+                    jQuery('.arrow', jQuery(this).parent()).addClass("open");
+                    jQuery(this).parent().parent().addClass("open");
                     sub.slideDown(200, function () {
                             handleSidebarAndContentHeight();
                         });

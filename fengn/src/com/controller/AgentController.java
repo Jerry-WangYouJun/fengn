@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,14 +21,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.common.CodeUtil;
 import com.common.ContextString;
 import com.model.Agent;
-import com.model.Grid;
 import com.model.Pagination;
 import com.model.QueryData;
 import com.model.User;
 import com.service.AgentService;
 import com.service.UserService;
-
-import net.sf.json.JSONObject;
 
 @RequestMapping("/agent")
 @Controller
@@ -51,9 +50,6 @@ public class AgentController {
 		Pagination page =  new Pagination(pageNo, pageSize) ;
 	    CodeUtil.initPagination(page);
 		List<User> list = userService.queryList(user , page );
-		for(int i= 0 ; i < 5 ; i++){
-			 list.addAll(list);
-		}
 		return list;
 	}
 	
