@@ -138,11 +138,11 @@
 					</a>
 					<ul class="sub-menu">
 						<li >
-							<a href="#" onclick='addTab("user","${pageContext.request.contextPath}/pages/user_list.jsp","代理商管理")'>
+							<a href="#" style="padding-left:25px" onclick='addTab("user","${pageContext.request.contextPath}/pages/user_list.jsp","代理商管理")'>
 							代理商管理</a>
 						</li>
 						<li >
-							<a href="#" onclick='addTab("user2","${pageContext.request.contextPath}/jsp/table_advanced.html","用户管理2")'>
+							<a href="#" style="padding-left:25px" onclick='addTab("pac","${pageContext.request.contextPath}/pages/pac_list.jsp","套餐管理")'>
 							套餐管理</a>
 						</li>
 					</ul>

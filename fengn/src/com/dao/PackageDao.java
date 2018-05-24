@@ -27,7 +27,7 @@ public class PackageDao {
 		String sql = "select  *  from t_package where 1=1  " + whereSQL(qo) ;
 		String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
          final  List<Packages> list =   new ArrayList<>();
-         jdbcTemplate.query(finalSql, new RowMapper() {
+         jdbcTemplate.query(sql, new RowMapper() {
 			public Object mapRow(ResultSet rs, int arg1) throws SQLException {
 					Packages  vo = new Packages(); 
 					vo.setId(rs.getInt("id"));

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.common.CodeUtil;
@@ -28,28 +29,15 @@ public class PackageController {
 	@Autowired
 	PackagesService service;
 
+	@ResponseBody
 	@RequestMapping("/query")
-	public void quetyList(Packages pac, HttpSession session, String pageNo, String pageSize,
+	public List<Packages> quetyList(Packages pac, HttpSession session, String pageNo, String pageSize,
 			HttpServletResponse response) {
 		// System.out.println(userName);
-		Grid grid = new Grid();
 		Pagination page = new Pagination(pageNo, pageSize, 100);
 		CodeUtil.initPagination(page);
 		List<Packages> list = service.queryList(pac, page);
-		grid.setTotal(Long.valueOf(service.queryCardTotal(pac)));
-		grid.setRows(list);
-		PrintWriter out;
-		try {
-			response.setContentType("text/html;charset=UTF-8");
-			out = response.getWriter();
-			JSONObject json = new JSONObject();
-			json = JSONObject.fromObject(grid);
-			out.println(json);
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		return list;
 	}
 
 	@RequestMapping("/addInit")
