@@ -1,16 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@include file="/common.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html id="a1">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-theme.min.css">
-<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script> 
-<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-table.min.css" />  
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap-table.js"></script>
 <title>用户管理</title>
 	
 
@@ -21,13 +15,13 @@
 				  <div class="panel-body" id="a3" style="display:block">
 				  	    <table id="infoTable"> </table>
 					<div id="toolbar" class="btn-group">  
-			            <button id="btn_edit" type="button" class="btn btn-default" onclick="updateDish()">  
+			            <button id="btn_edit" type="button" class="btn btn-default" onclick="updateData()">  
 			                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>修改  
 			            </button>  
 			            <button id="btn_delete" type="button" class="btn btn-default" onclick="delDish()">  
 			                <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>删除  
 			            </button>  
-			            <button id="btn_delete" type="button" class="btn btn-default" onclick="add()">  
+			            <button id="btn_delete" type="button" class="btn btn-default" onclick="addInfo()">  
 			            	<span class="glyphicon glyphicon-plus" aria-hidden="true" ></span>新增
 			            </button>
 			        </div>  
@@ -35,25 +29,71 @@
 			</div>
 		</div>
 		
-			<div id="stack1" class="modal hide fade" tabindex="-1" data-focus-on="input:first">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-						<h3>Stack One</h3>
-					</div>
-					<div class="modal-body">
-						<p>One fine body…</p>
-						<p>One fine body…</p>
-						<input type="text" class="m-wrap" data-tabindex="1">
-						<input type="text" class="m-wrap" data-tabindex="2">
-						<a class="btn green" data-toggle="modal" href="#stack2">Launch modal</a>
-					</div>
-					<div class="modal-footer">
-						<button type="button" data-dismiss="modal" class="btn">Close</button>
-						<button type="button" class="btn red">Ok</button>
-					</div>
+	<div class="modal fade" id="myModal" tabindex="-2" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="height: ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">支出管理</h4>
 				</div>
+				<div class="modal-body">
+					<form id="dataForm">
+					 <input  class="form-control" name="id" type="hidden"></input>
+					 <input  class="form-control" name="user" type="hidden"></input>
+					 <input  class="form-control" name="actordate" type="hidden"></input>
+					 <div class="form-group" >
+					            <label class="control-label">发生时间：</label>  
+					            <!--指定 date标记-->  
+					            <div class='input-group date' id='datetimepicker1'  >  
+					                <input type='text' class="form-control" readonly name="actordate" />  
+					                <span class="input-group-addon" >  
+					                    <span class="glyphicon glyphicon-calendar"></span>  
+					                </span>  
+					            </div>   
+				        </div> 
+						<div class="form-group">
+							<label for="recipient-name" class="control-label">支出费用:</label> <input
+								type="text" class="form-control" name="money">
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label">支出类型:</label> 
+								<select name="modeid" class="form-control">
+										 <c:forEach items="${modelList}" var="mode">
+										 	<c:if test="${ mode.parenttype eq '支出'}">
+										 		<option value="${mode.id}">${mode.typename}</option>
+										 	</c:if>
+										 		
+										 </c:forEach>
+								</select>
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label">支出人:</label> <input
+								class="form-control" name="actor"></input>
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label">所在账户:</label> 
+								<select name="account" class="form-control">
+										 <c:forEach items="${accountList}" var="account">
+										 		<option value="${account.id}">${account.aname}</option>
+										 </c:forEach>
+								</select>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="subInfo()">提交更改</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
 </body>
 <script type="text/javascript">
+			
 		$(function(){
 			    $('#infoTable').bootstrapTable({  
 			        url : '${basePath}/agent/user_query', // 请求后台的URL（*）            
@@ -92,67 +132,6 @@
 			        silent : true, // 刷新事件必须设置  
 			    });  
 		});
-		
-		function add(){
-			 $("#stack1").modal("show");
-		}
-		
-		function updateUser(){
-			var id = getChecked();
-			if (id > 0) {
-				var path = "${basePath}/updateInit/" + id;
-				document.getElementById('frameContent').src = path;
-				$('#dlg-frame').dialog('open');
-			}
-		}
-		
-		function deleteUser(){
-			var del= confirm("确认删除？");
-			if(!del){
-				return false;
-			}
-			var id = getChecked();
-			if (id > 0) {
-				var path = "${basePath}/user_delete/" + id;
-				$.ajax( {
-					url : path,
-					type : 'post',
-					data : $("#dataForm").serialize(),
-					dataType : 'json',
-					success : function(data) {
-						if(data.success){
-							$.messager.alert('提示',data.msg);
-							doSearch();
-						}else{
-							$.messager.alert('提示',data.msg,"error");
-						}
-						
-					},
-					error : function(transport) {
-						$.messager.alert('提示', "系统产生错误,请联系管理员!", "error");
-					}
-				});
-			}
-		}
-		
-		function getChecked() {
-			var id;
-			var checkTotal = 0;
-			$("input[type=checkbox]").each(function() {
-				if (this.checked) {
-					id = $(this).val();
-					checkTotal++;
-				}
-			});
-			if (checkTotal == 0) {
-				$.messager.alert('提示', "请先选中一行(只允许单行操作)", 'error');
-				return 0;
-			} else if (checkTotal > 1) {
-				$.messager.alert('提示', "只能选中一行(只允许单行操作)", 'error');
-				return 0;
-			}
-			return id;
-		}
 	</script>
 	
 		
