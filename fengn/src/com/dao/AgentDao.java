@@ -109,20 +109,20 @@ public class AgentDao {
 	}
 
 
-	public int addAndGetId(final Agent agent) {
-	    final String sql = "insert into orders(name, address,createtime,totalprice,status) values(?,?,?,?,?)";
-	    KeyHolder keyHolder = new GeneratedKeyHolder();
-	    jdbcTemplate.update(new PreparedStatementCreator() {
-	        @Override
-	        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-	        	int parentId = queryPrentIdByCode(agent.getCode()) ;
-	            PreparedStatement ps  = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-	           
-	            return ps;
-	        }
-	    }, keyHolder);
-	    return keyHolder.getKey().intValue();
-	}
+//	private int addAndGetId(final Agent agent) {
+//	    final String sql = "insert into orders(name, address,createtime,totalprice,status) values(?,?,?,?,?)";
+//	    KeyHolder keyHolder = new GeneratedKeyHolder();
+//	    jdbcTemplate.update(new PreparedStatementCreator() {
+//	        @Override
+//	        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+//	        	int parentId = queryPrentIdByCode(agent.getCode()) ;
+//	            PreparedStatement ps  = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//	           
+//	            return ps;
+//	        }
+//	    }, keyHolder);
+//	    return keyHolder.getKey().intValue();
+//	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String getMaxCode(String createrCode , int parentId){

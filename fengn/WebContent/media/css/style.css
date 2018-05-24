@@ -529,7 +529,7 @@ ul.page-sidebar-menu > li.active > a .selected {
    margin-top: 1px;
    margin-right: 5px;
    display: inline;
-   font-size: 16px;
+   font-size: 26px;
    font-family: FontAwesome;
    height: auto;
    content: "\f104";
@@ -544,7 +544,7 @@ ul.page-sidebar-menu > li > a > .arrow.open:before {
    display: inline;
    font-family: FontAwesome;
    height: auto;
-   font-size: 16px;
+   font-size: 26px;
    content: "\f107";
    font-weight: 300;
    text-shadow:none;
@@ -592,7 +592,7 @@ ul.page-sidebar-menu > li > ul.sub-menu  li > a > .arrow:before   {
    margin-top: 1px;
    margin-right: 20px;
    display: inline;
-   font-size: 16px;
+   font-size: 26px;
    font-family: FontAwesome;
    height: auto;
    content: "\f104";
@@ -607,7 +607,7 @@ ul.page-sidebar-menu > li > ul.sub-menu  li > a > .arrow.open:before {
    display: inline;
    font-family: FontAwesome;
    height: auto;
-   font-size: 16px;
+   font-size: 26px;
    content: "\f107";
    font-weight: 300;
    text-shadow:none;

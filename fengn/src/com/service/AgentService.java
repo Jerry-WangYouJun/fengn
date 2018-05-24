@@ -53,12 +53,25 @@ public class AgentService {
 			  if(agentId.equals(agent.getId())){
 				  TreeNode  node =  new TreeNode();
 				  node.setId(agent.getId()+"");
-				  node.setText(agent.getName());
-//				  String timeType = "" ;
-//				  if("kickback".equals(urlType)) {
-//						timeType = "?timeType=0";
-//				  }
-				  node.getAttributes().setPriUrl(request.getContextPath() +  "/treeindex/" + urlType + "/" + agent.getId() ); 
+				  String text = "" ;
+				  switch (urlType) {
+				case "card":
+					text = "移动卡-"+ agent.getName() ;
+					break;
+				case "unicom_card":
+					text = "联通卡-"+ agent.getName() ;
+					break;
+				case "kickback":
+					text = "移动返佣-"+ agent.getName() ;
+					break;
+				case "kickback_unicom":
+					text = "联通返佣-"+ agent.getName() ;
+					break;
+				default:
+					break;
+				}
+				  node.setText(text);
+				  node.getAttributes().setPriUrl(request.getContextPath() +  "/pages/" + urlType + "_list.jsp" ); 
 				  node.getAttributes().setAgentId(agent.getId());
 				  node.getAttributes().setUrlType(urlType);
 				  List<Agent> firstListTemp = new ArrayList<>();

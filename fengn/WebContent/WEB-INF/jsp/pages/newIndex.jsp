@@ -26,7 +26,7 @@
 				if(datas[childNode].children.length>0){
 					console.info(datas[childNode]);
 					  htmlStr += '<li><a ' 
-					  + 'onclick="addTab(\'' + datas[childNode].attributes.agentId + '\',\''
+					  + 'onclick="addTab(\''+datas[childNode].attributes.urlType +'_' + datas[childNode].attributes.agentId + '\',\''
 					  +   datas[childNode].attributes.priUrl + '\',\'' +datas[childNode].text  +'\')"'
 					  + 'style="padding-left:25px" href="javascript:;">' + datas[childNode].text
 					  + '<span class="arrow"></span></a>'
@@ -34,7 +34,7 @@
 					  +'</ul></li>';
 				}else{
 					 htmlStr += '<li><a ' 
-					  + 'onclick="addTab(\'' + datas[childNode].attributes.agentId + '\',\''
+					  + 'onclick="addTab(\''+datas[childNode].attributes.agentId +'_' + datas[childNode].attributes.agentId + '\',\''
 					  +   datas[childNode].attributes.priUrl + '\',\'' +datas[childNode].text  +'\')"'
 					  + ' style="padding-left:25px" href="javascript:;">' + datas[childNode].text
 					  + '</a></li>';
