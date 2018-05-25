@@ -70,7 +70,7 @@ public class UserController {
 		session.removeAttribute("user");
 		session.removeAttribute("groupId");
 		session.removeAttribute("agentId");
-		return "/agent/login";
+		return "pages/login";
 	}
 	
 	@RequestMapping("/user_query")

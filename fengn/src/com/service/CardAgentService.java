@@ -15,14 +15,9 @@ import com.model.InfoVo;
 import com.model.Pagination;
 import com.model.QueryData;
 
+
 @Service
 public class CardAgentService {
-	   private final String KICKBACK_SQL ="select h.iccid , h.money , c.packageType "
-	   		+ ", h.update_date , h.money - IFNULL(p.cost,u.cost)  kickback ,h.orderNo "
-				+ "from history h , cmtp c , card_agent a , a_agent u "
-				+ " left join t_package p on p.id=u.type "
-				+ " where h.iccid = c.iccid and c.iccid = a.iccid "
-				+ " and  u.id = a.agentid  and  u.id = " ;
 		 @Autowired
 		 DataMoveDao dao ;
 		 public List<InfoVo> queryCardInfo(Integer agentid , Pagination page, QueryData qo ){
@@ -74,7 +69,12 @@ public class CardAgentService {
 
 		public List<Map<String,String>> queryKickbackInfo(Integer id , QueryData qo ,  Pagination page , int timeType) {
 			List<Map<String,String>>  list = new ArrayList<>();
-			String sql = KICKBACK_SQL + id  ;
+			String sql = "select h.iccid , h.money , c.packageType "
+			   		+ ", h.update_date , h.money - IFNULL(p.cost,u.cost)  kickback ,h.orderNo , u.name "
+					+ "from history h , cmtp c , card_agent a , a_agent u "
+					+ " left join t_package p on p.id=u.type "
+					+ " where h.iccid = c.iccid and c.iccid = a.iccid "
+					+ " and  u.id = a.agentid  and u.code like  CONCAT((select code from a_agent where id = " + id   + "),'%' ) " ;
 			if(StringUtils.isNotEmpty(qo.getDateStart())){
 				 sql += " and h.update_date >= '" + qo.getDateStart() + "'" ;
 			}

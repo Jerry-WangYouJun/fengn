@@ -5,9 +5,10 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,15 +18,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.common.CodeUtil;
 import com.model.Agent;
-import com.model.Grid;
 import com.model.Pagination;
 import com.model.QueryData;
-import com.model.UnicomInfoVo;
 import com.service.UnicomAgentService;
 import com.service.UnicomCardAgentService;
 import com.service.UserService;
-
-import net.sf.json.JSONObject;
 
 @RequestMapping("/unicom")
 @Controller
@@ -39,32 +36,6 @@ public class UnicomAgentController {
 	@Autowired
 	UnicomCardAgentService cardAgentService;
 	
-	
-	@RequestMapping("/card_query/{agentId}")
-	public void queryCard(@PathVariable("agentId") Integer agentId, HttpServletResponse response, 
-			HttpServletRequest request  ,HttpSession session , QueryData qo) {
-		String pageNo = request.getParameter("pageNo");
-		String pageSize = request.getParameter("pageSize");
-		//System.out.println(userName);
-		Grid grid = new Grid();
-		Pagination page =  new Pagination(pageNo, pageSize , 100) ;
-	    CodeUtil.initPagination(page);
-	    List<UnicomInfoVo>  list = cardAgentService.queryCardInfo(agentId , page , qo);
-		grid.setTotal(Long.valueOf(cardAgentService.queryCardTotal(agentId  , qo)));
-		grid.setRows(list);
-		PrintWriter out;
-			try {
-				response.setContentType("text/html;charset=UTF-8");
-				out = response.getWriter();
-				JSONObject json = new JSONObject();
-				json = JSONObject.fromObject(grid);
-				out.println(json);
-				out.flush();
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	}
 	
 	@RequestMapping("/card_move")
 	public void moveCard(String iccids , String agentid ,HttpServletResponse response  ){

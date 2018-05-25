@@ -64,13 +64,14 @@ public class AgentService {
 				case "kickback":
 					text = "移动返佣-"+ agent.getName() ;
 					break;
-				case "kickback_unicom":
+				case "unicom_kickback":
 					text = "联通返佣-"+ agent.getName() ;
 					break;
 				default:
 					break;
 				}
 				  node.setText(text);
+				  node.setMenu(agent.getName());
 				  node.getAttributes().setPriUrl(request.getContextPath() +  "/pages/" + urlType + "_list.jsp" ); 
 				  node.getAttributes().setAgentId(agent.getId());
 				  node.getAttributes().setUrlType(urlType);
@@ -90,12 +91,30 @@ public class AgentService {
 			 for(Agent agent : listTemp){
 				 TreeNode tn = new TreeNode();
 					tn.setId(agent.getId() + "");
-					tn.setText(agent.getName());
+					String text = "" ;
+					  switch (urlType) {
+					case "card":
+						text = "移动卡-"+ agent.getName() ;
+						break;
+					case "unicom_card":
+						text = "联通卡-"+ agent.getName() ;
+						break;
+					case "kickback":
+						text = "移动返佣-"+ agent.getName() ;
+						break;
+					case "kickback_unicom":
+						text = "联通返佣-"+ agent.getName() ;
+						break;
+					default:
+						break;
+					}
+					  tn.setText(text);
+					  tn.setMenu(agent.getName());
 					String timeType = "" ;
 					if("kickback".equals(urlType)) {
 						timeType = "?timeType=0";
 					}
-					tn.getAttributes().setPriUrl(request.getContextPath() + "/treeindex/" + urlType + "/" + agent.getId() + timeType); 
+					tn.getAttributes().setPriUrl(request.getContextPath() +  "/pages/" + urlType + "_list.jsp" ); 
 					tn.getAttributes().setAgentId(agent.getId());
 					tn.getAttributes().setUrlType(urlType);
 					if(mapTree.containsKey(agent.getId())){

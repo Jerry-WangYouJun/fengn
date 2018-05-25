@@ -24,23 +24,25 @@
 			var htmlStr = '' ;
 			for(var childNode in datas){
 				if(datas[childNode].children.length>0){
-					console.info(datas[childNode]);
 					  htmlStr += '<li><a ' 
-					  + 'onclick="addTab(\''+datas[childNode].attributes.urlType +'_' + datas[childNode].attributes.agentId + '\',\''
-					  +   datas[childNode].attributes.priUrl + '\',\'' +datas[childNode].text  +'\')"'
-					  + 'style="padding-left:25px" href="javascript:;">' + datas[childNode].text
+					  + getTabData(datas[childNode])
+					  + 'style="padding-left:25px" href="javascript:;">' + datas[childNode].menu
 					  + '<span class="arrow"></span></a>'
 					  +'<ul class="sub-menu">' +  getTreeData(datas[childNode].children)
 					  +'</ul></li>';
 				}else{
 					 htmlStr += '<li><a ' 
-					  + 'onclick="addTab(\''+datas[childNode].attributes.agentId +'_' + datas[childNode].attributes.agentId + '\',\''
-					  +   datas[childNode].attributes.priUrl + '\',\'' +datas[childNode].text  +'\')"'
-					  + ' style="padding-left:25px" href="javascript:;">' + datas[childNode].text
+					  + getTabData(datas[childNode])
+					  + ' style="padding-left:25px" href="javascript:;">' + datas[childNode].menu
 					  + '</a></li>';
 				}
 			  }
 			return htmlStr ;
+		}
+		
+		function getTabData(node){
+			return 'onclick="addTab(\''+node.attributes.urlType +'_' + node.attributes.agentId + '\',\''
+			  +   node.attributes.priUrl + '\',\'' + node.text +'\')"'
 		}
 		
 		function getMenu(name){
@@ -76,8 +78,8 @@
 		<div class="navbar-inner">
 			<div class="container-fluid">
 				<!-- BEGIN LOGO -->
-				<a class="brand" href="index.html">
-					<img src="${pageContext.request.contextPath}/media/image/logo.png" alt="logo"/>
+				<a class="brand" href="#">
+					 <span style="color:white;">  青岛丰宁贸易</span>
 				</a>
 
 				<a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
@@ -95,13 +97,9 @@
 						<i class="icon-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="extra_profile.html"><i class="icon-user"></i> </a></li>
-							<li><a href="page_calendar.html"><i class="icon-calendar"></i> My Calendar</a></li>
-							<li><a href="inbox.html"><i class="icon-envelope"></i> My Inbox(3)</a></li>
-							<li><a href="#"><i class="icon-tasks"></i> My Tasks</a></li>
+							<li><a href="#"><i class="icon-tasks"></i>待办事项</a></li>
 							<li class="divider"></li>
-							<li><a href="extra_lock.html"><i class="icon-lock"></i> Lock Screen</a></li>
-							<li><a href="login.html"><i class="icon-key"></i> Log Out</a></li>
+							<li><a href="${pageContext.request.contextPath}/loginOut"><i class="icon-key"></i>注销用户</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -122,17 +120,9 @@
 					<div class="sidebar-toggler hidden-phone"></div>
 					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
 				</li>
-				<li class="start active ">
-					<a href="index.html"><i class="icon-home"></i> 
-						<span class="title">Dashboard</span>
-						<span class="selected"></span>
-					</a>
-
-				</li>
 
 				<li class="">
 					<a href="javascript:;">
-						<i class="icon-cogs"></i> 
 						<span class="title">基本信息管理</span>
 						<span class="arrow "></span>
 					</a>
@@ -226,56 +216,12 @@
 
 			<div class="container-fluid">
 
-				<!-- BEGIN PAGE HEADER-->
-
-				<div class="row-fluid">
-
-					<div class="span12">
-						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-
-						<ul class="breadcrumb">
-
-							<li>
-
-								<i class="icon-home"></i>
-
-								<a href="index.html">Home</a> 
-
-								<i class="icon-angle-right"></i>
-
-							</li>
-
-							<li><a href="#">Dashboard</a></li>
-
-							<li class="pull-right no-text-shadow">
-
-								<div id="dashboard-report-range" class="dashboard-date-range tooltips no-tooltip-on-touch-device responsive" data-tablet="" data-desktop="tooltips" data-placement="top" data-original-title="Change dashboard date range">
-
-									<i class="icon-calendar"></i>
-
-									<span></span>
-
-									<i class="icon-angle-down"></i>
-
-								</div>
-
-							</li>
-
-						</ul>
-
-						<!-- END PAGE TITLE & BREADCRUMB-->
-
-					</div>
-
-				</div>
-
-				<!-- END PAGE HEADER-->
 
 				<div id="dashboard">
 
 					<div class="row-fluid">
 							<div class="span12">
-									<ul class="nav nav-tabs" role="tablist" id="deviceulid">
+									<ul class="nav nav-tabs" style="margin:0px" role="tablist" id="deviceulid">
 							
 									</ul>
 									<!-- 面板区 -->

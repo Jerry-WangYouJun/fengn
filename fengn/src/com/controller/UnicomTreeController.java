@@ -13,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.common.CodeUtil;
 import com.model.Grid;
 import com.model.Pagination;
 import com.model.QueryData;
+import com.model.UnicomInfoVo;
 import com.service.AgentService;
 import com.service.UnicomCardAgentService;
 
@@ -78,9 +80,23 @@ public class UnicomTreeController {
 //	    }
 	 
 		
-
+		@ResponseBody
+		@RequestMapping("/card_query/{agentId}")
+		public List<UnicomInfoVo> queryCard(@PathVariable("agentId") Integer agentId, HttpServletResponse response, 
+				HttpServletRequest request  ,HttpSession session , QueryData qo) {
+			String pageNo = request.getParameter("pageNo");
+			String pageSize = request.getParameter("pageSize");
+			//System.out.println(userName);
+			Grid grid = new Grid();
+			Pagination page =  new Pagination(pageNo, pageSize , 100) ;
+		    CodeUtil.initPagination(page);
+		    List<UnicomInfoVo>  list = cardAgentService.queryCardInfo(agentId , page , qo);
+		    return list;
+		}
+		
+		@ResponseBody
 		@RequestMapping("/kickback_query/{agentId}")
-		public void queryKickback(@PathVariable("agentId") Integer agentId, HttpServletResponse response, 
+		public List<Map<String,String>>   queryKickback(@PathVariable("agentId") Integer agentId, HttpServletResponse response, 
 				HttpServletRequest request  ,HttpSession session , QueryData qo ) {
 			String pageNo = request.getParameter("pageNo");
 			String pageSize = request.getParameter("pageSize");
@@ -90,41 +106,7 @@ public class UnicomTreeController {
 		    CodeUtil.initPagination(page);
 		    List<Map<String,String>>  list = cardAgentService.queryKickbackInfo(agentId, qo  , page , qo.getTimeType());
 		    Map<String , Double > map = cardAgentService.queryKickbackTotal(agentId , qo , qo.getTimeType());
-			grid.setTotal(map.get("total").longValue());
-			grid.setRows(list);
-			PrintWriter out;
-				try {
-					response.setContentType("text/html;charset=UTF-8");
-					out = response.getWriter();
-					JSONObject json = new JSONObject();
-					json = JSONObject.fromObject(grid);
-					out.println(json);
-					out.flush();
-					out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
-		
-		@RequestMapping("/kickback_sum/{agentId}")
-		public void queryKickbackSum(@PathVariable("agentId") Integer agentId, HttpServletResponse response, 
-				HttpServletRequest request  ,HttpSession session , QueryData qo ) {
-			String pageNo = request.getParameter("pageNo");
-			String pageSize = request.getParameter("pageSize");
-			//System.out.println(userName);
-			Pagination page =  new Pagination(pageNo, pageSize , 100) ;
-		    CodeUtil.initPagination(page);
-		    Map<String , Double > map = cardAgentService.queryKickbackTotal(agentId , qo , qo.getTimeType());
-			PrintWriter out;
-				try {
-					response.setContentType("text/html;charset=UTF-8");
-					out = response.getWriter();
-					out.println(map.get("sumKick"));
-					out.flush();
-					out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+		    return list;
 		}
 		
 }

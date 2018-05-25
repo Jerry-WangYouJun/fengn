@@ -10,251 +10,127 @@
 <title>用户管理</title>
 <script type="text/javascript">
 	$(function() {
-		var role = '${roleid}' ==1 ? false : true;
-		 var agentId = parent.$('#tabs').tabs('getSelected').panel('options').id;
-		$('#card_table').datagrid({
-			url:"${basePath}/unicom/card_query/" + agentId ,
-			rownumbers : true,
-			autoRowHeight : true,
-			pagination : true,
-			fitColumns: true,
-			nowrap : false,
-			fit: true, 
-			columns:[[
-				{field : 'id',align : 'center',halign:'center',checkbox : true}, 
-				{field:'ICCID',title:'ICCID',align:'center'},
-				{field:'IMSI',title:'卡号',align:'center'},
-				{field:'gprsUsed',title:'使用流量',align:'center'},
-				{field:'packageType',title:'套餐类型',align:'center'},
-				{field:'orderStatus' , title:'订单状态' ,hidden:role, align:'center' ,
-					formatter: function(value,row,index){
-						if (value =='1'){
-							return "已充值";
-						} else {
-							return "未充值";
+		 var tabName = parent.$("#deviceulid > li.active").attr("id");
+		 var agentId = tabName.split("_")[4];
+		 $('#infoTable').bootstrapTable({  
+		        url : '${basePath}/unicom/card_query/'+agentId, // 请求后台的URL（*）            
+		        method : 'get', // 请求方式（*）  
+		        toolbar : '#toolbar', // 工具按钮用哪个容器  
+		        cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）  
+		        sidePagination : "client", // 分页方式：client客户端分页，server服务端分页（*）  
+		        pagination : true, // 是否显示分页（*）  
+		        pageNumber: 1,    //如果设置了分页，首页页码  
+		        pageSize: 50,                       //每页的记录行数（*）  
+		        pageList: [50,100,300,600],        //可供选择的每页的行数（*）  
+		        showRefresh : true, // 是否显示刷新按钮  
+		        clickToSelect : true, // 是否启用点击选中行  
+		        showToggle : false, // 是否显示详细视图和列表视图的切换按钮  
+		        search:true,   //是否启用搜索框 
+		        
+		        columns : [ {   checkbox : true } ,
+			        {field : 'id', visible: false  },
+					{field:'iccid',title:'ICCID',align:'center', valign: 'middle'},
+					{field:'imsi',title:'卡号',align:'center', valign: 'middle'},
+					{field:'gprsUsed',title:'使用流量',align:'center', valign: 'middle'},
+					{field:'packageType',title:'套餐类型',align:'center', valign: 'middle'},
+					{field:'orderStatus' , title:'订单状态' , align:'center' , valign: 'middle',
+						formatter: function(value,row,index){
+							if (value =='1'){
+								return "已充值";
+							} else {
+								return "未充值";
+							}
 						}
-					}
-				},
-				{field:'remark',title:'备注',align:'center'}
-			]],
-			toolbar : [ {
-				text:'全选',
-				iconCls: 'icon-ok',
-				handler: function(){
-					$("input:checkbox").each(function(){
-				    	   	 this.checked = "checked" ;
-				    })
-				}
-			},'-',{
-				text:'全取消',
-				iconCls: 'icon-redo',
-				handler: function(){
-					$("input:checkbox").each(function(){
-			    	   		  this.checked = false;
-			    		})
-					
-				}
-			},'-',{
-				text : '分配',
-				iconCls : 'icon-edit',
-				handler : function() {
-					updateCard();
-				}
-			},'-',{
-				text : '导入数据',
-				iconCls : 'icon-edit',
-				handler : function() {
-					upload();
-				}
-			},'-',{
-				id: 'test',
-				text:'修改订单状态',
-				iconCls: 'icon-edit',
-				handler: function(){updateOrderStatus();}
-			}]
-		});
-		$('#card_table').datagrid('getPager').pagination({  
-			 pageSize: 100,  
-	            pageList: [ 50 ,100 , 300, 500 , 1000],  
-	            showRefresh:false ,
-	            onSelectPage:function(pageNumber, pageSize){
-	            		doSearch();
-		        	}
-       });
-		
-		 
-		$('#dlg-frame').dialog({
-			title : '代理商管理',
-			width : 800,
-			height : 500,
-			top : 50,
-			left : 100,
-			closed : true,
-			cache : false,
-			modal : true
-		});
-		
-		if(role){
-			   $("#test").hide();
-		}
+					},
+					{field:'remark',title:'备注',align:'center', valign: 'middle'}
+			     ],  
+		        silent : true, // 刷新事件必须设置  
+		    }); 
 	});
-	function updateOrderStatus() {
-		var id = getChecked();
-		if (id > 0) {
-			var url = "${basePath}/unicom/status/" + id;
-			$.ajax({
-				url : url,
-				type : 'post',
-				data : $("#dataForm").serialize(),
-				dataType : 'json',
-				success : function(data) {
-					if (data.success) {
-						$.messager.alert('提示', data.msg);
-						doSearch();
-					} else {
-						$.messager.alert('提示', data.msg, "error");
-					}
 
-				},
-				error : function(transport) {
-					$.messager.alert('提示', "系统产生错误,请联系管理员!", "error");
-				}
-			});
-		}
-	}
-	function doSearch(index) {
-		var type = $("#search-type").val();
-		var iccidStart = $("#search-iccidStart").val();
-		var iccidEnd = $("#search-iccidEnd").val();
-		var pageNo = $(".pagination-num").val(); 
-		var pageSize = $(".pagination-page-list").val();
-	    $('#card_table').datagrid('reload',{
-	    	type : type,pageNo:pageNo,pageSize:pageSize ,
-	    		iccidStart:iccidStart,iccidEnd:iccidEnd
-		} );
-	}
-	function doClear() {
-		$("#search-type").val("");
-		$("#search-iccidStart").val("");
-		$("#search-iccidEnd").val("");
-	}
-	function updateCard() {
-		var agentId = parent.$('#tabs').tabs('getSelected').panel('options').id;
-		var id = "";
-		$("input[type=checkbox]").each(function() {
-			if (this.checked) {
-				id += $(this).val() + ",";
-			}
-		});
-		if(id.indexOf("on,")>=0){
-			id = id.substring(3);
-		}
-		var path = "${basePath}/unicom/move?iccids=" + id + "&moveFlag=2&moveAgent="+agentId ;
-		document.getElementById('frameContent').src = path;
-		$('#dlg-frame').dialog('open');
-	}
-	
-	function upload() {
-		var path = "${basePath}/unicomUpload/uploadUnicomInit"  ;
-		document.getElementById('frameContent').src = path;
-		$('#dlg-frame').dialog('open');
-	}
-	function updateUser() {
-		var id = getChecked();
-		if (id > 0) {
-			var path = "${basePath}/agent/updateInit/" + id;
-			document.getElementById('frameContent').src = path;
-			$('#dlg-frame').dialog('open');
-		}
-	}
-
-	function deleteUser() {
-		var del = confirm("确认删除？");
-		if (!del) {
-			return false;
-		}
-		var id = getChecked();
-		if (id > 0) {
-			var url = "${basePath}/agent/agent_delete/" + id;
-			$.ajax({
-				url : url,
-				type : 'post',
-				data : $("#dataForm").serialize(),
-				dataType : 'json',
-				success : function(data) {
-					if (data.success) {
-						$.messager.alert('提示', data.msg);
-						doSearch();
-					} else {
-						$.messager.alert('提示', data.msg, "error");
-					}
-
-				},
-				error : function(transport) {
-					$.messager.alert('提示', "系统产生错误,请联系管理员!", "error");
-				}
-			});
-		}
-	}
-
-	function getChecked() {
-		var id;
-		var checkTotal = 0;
-		$("input[type=checkbox]").each(function() {
-			if (this.checked) {
-				id = $(this).val();
-				checkTotal++;
-			}
-		});
-		if (checkTotal == 0) {
-			alert("请选中一条数据！");
-			return 0;
-		} else if (checkTotal > 1) {
-			alert("只能选择一条数据！");
-			return 0;
-		}
-		return id;
-	}
 </script>
 <style type="text/css">
-.datagrid-view{
-	height : 2000px;
+  .panel-body {
+    padding: 0px !important; 
 }
 
 </style>
 </head>
 <body >
-	<div id="tb" region="north" title="查询条件区" class="easyui-panel"
-		iconCls="icon-search" style="padding: 3px; height: 60px; width: 80%">
-		<%-- <span>套餐类型:</span>
-		<select id="search-type" name="type" >
-			 <option value="0">--选择--</option>
-			 <c:forEach items="${typeList}" var="typename">
-			 		<option value = "${typename}">${typename}</option>
-			 </c:forEach>	
-		</select> --%>
-		<span>ICCID:</span>
-		<input id="search-iccidStart" name="iccidStart" /> - 
-		<input
-			id="search-iccidEnd" name="iccidEnd" />
-		<a href="####"
-			class="easyui-linkbutton" plain="true" iconCls="icon-search"
-			onclick="doSearch()">查询</a> <a href="####" class="easyui-linkbutton"
-			plain="true" iconCls="icon-clear" onclick="doClear()">清除</a>
-	</div>
- 	<div id="main_layout" data-options="region:'center',border:false,showHeader:false" style="width:80%;height:70%;">
- 		<table id="card_table" class="easyui-datagrid" fit="true" ></table>
- 	</div>
-	<div data-options="region:'south',border:false,showHeader:false" style="width:900px;height:20%;">
- 		 &nbsp;
- 	</div>
-
-		<div id="dlg-frame">
-			<iframe width="99%" height="98%" name="frameContent"
-				id="frameContent" frameborder="0"></iframe>
+	<div >
+			<div >
+				  <div class="panel-body" id="a3" style="display:block">
+				  	    <table id="infoTable"> </table>
+					<div id="toolbar" class="btn-group">  
+			            <button id="btn_edit" type="button" class="btn btn-default" onclick="updateData()">  
+			                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>分配
+			            </button>  
+			        </div>  
+				  </div>
+			</div>
 		</div>
+		
+	<div class="modal fade" id="myModal" tabindex="-2" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="height: ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">支出管理</h4>
+				</div>
+				<div class="modal-body">
+					<form id="dataForm">
+					 <input  class="form-control" name="id" type="hidden"></input>
+					 <input  class="form-control" name="user" type="hidden"></input>
+					 <input  class="form-control" name="actordate" type="hidden"></input>
+					 <div class="form-group" >
+					            <label class="control-label">发生时间：</label>  
+					            <!--指定 date标记-->  
+					            <div class='input-group date' id='datetimepicker1'  >  
+					                <input type='text' class="form-control" readonly name="actordate" />  
+					                <span class="input-group-addon" >  
+					                    <span class="glyphicon glyphicon-calendar"></span>  
+					                </span>  
+					            </div>   
+				        </div> 
+						<div class="form-group">
+							<label for="recipient-name" class="control-label">支出费用:</label> <input
+								type="text" class="form-control" name="money">
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label">支出类型:</label> 
+								<select name="modeid" class="form-control">
+										 <c:forEach items="${modelList}" var="mode">
+										 	<c:if test="${ mode.parenttype eq '支出'}">
+										 		<option value="${mode.id}">${mode.typename}</option>
+										 	</c:if>
+										 		
+										 </c:forEach>
+								</select>
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label">支出人:</label> <input
+								class="form-control" name="actor"></input>
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label">所在账户:</label> 
+								<select name="account" class="form-control">
+										 <c:forEach items="${accountList}" var="account">
+										 		<option value="${account.id}">${account.aname}</option>
+										 </c:forEach>
+								</select>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="subInfo()">提交更改</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
 	</div>
-
-
 </body>
 </html>

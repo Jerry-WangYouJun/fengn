@@ -9,6 +9,11 @@
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
+<style type="text/css">
+  .panel-body {
+    padding: 0px !important; 
+}
+</style>
   </head>
   <body id="a2">
 	<div >
@@ -37,49 +42,30 @@
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">支出管理</h4>
+					<h4 class="modal-title" id="myModalLabel">套餐管理</h4>
 				</div>
 				<div class="modal-body">
 					<form id="dataForm">
 					 <input  class="form-control" name="id" type="hidden"></input>
-					 <input  class="form-control" name="user" type="hidden"></input>
-					 <input  class="form-control" name="actordate" type="hidden"></input>
-					 <div class="form-group" >
-					            <label class="control-label">发生时间：</label>  
-					            <!--指定 date标记-->  
-					            <div class='input-group date' id='datetimepicker1'  >  
-					                <input type='text' class="form-control" readonly name="actordate" />  
-					                <span class="input-group-addon" >  
-					                    <span class="glyphicon glyphicon-calendar"></span>  
-					                </span>  
-					            </div>   
-				        </div> 
 						<div class="form-group">
-							<label for="recipient-name" class="control-label">支出费用:</label> <input
-								type="text" class="form-control" name="money">
+							<label for="recipient-name" class="control-label">套餐名:</label> <input
+								type="text" class="form-control" name="typename">
 						</div>
 						<div class="form-group">
-							<label for="message-text" class="control-label">支出类型:</label> 
-								<select name="modeid" class="form-control">
-										 <c:forEach items="${modelList}" var="mode">
-										 	<c:if test="${ mode.parenttype eq '支出'}">
-										 		<option value="${mode.id}">${mode.typename}</option>
-										 	</c:if>
-										 		
-										 </c:forEach>
-								</select>
+							<label for="message-text" class="control-label">套餐描述:</label> 
+								<input type="text" class="form-control" name="discrip">
 						</div>
 						<div class="form-group">
-							<label for="message-text" class="control-label">支出人:</label> <input
-								class="form-control" name="actor"></input>
+							<label for="message-text" class="control-label">成本价:</label> <input
+								class="form-control" name="cost"></input>
 						</div>
 						<div class="form-group">
-							<label for="message-text" class="control-label">所在账户:</label> 
-								<select name="account" class="form-control">
-										 <c:forEach items="${accountList}" var="account">
-										 		<option value="${account.id}">${account.aname}</option>
-										 </c:forEach>
-								</select>
+							<label for="message-text" class="control-label">续费价:</label> 
+								<input type="text" class="form-control" name="renew">
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label">备注:</label> <input
+								class="form-control" name="remark"></input>
 						</div>
 					</form>
 				</div>

@@ -9,10 +9,10 @@ var Login = function () {
 	            errorClass: 'help-inline', // default input error message class
 	            focusInvalid: false, // do not focus the last invalid input
 	            rules: {
-	                username: {
+	            	userNo: {
 	                    required: true
 	                },
-	                password: {
+	                pwd: {
 	                    required: true
 	                },
 	                remember: {
@@ -21,11 +21,11 @@ var Login = function () {
 	            },
 
 	            messages: {
-	                username: {
-	                    required: "Username is required."
+	            	userNo: {
+	                    required: "用户名不能为空."
 	                },
-	                password: {
-	                    required: "Password is required."
+	                pwd: {
+	                    required: "密码不能为空."
 	                }
 	            },
 
@@ -48,7 +48,7 @@ var Login = function () {
 	            },
 
 	            submitHandler: function (form) {
-	                window.location.href = "index.html";
+	                window.location.href = form.submit();
 	            }
 	        });
 

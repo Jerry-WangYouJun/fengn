@@ -6,127 +6,120 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- <script type="text/javascript" src="http://www.w3cschool.cc/try/jeasyui/datagrid-detailview.js"></script> -->
 <title>用户管理</title>
 <script type="text/javascript">
-		var agentId = parent.$('#tabs').tabs('getSelected').panel('options').id;
 	$(function() {
-		$('#data_table').datagrid({
-			url:"${basePath}/treeindex/kickback_query/" + agentId  ,
-			rownumbers : true,
-			autoRowHeight : true,
-			pagination : true,
-			fitColumns: true,
-			nowrap : false,
-			fit: true,
-			columns:[[
-				{field:'iccid',title:'ICCID',align:'center'},
-				{field:'orderNo',title:'订单编号',align:'center'},
-				{field:'money',title:'充值金额',align:'center'},
-				{field:'packageType',title:'套餐类型',align:'center'},
-				{field:'update_date',title:'充值时间',align:'center'},				
-				{field:'kickback',title:'返佣',align:'center'}
-			]]
-		});
-		$('#data_table').datagrid('getPager').pagination({  
-			 pageSize: 100,  
-	            pageList: [ 50 ,100 , 300, 500 , 1000],  
-	            showRefresh:false ,
-	            onSelectPage:function(pageNumber, pageSize){
-	            		doSearch();
-		        	}
-       });
-		
-		 
-		$('#dlg-frame').dialog({
-			title : '代理商管理',
-			width : 800,
-			height : 500,
-			top : 50,
-			left : 100,
-			closed : true,
-			cache : false,
-			modal : true
-		});
-		searchSum(agentId);
+		 var tabName = parent.$("#deviceulid > li.active").attr("id");
+		 var agentId = tabName.split("_")[3];
+		 $('#infoTable').bootstrapTable({  
+		        url : '${basePath}/treeindex/kickback_query/'+agentId, // 请求后台的URL（*）            
+		        method : 'get', // 请求方式（*）  
+		        toolbar : '#toolbar', // 工具按钮用哪个容器  
+		        cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）  
+		        sidePagination : "client", // 分页方式：client客户端分页，server服务端分页（*）  
+		        pagination : true, // 是否显示分页（*）  
+		        pageNumber: 1,    //如果设置了分页，首页页码  
+		        pageSize: 50,                       //每页的记录行数（*）  
+		        pageList: [50,100,300,600],        //可供选择的每页的行数（*）  
+		        showRefresh : true, // 是否显示刷新按钮  
+		        clickToSelect : true, // 是否启用点击选中行  
+		        showToggle : false, // 是否显示详细视图和列表视图的切换按钮  
+		        search:true,   //是否启用搜索框 
+		        
+		        columns : [ {   checkbox : true } ,
+		                    {field:'iccid',title:'ICCID',align:'center', valign: 'middle'},
+		    				{field:'orderNo',title:'订单编号',align:'center', valign: 'middle'},
+		    				{field:'name',title:'所属代理商',align:'center', valign: 'middle'},
+		    				{field:'money',title:'充值金额',align:'center', valign: 'middle'},
+		    				{field:'packageType',title:'套餐类型',align:'center', valign: 'middle'},
+		    				{field:'update_date',title:'充值时间',align:'center', valign: 'middle'},				
+		    				{field:'kickback',title:'返佣',align:'center', valign: 'middle'}
+			     ],  
+		        silent : true, // 刷新事件必须设置  
+		    }); 
 	});
-	 function searchSum(id){
-		 var timeType = $("#timeType")[0].value;
-			var dateStart = document.getElementsByName("dateStart")[0].value;
-			var dateEnd = document.getElementsByName("dateEnd")[0].value;
-			var pageNo = $(".pagination-num").val(); 
-			var pageSize = $(".pagination-page-list").val();
-			var url = "${basePath}/treeindex/kickback_sum/" + id;
-			$.ajax({
-				url : url,
-				data :{
-				    	timeType : timeType,pageNo:pageNo,pageSize:pageSize ,
-				    	dateStart:dateStart,dateEnd:dateEnd
-					},
-				dataType : 'json',
-				success : function(data) {
-					$("#money").text(data);
-				},
-			});
-	 }
-	function doSearch(index) {
-		var timeType = $("#timeType")[0].value;
-		var dateStart = document.getElementsByName("dateStart")[0].value;
-		var dateEnd = document.getElementsByName("dateEnd")[0].value;
-		var pageNo = $(".pagination-num").val(); 
-		var pageSize = $(".pagination-page-list").val();
-	    $('#data_table').datagrid('reload',{
-	    	timeType : timeType,pageNo:pageNo,pageSize:pageSize ,
-	    	dateStart:dateStart,dateEnd:dateEnd
-		} );
-	    searchSum(agentId)
-	}
-	function doClear() {
-		$("#timeType").val("");
-		$('#search-dateStart').combo('setText','');
-		$('#search-dateEnd').combo('setText','');
-	}
-</script>
 
+</script>
+<style type="text/css">
+
+  .panel-body {
+    padding: 0px !important; 
+}
+</style>
 </head>
 <body >
-	<div id="tb" region="north" title="查询条件区" class="easyui-panel"
-		iconCls="icon-search" style="padding: 3px; height: 60px; width: 80%">
-		<span>查询时间:</span>
-		<input id="search-dateStart" name="dateStart" class="easyui-datebox"  type="text" /> - 
-		<input
-			id="search-dateEnd" name="dateEnd" class="easyui-datebox"  type="text"/>
-		<span>查询固定时间</span>
-		<select id="timeType"  name="timeType">
-			  <option value="0">--请选择--</option>
-			  <option value="7">--本周--</option>
-			  <option value="30">--本月--</option>
-			  <option value="60">--上月--</option>
-		</select>
-		<a href="####"
-			class="easyui-linkbutton" plain="true" iconCls="icon-search"
-			onclick="doSearch()">查询</a> 
-		<a href="####" class="easyui-linkbutton"
-			plain="true" iconCls="icon-clear" onclick="doClear()">清除</a>
-	</div>
-	<div id="main_layout" data-options="region:'center',border:false,showHeader:false" style="width:80%;height:70%;">
- 		<table id="data_table" class="easyui-datagrid" fit="true" ></table>
- 	</div>
-	<div data-options="region:'south',border:false,showHeader:false" style="width:900px;height:20%;">
- 			<table >
-				<thead>
-					<tr>
-						<th >充值总金额</th>
-						<th id="money">  </th>
-					</tr>
-				</thead>
-			</table>
- 	</div>
-
-		<div id="dlg-frame">
-			<iframe width="99%" height="98%" name="frameContent"
-				id="frameContent" frameborder="0"></iframe>
+	<div >
+			<div >
+				  <div class="panel-body" id="a3" style="display:block">
+				  	    <table id="infoTable"> </table>
+					<div id="toolbar" class="btn-group">  
+			        </div>  
+				  </div>
+			</div>
 		</div>
+		
+	<div class="modal fade" id="myModal" tabindex="-2" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="height: ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">支出管理</h4>
+				</div>
+				<div class="modal-body">
+					<form id="dataForm">
+					 <input  class="form-control" name="id" type="hidden"></input>
+					 <input  class="form-control" name="user" type="hidden"></input>
+					 <input  class="form-control" name="actordate" type="hidden"></input>
+					 <div class="form-group" >
+					            <label class="control-label">发生时间：</label>  
+					            <!--指定 date标记-->  
+					            <div class='input-group date' id='datetimepicker1'  >  
+					                <input type='text' class="form-control" readonly name="actordate" />  
+					                <span class="input-group-addon" >  
+					                    <span class="glyphicon glyphicon-calendar"></span>  
+					                </span>  
+					            </div>   
+				        </div> 
+						<div class="form-group">
+							<label for="recipient-name" class="control-label">支出费用:</label> <input
+								type="text" class="form-control" name="money">
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label">支出类型:</label> 
+								<select name="modeid" class="form-control">
+										 <c:forEach items="${modelList}" var="mode">
+										 	<c:if test="${ mode.parenttype eq '支出'}">
+										 		<option value="${mode.id}">${mode.typename}</option>
+										 	</c:if>
+										 		
+										 </c:forEach>
+								</select>
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label">支出人:</label> <input
+								class="form-control" name="actor"></input>
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label">所在账户:</label> 
+								<select name="account" class="form-control">
+										 <c:forEach items="${accountList}" var="account">
+										 		<option value="${account.id}">${account.aname}</option>
+										 </c:forEach>
+								</select>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="subInfo()">提交更改</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
 	</div>
-
 </body>
 </html>

@@ -8,6 +8,7 @@ public class TreeNode {
 	
     private String id;
     private String text;
+    private String menu;
     private String state;
     private String iconCls;
     private List<TreeNode> children;
@@ -63,6 +64,16 @@ public class TreeNode {
 	public void setAttributes(Attribute attributes) {
 		this.attributes = attributes;
 	}
+	
+
+	public String getMenu() {
+		return menu;
+	}
+
+	public void setMenu(String menu) {
+		this.menu = menu;
+	}
+
 
 	@Override
 	public boolean equals(Object obj) {
