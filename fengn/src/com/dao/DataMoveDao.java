@@ -454,7 +454,7 @@ public class DataMoveDao {
 				map.put("update_date", rs.getString("update_date"));
 				map.put("kickback", rs.getString("kickback"));
 				map.put("orderNo", rs.getString("orderNo"));
-				
+				map.put("name", rs.getString("name"));
 				list.add(map);
 				return null;
 			}
