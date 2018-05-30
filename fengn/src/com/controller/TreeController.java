@@ -45,7 +45,7 @@ public class TreeController {
 			getTreeDataBytype(session, response, request, "card", treeNode);
 	}
 	
-	@RequestMapping("/card_unicom")
+	@RequestMapping("/unicom_card")
 	public void getUnicomTreeData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
 			TreeNode treeNode = new TreeNode();
 			treeNode.setText("联通SIM卡管理");
@@ -59,7 +59,7 @@ public class TreeController {
 		getTreeDataBytype(session, response, request, "kickback", treeNode);
 	}
 	
-	@RequestMapping("/kickback_unicom")
+	@RequestMapping("/unicom_kickback")
 	public void getUnicomKickbackData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
 		TreeNode treeNode = new TreeNode();
 		treeNode.setText("联通返佣管理");

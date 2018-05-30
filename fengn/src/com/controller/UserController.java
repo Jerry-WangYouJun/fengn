@@ -48,7 +48,7 @@ public class UserController {
 //			}else {
 //				return "/unicom/index" ;
 //			}
-			return "pages/newIndex" ;
+			return "pages/newIndex2" ;
 		}else{
 			request.setAttribute("msg", "用户名或者密码错误");
 			return "pages/login" ;

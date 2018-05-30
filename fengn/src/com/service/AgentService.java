@@ -102,7 +102,7 @@ public class AgentService {
 					case "kickback":
 						text = "移动返佣-"+ agent.getName() ;
 						break;
-					case "kickback_unicom":
+					case "unicom_kickback":
 						text = "联通返佣-"+ agent.getName() ;
 						break;
 					default:
