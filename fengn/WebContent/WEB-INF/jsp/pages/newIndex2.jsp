@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -102,6 +103,12 @@
  			}
  			
  		});
+ 		
+ 		function upload() {
+ 			var path = "${basePath}/uploadExcel/uploadInit"  ;
+ 			document.getElementById('frameContent').src = path;
+ 			$('#dlg-frame').dialog('open');
+ 		}
         </script>
     </head>
 <body>
@@ -122,8 +129,21 @@
                             </li>
                         </ul>
                         <ul class="nav navbar-nav pull-right">
+                         <c:if test="${roleid eq '1' }">
+	                      	  <li class="dropdown">
+	                                <a href="#" style="padding: 12px" data-toggle="dropdown"><i class="im-paste">&nbsp;导入</i></a>
+	                                <ul class="dropdown-menu right" role="menu">
+	                                    <li><a href="#">丰宁/永思移动数据导入</a>
+	                                    </li>
+	                                    <li><a href="#">联通卡导入</a>
+	                                    </li>
+	                                    <li><a href="#"> 麦联宝导入</a>
+	                                    </li>
+	                                </ul>
+	                            </li>
+                         </c:if>
                             <li class="dropdown">
-                                <a href="#" style="padding: 12px" data-toggle="dropdown"><i class="br-alarm"></i></a>
+                                <a href="#" style="padding: 12px" data-toggle="dropdown"><i class="st-settings"></i></a>
                                 <ul class="dropdown-menu right" role="menu">
                                     <li><a href="#"><i class="st-user"></i> Profile</a>
                                     </li>

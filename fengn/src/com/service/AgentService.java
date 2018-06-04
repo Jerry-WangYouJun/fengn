@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dao.AgentDao;
+import com.dao.AgentMapper;
 import com.model.Agent;
 import com.model.Pagination;
 import com.model.QueryData;
@@ -21,6 +22,8 @@ public class AgentService {
 	  
 	 @Autowired
 	 AgentDao dao ;
+	 @Autowired
+	 AgentMapper mapper;
 	 
 	 Map<Integer , List<Agent>> mapTree = new HashMap<>();
 
@@ -29,8 +32,10 @@ public class AgentService {
 	}
 
 	public int insert(Agent agent ) {
-		 dao.queryPrentIdByCode(agent.getCode());
-		 return  dao.insert(agent );
+		 Integer parentId = dao.queryPrentIdByCode(agent.getCode());
+		 agent.setParengId(parentId);
+		 agent.setCode(dao.getMaxCode(agent.getCode(), parentId));
+		 return  mapper.insert(agent);
 	}
 
 	public void update(Agent agent) {

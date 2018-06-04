@@ -40,22 +40,26 @@
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">支出管理</h4>
+					<h4 class="modal-title" id="myModalLabel">代理商管理</h4>
 				</div>
 				<div class="modal-body">
 					<form id="dataForm">
 					 <input  class="form-control" name="id" type="hidden"></input>
 						<div class="form-group">
 							<label for="recipient-name" class="control-label">登录名:</label> <input
-								type="text" class="form-control" name="userNo">
+								type="text" class="form-control" name="userNo" id="userNo">
 						</div>
 						<div class="form-group">
-							<label for="message-text" class="control-label">用户名称:</label> 
-								<input type="text" class="form-control" name="userName">
+							<label for="message-text" class="control-label">代理商名称:</label> 
+								<input type="text" class="form-control" name="name" id="name">
 						</div>
 						<div class="form-group">
-							<label for="message-text" class="control-label">密码:</label> <input
-								class="form-control" name="pwd"></input>
+							<label for="message-text" class="control-label">代理商类型:</label>
+							<select class="form-control"  id ="groupId" name="groupId">  
+					           <option value="1">移动</option>
+					           <option value="2">联通</option>
+					           <option value="3">联通，移动</option>  
+					        </select>	
 						</div>
 					</form>
 				</div>
@@ -70,6 +74,9 @@
 	</div>
 </body>
 <script type="text/javascript">
+		function subInfo(){
+			subInfoAll("agent");
+		}
 			
 		$(function(){
 			    $('#infoTable').bootstrapTable({  
@@ -82,6 +89,7 @@
 			        pageNumber: 1,    //如果设置了分页，首页页码  
 			        pageSize: 50,                       //每页的记录行数（*）  
 			        pageList: [100,300,600],        //可供选择的每页的行数（*）  
+			        singleSelect    : true,   
 			        showRefresh : true, // 是否显示刷新按钮  
 			        clickToSelect : true, // 是否启用点击选中行  
 			        showToggle : false, // 是否显示详细视图和列表视图的切换按钮  
@@ -99,16 +107,12 @@
 			            field : 'agentCode',title : '代理商代码',  align: 'center', valign: 'middle'  
 			        },{  
 			            field : 'userNo',   title : '登录账号',  align: 'center',   valign: 'middle'  
-			        },{  
-			            field : 'type', title : '套餐类型',    align: 'center',  valign: 'middle'  
-			        }, {  
-			           field : 'cost',  title : '成本价',  align: 'center',   valign: 'middle' 
-			        }, {  
-				           field : 'renew',  title : '续费价', align: 'center',   valign: 'middle' 
-				        }],  
+			        }],  
 			        silent : true, // 刷新事件必须设置  
 			    });  
 		});
+		
+		
 	</script>
 	
 		

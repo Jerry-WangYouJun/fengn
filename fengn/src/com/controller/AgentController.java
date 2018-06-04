@@ -150,7 +150,7 @@ public class AgentController {
 		return mv;
 	}
 	
-	@RequestMapping("/insert")
+	@RequestMapping("/agent_edit")
 	public void insert(Agent agent , HttpSession session ,HttpServletResponse response ){
 		if(agent.getId()!=null && agent.getId() >0){
 			service.update(agent);

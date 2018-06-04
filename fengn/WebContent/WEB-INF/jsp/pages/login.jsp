@@ -28,7 +28,7 @@
 	</div>
 
 	<div class="content">
-		<form class="form-vertical login-form" action="${pageContext.request.contextPath }/checkUser">
+		<form class="form-vertical login-form" action="${pageContext.request.contextPath }/checkUser" method="post">
 			<h3 class="form-title">欢迎登陆</h3>
 			<div class="alert alert-error hide">
 				<button class="close" data-dismiss="alert"></button>

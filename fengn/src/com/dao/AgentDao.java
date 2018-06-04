@@ -87,7 +87,7 @@ public class AgentDao {
 
 	public int insert(final Agent agent) {
 		//KeyHolder keyHolder = new GeneratedKeyHolder();
-		 final String sql = "insert into a_agent (code,name,cost,renew,type,creater,parentid,groupId) values(?,?,?,?,?,?,?,?)";
+		 final String sql = "insert into a_agent (code,name,creater,parentid,groupId) values(?,?,?,?,?)";
 		 KeyHolder keyHolder = new GeneratedKeyHolder();
 		 jdbcTemplate.update(new PreparedStatementCreator() {
 	        @Override
@@ -96,12 +96,9 @@ public class AgentDao {
 	            PreparedStatement ps  = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1,  getMaxCode(agent.getCode(),parentId));  
                 ps.setString(2, agent.getName()); 
-                ps.setDouble(3, agent.getCost());
-                ps.setDouble(4 , agent.getRenew());
-                ps.setString(5, agent.getType());
-                ps.setString(6, agent.getCreater());
-                ps.setInt(7, parentId);
-                ps.setInt(8, agent.getGroupId());
+                ps.setString(3, agent.getCreater());
+                ps.setInt(4, parentId);
+                ps.setInt(5, agent.getGroupId());
 	            return ps;
 	        }
 	    }, keyHolder);
