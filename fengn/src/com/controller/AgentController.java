@@ -157,9 +157,9 @@ public class AgentController {
 		}else{
 			agent.setCreater(session.getAttribute("user").toString());
 			agent.setCode(session.getAttribute("agentcode").toString());
-			int agentId = service.insert(agent );
+			service.insert(agent );
 			User user = new User();
-			user.setAgentId(agentId);
+			user.setAgentId(agent.getId());
 			user.setUserNo(agent.getUserNo());
 			user.setUserName(agent.getName());
 			user.setPwd("123456");

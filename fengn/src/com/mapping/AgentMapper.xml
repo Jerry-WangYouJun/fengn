@@ -22,19 +22,23 @@
     from a_agent
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer"  >
     delete from a_agent
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.model.Agent">
-    insert into a_agent (id, code, name, 
+  <insert id="insert" parameterType="com.model.Agent"  keyProperty="id" >
+  	<selectKey keyProperty='id' resultType='int' order='AFTER'  >  
+        select LAST_INSERT_ID();  
+    </selectKey> 
+    insert into a_agent ( code, name, 
       cost, renew, type, 
       creater, creatdate, parentId, 
       groupId)
-    values (#{id,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+    values ( #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{cost,jdbcType=DECIMAL}, #{renew,jdbcType=DECIMAL}, #{type,jdbcType=VARCHAR}, 
       #{creater,jdbcType=VARCHAR}, #{createdate,jdbcType=VARCHAR}, #{parengId,jdbcType=INTEGER}, 
       #{groupId,jdbcType=INTEGER})
+       
   </insert>
   <insert id="insertSelective" parameterType="com.model.Agent">
     insert into a_agent
