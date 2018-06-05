@@ -39,7 +39,7 @@ public class AgentController {
 	
 	@ResponseBody
 	@RequestMapping("/user_query")
-	public List<User>  queryTest( HttpServletResponse response, HttpServletRequest request  ,HttpSession session ) {
+	public List<Agent>  queryTest( HttpServletResponse response, HttpServletRequest request  ,HttpSession session ) {
 		String userName = request.getParameter("userName");
 		String pageNo = request.getParameter("pageNo");
 		String pageSize = request.getParameter("pageSize");
@@ -49,12 +49,13 @@ public class AgentController {
 		user.setAgentCode(agentCode);
 		Pagination page =  new Pagination(pageNo, pageSize) ;
 	    CodeUtil.initPagination(page);
-		List<User> list = userService.queryList(user , page );
+		List<Agent> list = userService.queryList(user , page );
 		return list;
 	}
 	
 	@RequestMapping("/card_move")
 	public void moveCard(String iccids , String agentid ,HttpServletResponse response  ){
+		response.setCharacterEncoding("UTF-8");
 		PrintWriter out;
 		try {
 			service.updateCardAgent(iccids,agentid);
@@ -153,7 +154,10 @@ public class AgentController {
 	@RequestMapping("/agent_edit")
 	public void insert(Agent agent , HttpSession session ,HttpServletResponse response ){
 		if(agent.getId()!=null && agent.getId() >0){
-			service.update(agent);
+			Agent temp = service.getById(agent.getId());
+			temp.setName(agent.getName());
+			temp.setGroupId(agent.getGroupId());
+			service.update(temp);
 		}else{
 			agent.setCreater(session.getAttribute("user").toString());
 			agent.setCode(session.getAttribute("agentcode").toString());
@@ -198,8 +202,8 @@ public class AgentController {
 		return mv;
 	}
 	
-	@RequestMapping(value="/agent_delete/{id}")
-	public void delete(@PathVariable("id") Integer id, HttpServletResponse response ){
+	@RequestMapping(value="/agent_delete")
+	public void delete(Integer id, HttpServletResponse response ){
 		PrintWriter out;
 		try {
 			service.delete(id);

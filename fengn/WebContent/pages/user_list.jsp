@@ -78,6 +78,9 @@
 			subInfoAll("agent");
 		}
 			
+		function delDish(){
+			deleteDataAll("agent");
+		}
 		$(function(){
 			    $('#infoTable').bootstrapTable({  
 			        url : '${basePath}/agent/user_query', // 请求后台的URL（*）            
@@ -100,14 +103,22 @@
 			        },{  
 			            field : 'id', visible: false 
 			        },{  
-			            field : 'agentId',  visible: false 
+			            field : 'name',   title : '代理商',   align: 'center', valign: 'middle'  
 			        },{  
-			            field : 'agentName',   title : '代理商',   align: 'center', valign: 'middle'  
-			        },{  
-			            field : 'agentCode',title : '代理商代码',  align: 'center', valign: 'middle'  
+			            field : 'code',title : '代理商代码',  align: 'center', valign: 'middle'  
 			        },{  
 			            field : 'userNo',   title : '登录账号',  align: 'center',   valign: 'middle'  
-			        }],  
+			        },{  
+			            field : 'groupId',   title : '代理商类型',  align: 'center',   valign: 'middle'  ,
+						formatter : function(value, row, index) {
+							if (value == '1') {
+								return "移动";
+							} else if (value == '2') {
+								return "联通";
+							} else if(value =='3' ){
+									return  "移动,联通";
+							}
+			        }}],  
 			        silent : true, // 刷新事件必须设置  
 			    });  
 		});

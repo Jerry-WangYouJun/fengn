@@ -39,7 +39,8 @@ public class AgentService {
 	}
 
 	public void update(Agent agent) {
-		dao.update(agent);
+		//dao.update(agent);
+		mapper.updateByPrimaryKey(agent);
 	}
 
 	public void delete(Integer id) {
@@ -160,6 +161,10 @@ public class AgentService {
 
 	public int checkUser(String userNo) {
 		return  dao.checkUser(userNo);
+	}
+
+	public Agent getById(Integer id) {
+		return mapper.selectByPrimaryKey(id);
 	}
 	
 	 

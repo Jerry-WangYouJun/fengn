@@ -73,7 +73,7 @@ public class UserController {
 		return "pages/login";
 	}
 	
-	@RequestMapping("/user_query")
+	/*@RequestMapping("/user_query")
 	public ModelAndView quetyList(User user , HttpSession session , String pageNo , String pageSize){
 		  ModelAndView mv = new ModelAndView("/agent/user/user_list");
 		  String agentCode = session.getAttribute("agentcode").toString();
@@ -88,8 +88,8 @@ public class UserController {
 		  mv.addObject("list", list);
 		  mv.addObject("page", page);
 		  return  mv ;
-	}
-	
+	}*/
+	/*
 	@RequestMapping("/addInit")
 	public ModelAndView addInit(){
 		ModelAndView  mv = new ModelAndView( "/agent/user/user_add");
@@ -97,8 +97,8 @@ public class UserController {
 		mv.addObject("user", user);
 		return mv;
 	}
-	
-	@RequestMapping("/insert")
+	*/
+	/*@RequestMapping("/insert")
 	public void insert(User user , HttpSession session ,HttpServletResponse response ){
 		user.setPwd(user.getPwd().split(",")[0]);
 		if(user.getId()!=null && user.getId() >0){
@@ -120,19 +120,19 @@ public class UserController {
 			e.printStackTrace();
 		}
 			
-	}
+	}*/
 	
-	@RequestMapping(value="/updateInit/{id}")
-	public ModelAndView  updateInit(@PathVariable("id") Integer id){
-		ModelAndView  mv = new ModelAndView( "/agent/user/user_add");
-		User user = new User();
-		user.setId(id );
-		List<User> list = service.queryList(user , new Pagination() );
-		mv.addObject("user", list.get(0));
-		return mv;
-	}
+//	@RequestMapping(value="/updateInit/{id}")
+//	public ModelAndView  updateInit(@PathVariable("id") Integer id){
+//		ModelAndView  mv = new ModelAndView( "/agent/user/user_add");
+//		User user = new User();
+//		user.setId(id );
+//		List<User> list = service.queryList(user , new Pagination() );
+//		mv.addObject("user", list.get(0));
+//		return mv;
+//	}
 	
-	@RequestMapping(value="/user_delete/{id}")
+/*	@RequestMapping(value="/user_delete/{id}")
 	public void delete(@PathVariable("id") Integer id, HttpServletResponse response ){
 		response.setContentType("text/text;charset=UTF-8");
 		PrintWriter out;
@@ -148,5 +148,5 @@ public class UserController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 }

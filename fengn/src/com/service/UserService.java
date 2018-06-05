@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.dao.AgentDao;
 import com.dao.UserDao;
+import com.model.Agent;
 import com.model.Pagination;
 import com.model.User;
 
@@ -23,7 +24,7 @@ public class UserService {
 		return dao.checkUser(user);
 	}
 
-	public List<User> queryList(User user, Pagination page) {
+	public List<Agent> queryList(User user, Pagination page) {
 		return dao.queryList(user ,page);
 	}
 	
