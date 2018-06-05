@@ -61,8 +61,12 @@
 				  	    <table id="infoTable"> </table>
 					<div id="toolbar" class="btn-group">  
 			            <button id="btn_edit" type="button" class="btn btn-default" onclick="moveData()">  
-			                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>分配
-			            </button>  
+			                <span class="glyphicon glyphicon-forward" aria-hidden="true" ></span>分配
+			            </button>
+			           <!--  <button id="btn_edit" type="button" class="btn btn-default" onclick="moveData()">  
+			                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
+			                修改订单状态
+			            </button>  -->  
 			        </div>  
 				  </div>
 			</div>
@@ -89,6 +93,7 @@
 		</div>
 		<!-- /.modal -->
 	</div>
+	
 </body>
 <script type="text/javascript">
 	$(function(){
@@ -179,5 +184,6 @@
 			
 		}
 	}
+	
 </script>
 </html>

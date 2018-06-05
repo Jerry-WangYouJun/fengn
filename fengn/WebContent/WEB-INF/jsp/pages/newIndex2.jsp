@@ -24,6 +24,7 @@
         <link rel="apple-touch-icon-precomposed" href="${pageContext.request.contextPath}/assets/img/ico/apple-touch-icon-57-precomposed.png">
         <link rel="icon" href="${pageContext.request.contextPath}/assets/img/ico/favicon.ico" type="image/png">
         <script src="${pageContext.request.contextPath}/assets/js/jquery-1.8.3.min.js"></script>
+        <script type="text/JavaScript" src="${pageContext.request.contextPath}/js/jquery.form.js"></script>
         <meta name="msapplication-TileColor" content="#3399cc" />
         <script type="text/javascript">
         function openSub(obj){
@@ -133,11 +134,11 @@
 	                      	  <li class="dropdown">
 	                                <a href="#" style="padding: 12px" data-toggle="dropdown"><i class="im-paste">&nbsp;导入</i></a>
 	                                <ul class="dropdown-menu right" role="menu">
-	                                    <li><a href="#">丰宁/永思移动数据导入</a>
+	                                    <li><a href="#" onclick="uploadData()">丰宁/永思移动数据导入</a>
 	                                    </li>
-	                                    <li><a href="#">联通卡导入</a>
+	                                    <li><a href="#" onclick="uploadUnicomData()">联通卡导入</a>
 	                                    </li>
-	                                    <li><a href="#"> 麦联宝导入</a>
+	                                    <li><a href="#" onclick="uploadMlbData()"> 麦联宝导入</a>
 	                                    </li>
 	                                </ul>
 	                            </li>
@@ -491,5 +492,193 @@
 
       
 	</script>
+	
+	
+	<div class="modal fade" id="uploadModal" tabindex="-2" role="dialog"
+		aria-labelledby="uploadModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="width:400px; ">
+			<div class="modal-content">
+				<div class="modal-body">
+					 <form class="form-signin" role="form" method="POST"
+						enctype="multipart/form-data" id="form1"
+						action="${basePath}/uploadExcel/upload.do">
+						<div class="form-group">
+							<label for="message-text" class="control-label">上传文件:</label>
+							 <input class="form-control" style="float:left"
+									id="upfile" type="file" name="upfile"
+									class="col-md-12" required>	
+						</div>
+						<div class="form-group">
+						  <div class="col-xs-3 ">
+						   <label for="message-text" class="control-label">选择接口:</label>
+						  </div>
+						    <select name="apiCode" id = "apiCode" class="form-control" >
+						      <option value="1">永思接口数据</option>
+						      <option value="2">丰宁接口数据</option>
+						    </select>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" id="btn_api" class="btn btn-primary" data-dismiss="modal" onclick="">上传数据</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
+	
+	<div class="modal fade" id="unicomModal" tabindex="-2" role="dialog"
+		aria-labelledby="uploadModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="width:400px; ">
+			<div class="modal-content">
+				<div class="modal-body">
+					   	<form class="form-signin" role="form" method="POST"
+						enctype="multipart/form-data" id="unicomForm"
+						action="${basePath}/uploadExcel/upload.do">
+						<div class="form-group">
+							<label for="message-text" class="control-label">上传文件:</label>
+							 <input class="form-control" style="float:left"
+									id="upfile" type="file" name="upfile"
+									class="col-md-12" required>	
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" id="btn_insert" class="btn btn-primary" data-dismiss="modal" onclick="">上传新数据</button>
+					<button type="button" id="btn_update" class="btn btn-primary" data-dismiss="modal" onclick="">上传更新数据</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
+	
+	<div class="modal fade" id="mlbModal" tabindex="-2" role="dialog"
+		aria-labelledby="uploadModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="width:400px; ">
+			<div class="modal-content">
+				<div class="modal-body">
+					   	<form class="form-signin" role="form" method="POST"
+						enctype="multipart/form-data" id="mlbForm"
+						action="${basePath}/uploadExcel/upload.do">
+						<div class="form-group">
+							<label for="message-text" class="control-label">上传文件:</label>
+							 <input class="form-control" style="float:left"
+									id="upfile" type="file" name="upfile"
+									class="col-md-12" required>	
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" id="btn_mlb" class="btn btn-primary" data-dismiss="modal" onclick="">上传数据</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
     </body>
+    <script type="text/javascript">
+	
+	function uploadData() {
+		$("#uploadModal").modal("show");
+	}
+	
+	//ajax 方式上传文件操作
+	$(document).ready(function() {
+		$('#btn_api').click(function() {
+			if($("#apiCode").val() == "0"){
+				  alert("请选择数据接口");
+				  return false ;
+			}
+			//if (checkData()) {
+				$('#form1').ajaxSubmit({
+					url : '${basePath}/uploadExcel/ajaxUpload.do',
+					dataType : 'text',
+					success : resutlMsg,
+					error : errorMsg
+				});
+				function resutlMsg(msg) {
+					alert(msg);
+					parent.$('#dlg-frame').dialog("close");
+					//window.location.href = "${basePath}/uploadExcel/dataList.do?dateBegin=&dateEnd=&status=";
+					$("#upfile").val("");
+				}
+				function errorMsg() {
+					alert("导入excel出错！");
+				}
+			//}
+		});
+	});
+	
+
+	function uploadUnicomData() {
+		$("#unicomModal").modal("show");
+	}
+	
+	//ajax 方式上传文件操作
+	$(document).ready(function() {
+		$('#btn_insert').click(function() {
+				$('#unicomForm').ajaxSubmit({
+					url : '${basePath}/unicomUpload/uploadExcelUnicom?act=insert',
+					dataType : 'text',
+					success : resutlMsg,
+					error : errorMsg
+				});
+				function resutlMsg(msg) {
+					alert(msg);
+					parent.$('#dlg-frame').dialog('close');
+					//window.location.href = "${basePath}/uploadExcel/dataList.do?dateBegin=&dateEnd=&status=";
+					$("#upfile").val("");
+				}
+				function errorMsg() {
+					alert("导入excel出错！");
+				}
+		});
+		$('#btn_update').click(function() {
+			$('#unicomForm').ajaxSubmit({
+				url : '${basePath}/unicomUpload/uploadExcelUnicom?act=update',
+				dataType : 'text',
+				success : resutlMsg,
+				error : errorMsg
+			});
+			function resutlMsg(msg) {
+				alert(msg);
+				parent.$('#dlg-frame').dialog('close');
+				$("#upfile").val("");
+			}
+			function errorMsg() {
+				alert("导入excel出错！");
+			}
+	});
+	});
+	
+	
+	function uploadMlbData(){
+		 $("#mlbModal").modal("show");
+	}
+	
+	$(document).ready(function() {
+		$('#btn_mlb').click(function() {
+			$('#mlbForm').ajaxSubmit({
+				url : '${basePath}/unicomUpload/uploadExcelUnicom?act=update',
+				dataType : 'text',
+				success : resutlMsg,
+				error : errorMsg
+			});
+			function resutlMsg(msg) {
+				alert(msg);
+				parent.$('#dlg-frame').dialog('close');
+				$("#upfile").val("");
+			}
+			function errorMsg() {
+				alert("导入excel出错！");
+			}
+	});
+	});
+</script>
 </html>
