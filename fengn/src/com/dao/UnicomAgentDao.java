@@ -87,12 +87,13 @@ public class UnicomAgentDao {
 		return list;
 	}
 
-	public void updateCardAgent(String iccids, String agentid) {
-		String sql = "update unicom_card_agent set  agentid = " +
+	public void updateCardAgent(String iccids, String agentid , String table ) {
+		String sql = "update "+table +"_card_agent set  agentid = " +
 				agentid + "  where iccid in ("
-				+ " select guid from mlb_unicom_card  where id in (" + iccids  + "  0 ) )" ;
+				+ " select guid from mlb_"+table+"_card  where id in (" + iccids  + "  0 ) )" ;
 		jdbcTemplate.update(sql);
 	}
+	
 
 	public String whereSQL(QueryData qo){
 		String whereSql = "";

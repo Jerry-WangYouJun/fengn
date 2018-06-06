@@ -26,7 +26,6 @@ import com.service.AgentService;
 import com.service.CardAgentService;
 
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/treeindex")
@@ -41,7 +40,7 @@ public class TreeController {
 	@RequestMapping("/card")
 	public void getTreeData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
 			TreeNode treeNode = new TreeNode();
-			treeNode.setText("移动SIM卡管理");
+			treeNode.setText("丰宁/永思SIM卡管理");
 			getTreeDataBytype(session, response, request, "card", treeNode);
 	}
 	
@@ -51,11 +50,17 @@ public class TreeController {
 			treeNode.setText("联通SIM卡管理");
 			getTreeDataBytype(session, response, request, "unicom_card", treeNode);
 	}
+	@RequestMapping("/cmcc_card")
+	public void getCmccTreeData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+			TreeNode treeNode = new TreeNode();
+			treeNode.setText("移动SIM卡管理");
+			getTreeDataBytype(session, response, request, "cmcc_card", treeNode);
+	}
 
 	@RequestMapping("/kickback")
 	public void getKickbackData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
 		TreeNode treeNode = new TreeNode();
-		treeNode.setText("移动返佣管理");
+		treeNode.setText("丰宁/永思返佣管理");
 		getTreeDataBytype(session, response, request, "kickback", treeNode);
 	}
 	
@@ -64,6 +69,12 @@ public class TreeController {
 		TreeNode treeNode = new TreeNode();
 		treeNode.setText("联通返佣管理");
 		getTreeDataBytype(session, response, request, "unicom_kickback", treeNode);
+	}
+	@RequestMapping("/cmcc_kickback")
+	public void getCmccKickbackData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+		TreeNode treeNode = new TreeNode();
+		treeNode.setText("移动返佣管理");
+		getTreeDataBytype(session, response, request, "cmcc_kickback", treeNode);
 	}
 
 	public void getTreeDataBytype(HttpSession session, HttpServletResponse response, HttpServletRequest request 

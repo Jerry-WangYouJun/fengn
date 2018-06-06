@@ -234,19 +234,46 @@ public class ResponseURLDataUtil {
 		return token ;
 	}
 	
-	public static void main(String[] args) {
-		try {
-			getUnicomCard(1,30000 , "" , "2,3,4");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
 	public static JSONObject getUnicomCard(int pindex,int pRowCount , String iccids , String storeStatus) throws UnsupportedEncodingException {
 		String jsonString;
 		JSONObject jsonObject  = null;
 		try {
 			String url = getQueryUnicomUrl();
+			Map map = new HashMap();
+			map.put("p",  pindex);
+			map.put("pRowCount", pRowCount);
+			map.put("loginHoldId", "12896");
+			map.put("key", "");
+			map.put("storeState", storeStatus);
+			map.put("noChild", "0");
+			map.put("groupHoldId", "0");
+			map.put("batchCardStr", iccids);
+			map.put("batchType", "1");
+			JSONObject json = JSONObject.fromObject(map);
+			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString());
+			 jsonObject  = JSONObject.fromObject(jsonString);  
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+			return jsonObject ;
+	}
+	
+	
+	public static void main(String[] args) {
+		try {
+			getCmccCard(1,1000 , "" , "all");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static JSONObject getCmccCard(int pindex,int pRowCount , String iccids , String storeStatus) throws UnsupportedEncodingException {
+		String jsonString;
+		JSONObject jsonObject  = null;
+		try {
+			String url = "https://www.m-m10086.com/api/YDSimListFire/Search";
 			Map map = new HashMap();
 			map.put("p",  pindex);
 			map.put("pRowCount", pRowCount);

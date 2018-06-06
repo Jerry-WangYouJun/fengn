@@ -23,8 +23,8 @@ public class UnicomCardAgentService {
 		 
 		 @Autowired
 		 CardInfoMapper cardInfoDao;
-		 public List<UnicomInfoVo> queryCardInfo(Integer agentid , Pagination page, QueryData qo ){
-			 String sql = "select c.* , ag.name from unicom_card_agent a , mlb_unicom_card c , a_agent ag "
+		 public List<UnicomInfoVo> queryCardInfo(Integer agentid , Pagination page, QueryData qo  , String table ){
+			 String sql = "select c.* , ag.name from "+table+"_card_agent a , mlb_"+table+"_card c , a_agent ag "
 				 		+ "where a.iccid = c.guid   and ag.id=a.agentid " + 
 				 		"and ag.code like  CONCAT((select code from a_agent where id ="
 				 		+ agentid + "),'%' ) ";
@@ -35,11 +35,15 @@ public class UnicomCardAgentService {
 				 sql += " and  c.guid <= '" + qo.getIccidEnd() + "'" ;
 			}
 			 String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
-			 return dao.queryDataList(finalSql);
+			 if("cmcc".equals(table)) {
+					return dao.queryCmccDataList(finalSql);
+				}else {
+					return dao.queryDataList(finalSql);
+				}
 		 }
 		 
-		 public int queryCardTotal(Integer agentid ,  QueryData qo ){
-			 String sql = "select count(*) total from unicom_card_agent a , mlb_unicom_card c , a_agent ag "
+		 public int queryCardTotal(Integer agentid ,  QueryData qo, String table ){
+			 String sql = "select count(*) total from "+table+"_card_agent a , mlb_"+table+"_card c , a_agent ag "
 				 		+ "where a.iccid = c.guid  and ag.id=a.agentid  " 
 				 		+  "and ag.code like  CONCAT((select code from a_agent where id ="
 				 		+ agentid + "),'%' ) ";;
@@ -49,6 +53,7 @@ public class UnicomCardAgentService {
 			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
 				 sql += " and  c.guid <= '" + qo.getIccidEnd() + "'" ;
 			}
+			
 			 return dao.queryDataTotal(sql);
 		 }
 

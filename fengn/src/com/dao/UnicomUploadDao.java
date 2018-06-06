@@ -163,6 +163,7 @@ public class UnicomUploadDao {
 		return jdbcTemplate.update(insertsqlTemp);
 	}
 	
+	
 	public int insertMlbHistory( String  cmtpTable , String historyTable) {
 		String insertsqlTemp = "insert "+historyTable +" "
 				+ "(iccid , imsi ,packageType ,money , update_date , packagedetail , orderno  ) " + 
@@ -224,6 +225,20 @@ public class UnicomUploadDao {
 				+ " select   guid, packageName, " + 
 				"      simState, expireTime, oddTime, " + 
 				"	   dayUsageData, amountUsageData, totalMonthUsageFlow  from mlb_"+table+"_card_copy "
+				+ " where guid not in (select guid  from  mlb_"+table+"_card )";
+		return jdbcTemplate.update(insertsqlTemp);
+	}
+	
+	public int insertCmccData(String table) {
+		String insertsqlTemp = "insert into  mlb_" + table +  "_card  ( guid, simId, " + 
+				"      sim, packageName, bootState, " + 
+				"      expireTime, oddTime, amountUsageData, " + 
+				"      flowLeftValue, monthUsageData, totalMonthUsageFlow 	) "
+				+ " select  guid, simId, " + 
+				"     sim, packageName, bootState,  " + 
+				"	  expireTime, oddTime, amountUsageData,"
+				+ "  flowLeftValue, monthUsageData, totalMonthUsageFlow  "
+				+ "  from mlb_"+table+"_card_copy "
 				+ " where guid not in (select guid  from  mlb_"+table+"_card )";
 		return jdbcTemplate.update(insertsqlTemp);
 	}

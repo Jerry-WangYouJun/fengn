@@ -62,15 +62,21 @@ public class AgentService {
 				  String text = "" ;
 				  switch (urlType) {
 				case "card":
-					text = "移动卡-"+ agent.getName() ;
+					text = "丰宁/永思卡-"+ agent.getName() ;
 					break;
 				case "unicom_card":
 					text = "联通卡-"+ agent.getName() ;
 					break;
+				case "cmcc_card":
+					text = "移动卡-"+ agent.getName() ;
+					break;
 				case "kickback":
-					text = "移动返佣-"+ agent.getName() ;
+					text = "丰宁/永思返佣-"+ agent.getName() ;
 					break;
 				case "unicom_kickback":
+					text = "联通返佣-"+ agent.getName() ;
+					break;
+				case "cmcc_kickback":
 					text = "联通返佣-"+ agent.getName() ;
 					break;
 				default:
@@ -99,18 +105,24 @@ public class AgentService {
 					tn.setId(agent.getId() + "");
 					String text = "" ;
 					  switch (urlType) {
-					case "card":
-						text = "移动卡-"+ agent.getName() ;
-						break;
-					case "unicom_card":
-						text = "联通卡-"+ agent.getName() ;
-						break;
-					case "kickback":
-						text = "移动返佣-"+ agent.getName() ;
-						break;
-					case "unicom_kickback":
-						text = "联通返佣-"+ agent.getName() ;
-						break;
+					  case "card":
+							text = "丰宁/永思卡-"+ agent.getName() ;
+							break;
+						case "unicom_card":
+							text = "联通卡-"+ agent.getName() ;
+							break;
+						case "cmcc_card":
+							text = "移动卡-"+ agent.getName() ;
+							break;
+						case "kickback":
+							text = "丰宁/永思返佣-"+ agent.getName() ;
+							break;
+						case "unicom_kickback":
+							text = "联通返佣-"+ agent.getName() ;
+							break;
+						case "cmcc_kickback":
+							text = "联通返佣-"+ agent.getName() ;
+							break;
 					default:
 						break;
 					}

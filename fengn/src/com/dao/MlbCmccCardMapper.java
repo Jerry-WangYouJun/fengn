@@ -1,5 +1,7 @@
 package com.dao;
 
+import java.util.List;
+
 import com.model.MlbCmccCard;
 
 public interface MlbCmccCardMapper {
@@ -14,6 +16,8 @@ public interface MlbCmccCardMapper {
     int updateByPrimaryKeySelective(MlbCmccCard record);
 
     int updateByPrimaryKey(MlbCmccCard record);
+
+	int insertBatch(List<MlbCmccCard> mccInsertList);
     
     
 }

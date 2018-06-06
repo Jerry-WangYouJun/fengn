@@ -97,6 +97,8 @@
  			if("${groupId}"=="1" || "${groupId}"=="3"){
  				getMenu("card");
  				getMenu("kickback");
+ 				getMenu("cmcc_card");
+ 				getMenu("cmcc_kickback");
  			}
  			if("${groupId}"=="2" || "${groupId}"=="3"){
  				getMenu("unicom_card");
@@ -191,11 +193,11 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="#">移动卡信息 <i class="fa-save"></i></a>
+                    <li><a href="#">丰宁/永思卡信息 <i class="fa-save"></i></a>
                         <ul class="nav sub" id="card">
 						</ul>
                     </li>
-                    <li><a href="#">移动返佣 <i class="fa-dollar"></i></a>
+                    <li><a href="#">丰宁/永思返佣 <i class="fa-dollar"></i></a>
                         <ul class="nav sub" id="kickback">
 						</ul>
                     </li>
@@ -205,6 +207,14 @@
                     </li>
                     <li><a href="#">联通返佣 <i class="fa-money"></i></a>
                         <ul class="nav sub" id="unicom_kickback">
+						</ul>
+                    </li>
+                    <li><a href="#">移动卡信息 <i class="fa-file-text"></i></a>
+                        <ul class="nav sub" id="cmcc_card">
+						</ul>
+                    </li>
+                    <li><a href="#">移动返佣 <i class="fa-money"></i></a>
+                        <ul class="nav sub" id="cmcc_kickback">
 						</ul>
                     </li>
                 </ul>
