@@ -86,7 +86,8 @@
 			        method : 'get', // 请求方式（*）  
 			        toolbar : '#toolbar', // 工具按钮用哪个容器  
 			        cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）  
-			        sidePagination : "client", // 分页方式：client客户端分页，server服务端分页（*）  
+			        sidePagination : "server", // 分页方式：client客户端分页，server服务端分页（*）  
+			        queryParamsType:'',
 			        pagination : true, // 是否显示分页（*）  
 			        pageNumber: 1,    //如果设置了分页，首页页码  
 			        pageSize: 50,                       //每页的记录行数（*）  

@@ -17,7 +17,8 @@
 		        method : 'get', // 请求方式（*）  
 		        toolbar : '#toolbar', // 工具按钮用哪个容器  
 		        cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）  
-		        sidePagination : "client", // 分页方式：client客户端分页，server服务端分页（*）  
+		        sidePagination : "server", // 分页方式：client客户端分页，server服务端分页（*）  
+		        queryParamsType:'',
 		        pagination : true, // 是否显示分页（*）  
 		        pageNumber: 1,    //如果设置了分页，首页页码  
 		        pageSize: 50,                       //每页的记录行数（*）  
@@ -99,13 +100,14 @@
 	<script type="text/javascript">
 	$(function(){
 		var tabName = parent.$("#deviceulid > li.active").attr("id");
-		 var agentId = tabName.split("_")[3];
+		 var agentId = tabName.split("_")[4];
 	    $('#agentTable').bootstrapTable({  
-	        url : '${basePath}/unicom/card_query/'+agentId, // 请求后台的URL（*）            
+	        url : '${basePath}/agent/user_query', // 请求后台的URL（*）            
 	        method : 'get', // 请求方式（*）  
 	        toolbar : '#agentToolbar', // 工具按钮用哪个容器  
 	        cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）  
-	        sidePagination : "client", // 分页方式：client客户端分页，server服务端分页（*）  
+	        sidePagination : "server", // 分页方式：client客户端分页，server服务端分页（*）  
+	        queryParamsType:'',
 	        pagination : true, // 是否显示分页（*）  
 	        pageNumber: 1,    //如果设置了分页，首页页码  
 	        pageSize: 50,                       //每页的记录行数（*）  
@@ -163,7 +165,7 @@
 		if (!del) {
 			return false;
 		}
-		var id = $("#agentTable").bootstrapTable('getSelections')[i].id;
+		var id = $("#agentTable").bootstrapTable('getSelections')[0].id;
 		if (id > 0) {
 			var url = "${basePath}/unicom/card_move";
 			$.ajax({

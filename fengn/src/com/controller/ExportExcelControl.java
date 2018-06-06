@@ -17,6 +17,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.common.ExportExcelUtil;
 import com.model.InfoVo;
  
+
+/**
+ * 模板文件下载，废弃
+ * @author Administrator
+ *
+ */
 @Controller
 @RequestMapping("/ExportExcel/*")  
 public class ExportExcelControl {

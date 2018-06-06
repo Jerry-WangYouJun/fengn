@@ -1,20 +1,23 @@
 package com.common;
 
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
+import org.apache.http.util.TextUtils;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-
-import net.sf.json.JSONObject;
 
 public class ResponseURLDataUtil {
 	public static JSONObject getLmbJsonData(String url) throws UnsupportedEncodingException {
@@ -47,7 +50,16 @@ public class ResponseURLDataUtil {
 				+ "&etime=" +URLEncoder.encode(timeEnd,"utf-8")
 				+ "&order=&id=&minamonth=&access=&simState=-1&"
 				+ "commercialTenant=&batchType=iccid&batchValues=&groupHoldId=0";
-		
+		System.out.println(url);
+		return url;
+	}
+	
+	/**
+	 *  
+	 * @return 物联网查询基本信息的url
+	 */
+	public static String getQueryUnicomUrl(){
+		String url = "https://www.m-m10086.com/api/SimListFire/Search";
 		return url;
 	}
 	
@@ -64,7 +76,7 @@ public class ResponseURLDataUtil {
 		 return cookie ;
 	}
 	/**
-	 * 执行相应的url获取
+	 * 执行物联网新增续费的url获取 ， post类型的请求
 	 * @param urlString
 	 * @return
 	 * @throws UnsupportedEncodingException
@@ -76,7 +88,7 @@ public class ResponseURLDataUtil {
             java.net.HttpURLConnection conn = (java.net.HttpURLConnection)url.openConnection();  
             conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
             conn.setDoOutput(true);  
-            conn.setRequestMethod("GET");   
+            conn.setRequestMethod("POST");   
             java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream(),"UTF-8"));  
             String line;  
             while ((line = in.readLine()) != null) {  
@@ -90,6 +102,12 @@ public class ResponseURLDataUtil {
         return res;  
     }  
     
+    /**
+	 * 执行物联网新增续费的url获取 ， get类型的请求
+	 * @param urlString
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
     public static String getReturnDataWithCookie(String urlString ) throws UnsupportedEncodingException {  
         String res = "";   
         try {   
@@ -99,6 +117,50 @@ public class ResponseURLDataUtil {
             conn.setDoOutput(true);  
             conn.setRequestProperty("cookie", getCookie(getToken("青岛丰宁贸易新", "8989123")));
             conn.setRequestMethod("GET");   
+            java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream(),"UTF-8"));  
+            String line;  
+            while ((line = in.readLine()) != null) {  
+                res += line;  
+            }  
+            in.close();  
+        } catch (Exception e) {  
+            System.out.println("error in wapaction,and e is " + e.getMessage());  
+        }  
+        	//System.out.println(res);  	
+        return res;  
+    } 
+    
+    /**
+     * 
+     * @param urlString 请求的url
+     * @param json  带查询条件的json字符串
+     * @return 查询结果
+     * @throws UnsupportedEncodingException
+     */
+    public static String getPOSTReturnDataWithCookie(String urlString ,String json) throws UnsupportedEncodingException {  
+        String res = "";   
+        try {   
+            URL url = new URL(urlString);  
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection)url.openConnection();  
+            conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
+            conn.setDoOutput(true);  
+            conn.setDoInput(true);
+            conn.setUseCaches(false);
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("Charset", "UTF-8");
+            conn.setRequestProperty("cookie", getCookie(getToken("青岛丰宁贸易新", "8989123")));
+            conn.setRequestMethod("POST");   
+            conn.setRequestProperty("Content-Type","application/json; charset=UTF-8");
+            conn.setRequestProperty("accept","application/json");
+            if (json != null && !TextUtils.isEmpty(json)) {
+                byte[] writebytes = json.getBytes();
+                // 设置文件长度
+                conn.setRequestProperty("Content-Length", String.valueOf(writebytes.length));
+                OutputStream outwritestream = conn.getOutputStream();
+                outwritestream.write(json.getBytes());
+                outwritestream.flush();
+                outwritestream.close();
+            }
             java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream(),"UTF-8"));  
             String line;  
             while ((line = in.readLine()) != null) {  
@@ -170,5 +232,28 @@ public class ResponseURLDataUtil {
  		}
 		System.out.println(token);
 		return token ;
+	}
+	
+	
+	public static void main(String[] args) throws UnsupportedEncodingException {
+		String jsonString;
+		JSONObject jsonObject  = null;
+		try {
+			String url = getQueryUnicomUrl();
+			Map map = new HashMap();
+			map.put("p", "1");
+			map.put("pRowCount", "1000");
+			map.put("loginHoldId", "12896");
+			map.put("key", "");
+			map.put("storeState", "2");
+			map.put("noChild", "0");
+			map.put("groupHoldId", "0");
+			JSONObject json = JSONObject.fromObject(map);
+			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString());
+			 jsonObject  = JSONObject.fromObject(jsonString);  
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+			System.out.println(jsonObject.toString());
 	}
 }

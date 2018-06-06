@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.common.CodeUtil;
 import com.common.ContextString;
 import com.model.Agent;
+import com.model.Grid;
 import com.model.Pagination;
 import com.model.QueryData;
 import com.model.User;
@@ -39,9 +40,9 @@ public class AgentController {
 	
 	@ResponseBody
 	@RequestMapping("/user_query")
-	public List<Agent>  queryTest( HttpServletResponse response, HttpServletRequest request  ,HttpSession session ) {
+	public Grid  queryTest( HttpServletResponse response, HttpServletRequest request  ,HttpSession session ) {
 		String userName = request.getParameter("userName");
-		String pageNo = request.getParameter("pageNo");
+		String pageNo = request.getParameter("pageNumber");
 		String pageSize = request.getParameter("pageSize");
 	    User user = new User();
 	    user.setUserName(userName);
@@ -50,7 +51,11 @@ public class AgentController {
 		Pagination page =  new Pagination(pageNo, pageSize) ;
 	    CodeUtil.initPagination(page);
 		List<Agent> list = userService.queryList(user , page );
-		return list;
+		int total = userService.queryListCount(user);
+		Grid grid = new Grid();
+		grid.setRows(list);
+		grid.setTotal((long)total);
+		return grid;
 	}
 	
 	@RequestMapping("/card_move")

@@ -51,7 +51,7 @@ public class UserDao {
 				+ " left join t_package p on  p.id = a.type where u.agentid = a.id   " + whereSql(user);
 		String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
          final  List<Agent> list =   new ArrayList<>();
-         jdbcTemplate.query(sql, new RowMapper() {
+         jdbcTemplate.query(finalSql, new RowMapper() {
 			public Object mapRow(ResultSet rs, int arg1) throws SQLException {
 					Agent  vo = new Agent(); 
 					vo.setId(rs.getInt("agentid"));

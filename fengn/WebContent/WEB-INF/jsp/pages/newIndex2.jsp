@@ -134,10 +134,6 @@
 	                      	  <li class="dropdown">
 	                                <a href="#" style="padding: 12px" data-toggle="dropdown"><i class="im-paste">&nbsp;导入</i></a>
 	                                <ul class="dropdown-menu right" role="menu">
-	                                    <li><a href="#" onclick="uploadData()">丰宁/永思移动数据导入</a>
-	                                    </li>
-	                                    <li><a href="#" onclick="uploadUnicomData()">联通卡导入</a>
-	                                    </li>
 	                                    <li><a href="#" onclick="uploadMlbData()"> 麦联宝导入</a>
 	                                    </li>
 	                                </ul>
@@ -529,32 +525,6 @@
 		<!-- /.modal -->
 	</div>
 	
-	<div class="modal fade" id="unicomModal" tabindex="-2" role="dialog"
-		aria-labelledby="uploadModalLabel" aria-hidden="true">
-		<div class="modal-dialog" style="width:400px; ">
-			<div class="modal-content">
-				<div class="modal-body">
-					   	<form class="form-signin" role="form" method="POST"
-						enctype="multipart/form-data" id="unicomForm"
-						action="${basePath}/uploadExcel/upload.do">
-						<div class="form-group">
-							<label for="message-text" class="control-label">上传文件:</label>
-							 <input class="form-control" style="float:left"
-									id="upfile" type="file" name="upfile"
-									class="col-md-12" required>	
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" id="btn_insert" class="btn btn-primary" data-dismiss="modal" onclick="">上传新数据</button>
-					<button type="button" id="btn_update" class="btn btn-primary" data-dismiss="modal" onclick="">上传更新数据</button>
-				</div>
-			</div>
-			<!-- /.modal-content -->
-		</div>
-		<!-- /.modal -->
-	</div>
 	
 	<div class="modal fade" id="mlbModal" tabindex="-2" role="dialog"
 		aria-labelledby="uploadModalLabel" aria-hidden="true">
@@ -569,6 +539,16 @@
 							 <input class="form-control" style="float:left"
 									id="upfile" type="file" name="upfile"
 									class="col-md-12" required>	
+						</div>
+						<div class="form-group">
+						  <div class="col-xs-3 ">
+						   <label for="message-text" class="control-label">选择卡类型:</label>
+						  </div>
+						    <select name="apiCode" id = "apiCode" class="form-control" >
+						      <option value="1">移动</option>
+						      <option value="2">联通</option>
+						      <option value="3">电信</option>
+						    </select>
 						</div>
 					</form>
 				</div>
@@ -665,7 +645,7 @@
 	$(document).ready(function() {
 		$('#btn_mlb').click(function() {
 			$('#mlbForm').ajaxSubmit({
-				url : '${basePath}/unicomUpload/uploadExcelUnicom?act=update',
+				url : '${basePath}/unicomUpload/uploadExcelUnicom?act=insert',
 				dataType : 'text',
 				success : resutlMsg,
 				error : errorMsg

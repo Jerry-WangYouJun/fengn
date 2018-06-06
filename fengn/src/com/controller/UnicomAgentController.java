@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -14,12 +16,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.common.CodeUtil;
 import com.model.Agent;
+import com.model.Grid;
 import com.model.Pagination;
 import com.model.QueryData;
+import com.model.UnicomInfoVo;
 import com.service.UnicomAgentService;
 import com.service.UnicomCardAgentService;
 import com.service.UserService;
@@ -94,6 +99,41 @@ public class UnicomAgentController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+
+	@ResponseBody
+	@RequestMapping("/card_query/{agentId}")
+	public Grid queryCard(@PathVariable("agentId") Integer agentId, HttpServletResponse response, 
+			HttpServletRequest request  ,HttpSession session , QueryData qo) {
+		Grid grid = new  Grid();
+		String pageNo = request.getParameter("pageNumber");
+		String pageSize = request.getParameter("pageSize");
+		//System.out.println(userName);
+		Pagination page =  new Pagination(pageNo, pageSize , 100) ;
+	    CodeUtil.initPagination(page);
+	    List<UnicomInfoVo>  list = cardAgentService.queryCardInfo(agentId , page , qo);
+	    Long total = (long)cardAgentService.queryCardTotal(agentId, qo);
+	    grid.setRows(list);
+	    grid.setTotal(total);
+	    return grid;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/kickback_query/{agentId}")
+	public Grid   queryKickback(@PathVariable("agentId") Integer agentId, HttpServletResponse response, 
+			HttpServletRequest request  ,HttpSession session , QueryData qo ) {
+		String pageNo = request.getParameter("pageNumber");
+		String pageSize = request.getParameter("pageSize");
+		//System.out.println(userName);
+		Grid grid = new Grid();
+		Pagination page =  new Pagination(pageNo, pageSize , 100) ;
+	    CodeUtil.initPagination(page);
+	    List<Map<String,String>>  list = cardAgentService.queryKickbackInfo(agentId, qo  , page , qo.getTimeType());
+	    Map<String , Double > map = cardAgentService.queryKickbackTotal(agentId , qo , qo.getTimeType());
+	   grid.setRows(list);
+	   grid.setTotal(map.get("total").longValue());
+	    return grid;
 	}
 	
 }

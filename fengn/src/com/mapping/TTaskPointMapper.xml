@@ -13,6 +13,11 @@
     <result column="reason" jdbcType="VARCHAR" property="reason" />
     <result column="error" jdbcType="VARCHAR" property="error" />
   </resultMap>
+  
+   <resultMap id="logMap" type="java.util.HashMap">
+    <result column="startTime" jdbcType="VARCHAR" property="startTime" />
+    <result column="error" jdbcType="VARCHAR" property="error" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - @mbg.generated
@@ -108,6 +113,12 @@
       order by ${orderByClause}
     </if>
   </select>
+  
+    
+  <select id="selectStartTime"  resultMap="logMap">
+      select max(pointTime) startTime , error from t_task_point group by  error
+  </select>
+  
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated

@@ -1,11 +1,13 @@
 package com.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.model.TTaskPoint;
 import com.model.TTaskPointExample;
+
 
 public interface TTaskPointMapper {
 
@@ -74,4 +76,8 @@ public interface TTaskPointMapper {
 	 * @mbg.generated  Sun May 13 12:26:08 CST 2018
 	 */
 	int updateByPrimaryKey(TTaskPoint record);
+	
+	
+	List<Map<String,String>> selectStartTime();
+	
 }

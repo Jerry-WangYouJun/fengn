@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.MlbUnicomCardMapper">
+  <resultMap id="BaseResultMap" type="com.model.MlbUnicomCard">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="guid" jdbcType="VARCHAR" property="guid" />
+    <result column="packageName" jdbcType="VARCHAR" property="packagename" />
+    <result column="simState" jdbcType="VARCHAR" property="simstate" />
+    <result column="expireTime" jdbcType="VARCHAR" property="expiretime" />
+    <result column="oddTime" jdbcType="VARCHAR" property="oddtime" />
+    <result column="dayUsageData" jdbcType="DOUBLE" property="dayusagedata" />
+    <result column="amountUsageData" jdbcType="DOUBLE" property="amountusagedata" />
+    <result column="totalMonthUsageFlow" jdbcType="DOUBLE" property="totalmonthusageflow" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, guid, packageName, simState, expireTime, oddTime, dayUsageData, amountUsageData, 
+    totalMonthUsageFlow
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mlb_unicom_card
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from mlb_unicom_card
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.model.MlbUnicomCard">
+    insert into mlb_unicom_card (id, guid, packageName, 
+      simState, expireTime, oddTime, 
+      dayUsageData, amountUsageData, totalMonthUsageFlow
+      )
+    values (#{id,jdbcType=INTEGER}, #{guid,jdbcType=VARCHAR}, #{packagename,jdbcType=VARCHAR}, 
+      #{simstate,jdbcType=VARCHAR}, #{expiretime,jdbcType=VARCHAR}, #{oddtime,jdbcType=VARCHAR}, 
+      #{dayusagedata,jdbcType=DOUBLE}, #{amountusagedata,jdbcType=DOUBLE}, #{totalmonthusageflow,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.model.MlbUnicomCard">
+    insert into mlb_unicom_card
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="guid != null">
+        guid,
+      </if>
+      <if test="packagename != null">
+        packageName,
+      </if>
+      <if test="simstate != null">
+        simState,
+      </if>
+      <if test="expiretime != null">
+        expireTime,
+      </if>
+      <if test="oddtime != null">
+        oddTime,
+      </if>
+      <if test="dayusagedata != null">
+        dayUsageData,
+      </if>
+      <if test="amountusagedata != null">
+        amountUsageData,
+      </if>
+      <if test="totalmonthusageflow != null">
+        totalMonthUsageFlow,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="guid != null">
+        #{guid,jdbcType=VARCHAR},
+      </if>
+      <if test="packagename != null">
+        #{packagename,jdbcType=VARCHAR},
+      </if>
+      <if test="simstate != null">
+        #{simstate,jdbcType=VARCHAR},
+      </if>
+      <if test="expiretime != null">
+        #{expiretime,jdbcType=VARCHAR},
+      </if>
+      <if test="oddtime != null">
+        #{oddtime,jdbcType=VARCHAR},
+      </if>
+      <if test="dayusagedata != null">
+        #{dayusagedata,jdbcType=DOUBLE},
+      </if>
+      <if test="amountusagedata != null">
+        #{amountusagedata,jdbcType=DOUBLE},
+      </if>
+      <if test="totalmonthusageflow != null">
+        #{totalmonthusageflow,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.model.MlbUnicomCard">
+    update mlb_unicom_card
+    <set>
+      <if test="guid != null">
+        guid = #{guid,jdbcType=VARCHAR},
+      </if>
+      <if test="packagename != null">
+        packageName = #{packagename,jdbcType=VARCHAR},
+      </if>
+      <if test="simstate != null">
+        simState = #{simstate,jdbcType=VARCHAR},
+      </if>
+      <if test="expiretime != null">
+        expireTime = #{expiretime,jdbcType=VARCHAR},
+      </if>
+      <if test="oddtime != null">
+        oddTime = #{oddtime,jdbcType=VARCHAR},
+      </if>
+      <if test="dayusagedata != null">
+        dayUsageData = #{dayusagedata,jdbcType=DOUBLE},
+      </if>
+      <if test="amountusagedata != null">
+        amountUsageData = #{amountusagedata,jdbcType=DOUBLE},
+      </if>
+      <if test="totalmonthusageflow != null">
+        totalMonthUsageFlow = #{totalmonthusageflow,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.model.MlbUnicomCard">
+    update mlb_unicom_card
+    set guid = #{guid,jdbcType=VARCHAR},
+      packageName = #{packagename,jdbcType=VARCHAR},
+      simState = #{simstate,jdbcType=VARCHAR},
+      expireTime = #{expiretime,jdbcType=VARCHAR},
+      oddTime = #{oddtime,jdbcType=VARCHAR},
+      dayUsageData = #{dayusagedata,jdbcType=DOUBLE},
+      amountUsageData = #{amountusagedata,jdbcType=DOUBLE},
+      totalMonthUsageFlow = #{totalmonthusageflow,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

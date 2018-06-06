@@ -38,9 +38,8 @@ public class UnicomUploadDao {
 			+ "	cardStatus,company_level ,	packageDetail ,updateTime  , remark	";
 
 	public int insertDataTemp(List<List<Object>> listob ) {
-		String insertsqlTemp = "INSERT INTO u_cmtp_temp ( " + columuns + ") "
-				+ "VALUES (?  ,? , ? ,  ?, ? "
-				+ ", ?, ?, ?, ?, ?, now()  , ? )";
+		String insertsqlTemp = "INSERT INTO mlb_unicom_card_copy (  ICCID ) "
+				+ "VALUES (? )";
 		objectList = listob;
 		// batchUpdate可以高效进行批量插入操作
 		try {

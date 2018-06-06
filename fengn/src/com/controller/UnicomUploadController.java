@@ -54,32 +54,9 @@ public class UnicomUploadController {
 		if(listob != null ){
 			System.out.println("读取xls数据用时：" + (System.currentTimeMillis() - startTime));
 			String msg = "";
-			dataServices.deleteDataTemp("u_cmtp_temp");
+			dataServices.deleteDataTemp("mlb_unicom_card_copy");
 			System.out.println("删除临时表,用时" + (System.currentTimeMillis() - startTime));
-			if("insert".equals(act)) {
 				msg = dataServices.insertUnicomList(listob ,agentId);
-			}else if("update".equals(act)) {
-				msg = dataServices.updateUnicomList(listob );
-			}
-			List<UnicomHistory>  historyList =  new ArrayList<>();
-			for(int i = 0 ; i < listob.size() ; i ++){//1 iccid  10 money 11.updatetime
-				try {
-					String money  =  listob.get(i).get(9).toString();
-					if(StringUtils.isNotEmpty(money) && Double.valueOf(money) > 0){
-						UnicomHistory history =   new UnicomHistory();
-						history.setIccid(listob.get(i).get(0).toString());
-						history.setMoney(Double.valueOf(money));
-						history.setUpdateDate(listob.get(i).get(10).toString());
-						historyList.add(history);
-					}
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
-			}
-			if(historyList != null && historyList.size() > 0) {
-				
-				dataServices.insertHistoryList(historyList);
-			}
 			out.print(msg);
 		}
 		out.flush();

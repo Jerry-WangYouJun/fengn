@@ -87,22 +87,26 @@ public class TreeController {
 
 	@ResponseBody
 	@RequestMapping("/card_query/{agentId}")
-	public List<InfoVo>  queryCard(@PathVariable("agentId") Integer agentId, HttpServletResponse response,
+	public Grid  queryCard(@PathVariable("agentId") Integer agentId, HttpServletResponse response,
 			HttpServletRequest request, HttpSession session, QueryData qo) {
- 		String pageNo = request.getParameter("pageNo");
+		Grid grid = new Grid();
+ 		String pageNo = request.getParameter("pageNumber");
 		String pageSize = request.getParameter("pageSize");
 		// System.out.println(userName);
 		Pagination page = new Pagination(pageNo, pageSize, 100);
 		CodeUtil.initPagination(page);
 		List<InfoVo> list = cardAgentService.queryCardInfo(agentId, page, qo);
-		return list;
+		Long total = (long)cardAgentService.queryCardTotal(agentId, qo);
+		grid.setRows(list);
+		grid.setTotal(total);
+		return grid;
 	}
 
 	@ResponseBody
 	@RequestMapping("/kickback_query/{agentId}")
-	public List<Map<String, String>> queryKickback(@PathVariable("agentId") Integer agentId, HttpServletResponse response,
+	public Grid queryKickback(@PathVariable("agentId") Integer agentId, HttpServletResponse response,
 			HttpServletRequest request, HttpSession session, QueryData qo) {
-		String pageNo = request.getParameter("pageNo");
+		String pageNo = request.getParameter("pageNumber");
 		String pageSize = request.getParameter("pageSize");
 		// System.out.println(userName);
 		Grid grid = new Grid();
@@ -110,13 +114,15 @@ public class TreeController {
 		CodeUtil.initPagination(page);
 		List<Map<String, String>> list = cardAgentService.queryKickbackInfo(agentId, qo, page, qo.getTimeType());
 		Map<String, Double> map = cardAgentService.queryKickbackTotal(agentId, qo, qo.getTimeType());
-		return list;
+		grid.setTotal(map.get("total").longValue());
+		grid.setRows(list);
+		return grid;
 	}
 
 	@RequestMapping("/kickback_sum/{agentId}")
 	public void queryKickbackSum(@PathVariable("agentId") Integer agentId, HttpServletResponse response,
 			HttpServletRequest request, HttpSession session, QueryData qo) {
-		String pageNo = request.getParameter("pageNo");
+		String pageNo = request.getParameter("pageNumber");
 		String pageSize = request.getParameter("pageSize");
 		// System.out.println(userName);
 		Pagination page = new Pagination(pageNo, pageSize, 100);
