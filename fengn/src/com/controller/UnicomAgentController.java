@@ -44,6 +44,7 @@ public class UnicomAgentController {
 	
 	@RequestMapping("/card_move")
 	public void moveCard(String iccids , String agentid ,HttpServletResponse response  ){
+		response.setCharacterEncoding("UTF-8");
 		PrintWriter out;
 		try {
 			service.updateCardAgent(iccids,agentid);
@@ -85,6 +86,7 @@ public class UnicomAgentController {
 	
 	@RequestMapping(value="/status/{id}")
 	public void delete(@PathVariable("id") Integer id, HttpServletResponse response ){
+		response.setCharacterEncoding("UTF-8");
 		PrintWriter out;
 		try {
 			service.updateOrderStatus(id);

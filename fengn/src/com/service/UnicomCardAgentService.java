@@ -1,6 +1,5 @@
 package com.service;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,48 +24,30 @@ public class UnicomCardAgentService {
 		 @Autowired
 		 CardInfoMapper cardInfoDao;
 		 public List<UnicomInfoVo> queryCardInfo(Integer agentid , Pagination page, QueryData qo ){
-			 String sql = "select c.* , ag.name from u_card_agent a , u_cmtp c , a_agent ag "
-				 		+ "where a.iccid = c.ICCID   and ag.id=a.agentid " + 
+			 String sql = "select c.* , ag.name from unicom_card_agent a , mlb_unicom_card c , a_agent ag "
+				 		+ "where a.iccid = c.guid   and ag.id=a.agentid " + 
 				 		"and ag.code like  CONCAT((select code from a_agent where id ="
 				 		+ agentid + "),'%' ) ";
 			if(StringUtils.isNotEmpty(qo.getIccidStart())){
-				 sql += " and c.ICCID >= '" + qo.getIccidStart() + "'" ;
+				 sql += " and c.guid >= '" + qo.getIccidStart() + "'" ;
 			}
 			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
-				 sql += " and  c.ICCID <= '" + qo.getIccidEnd() + "'" ;
-			}
-			if(StringUtils.isNotEmpty(qo.getType())){
-				String packageType  = "";
-				try {
-					 packageType =  new String(qo.getType().getBytes("ISO-8859-1"),"UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
-				sql += " and  packageType  like '%" + packageType + "%'" ;
+				 sql += " and  c.guid <= '" + qo.getIccidEnd() + "'" ;
 			}
 			 String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
 			 return dao.queryDataList(finalSql);
 		 }
 		 
 		 public int queryCardTotal(Integer agentid ,  QueryData qo ){
-			 String sql = "select count(*) total from u_card_agent a , u_cmtp c , a_agent ag "
-				 		+ "where a.iccid = c.ICCID  and ag.id=a.agentid  " 
+			 String sql = "select count(*) total from unicom_card_agent a , mlb_unicom_card c , a_agent ag "
+				 		+ "where a.iccid = c.guid  and ag.id=a.agentid  " 
 				 		+  "and ag.code like  CONCAT((select code from a_agent where id ="
 				 		+ agentid + "),'%' ) ";;
 			if(StringUtils.isNotEmpty(qo.getIccidStart())){
-				 sql += " and c.ICCID >= '" + qo.getIccidStart() + "'" ;
+				 sql += " and c.guid >= '" + qo.getIccidStart() + "'" ;
 			}
 			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
-				 sql += " and  c.ICCID <= '" + qo.getIccidEnd() + "'" ;
-			}
-			if(StringUtils.isNotEmpty(qo.getType())){
-				String packageType  = "";
-				try {
-					 packageType =  new String(qo.getType().getBytes("ISO-8859-1"),"UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
-				sql += " and  packageType  like '%" + packageType + "%'" ;
+				 sql += " and  c.guid <= '" + qo.getIccidEnd() + "'" ;
 			}
 			 return dao.queryDataTotal(sql);
 		 }

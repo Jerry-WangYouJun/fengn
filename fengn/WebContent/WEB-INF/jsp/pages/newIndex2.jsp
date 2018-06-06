@@ -106,7 +106,7 @@
  		});
  		
  		function upload() {
- 			var path = "${basePath}/uploadExcel/uploadInit"  ;
+ 			var path = "${pageContext.request.contextPath}/uploadExcel/uploadInit"  ;
  			document.getElementById('frameContent').src = path;
  			$('#dlg-frame').dialog('open');
  		}
@@ -497,7 +497,7 @@
 				<div class="modal-body">
 					 <form class="form-signin" role="form" method="POST"
 						enctype="multipart/form-data" id="form1"
-						action="${basePath}/uploadExcel/upload.do">
+						action="${pageContext.request.contextPath}/uploadExcel/upload.do">
 						<div class="form-group">
 							<label for="message-text" class="control-label">上传文件:</label>
 							 <input class="form-control" style="float:left"
@@ -533,7 +533,7 @@
 				<div class="modal-body">
 					   	<form class="form-signin" role="form" method="POST"
 						enctype="multipart/form-data" id="mlbForm"
-						action="${basePath}/uploadExcel/upload.do">
+						action="${pageContext.request.contextPath}/uploadExcel/upload.do">
 						<div class="form-group">
 							<label for="message-text" class="control-label">上传文件:</label>
 							 <input class="form-control" style="float:left"
@@ -541,9 +541,7 @@
 									class="col-md-12" required>	
 						</div>
 						<div class="form-group">
-						  <div class="col-xs-3 ">
 						   <label for="message-text" class="control-label">选择卡类型:</label>
-						  </div>
 						    <select name="apiCode" id = "apiCode" class="form-control" >
 						      <option value="1">移动</option>
 						      <option value="2">联通</option>
@@ -577,7 +575,7 @@
 			}
 			//if (checkData()) {
 				$('#form1').ajaxSubmit({
-					url : '${basePath}/uploadExcel/ajaxUpload.do',
+					url : '${pageContext.request.contextPath}/uploadExcel/ajaxUpload.do',
 					dataType : 'text',
 					success : resutlMsg,
 					error : errorMsg
@@ -585,7 +583,7 @@
 				function resutlMsg(msg) {
 					alert(msg);
 					parent.$('#dlg-frame').dialog("close");
-					//window.location.href = "${basePath}/uploadExcel/dataList.do?dateBegin=&dateEnd=&status=";
+					//window.location.href = "${pageContext.request.contextPath}/uploadExcel/dataList.do?dateBegin=&dateEnd=&status=";
 					$("#upfile").val("");
 				}
 				function errorMsg() {
@@ -604,7 +602,7 @@
 	$(document).ready(function() {
 		$('#btn_insert').click(function() {
 				$('#unicomForm').ajaxSubmit({
-					url : '${basePath}/unicomUpload/uploadExcelUnicom?act=insert',
+					url : '${pageContext.request.contextPath}/unicomUpload/uploadExcelUnicom?act=insert',
 					dataType : 'text',
 					success : resutlMsg,
 					error : errorMsg
@@ -612,7 +610,7 @@
 				function resutlMsg(msg) {
 					alert(msg);
 					parent.$('#dlg-frame').dialog('close');
-					//window.location.href = "${basePath}/uploadExcel/dataList.do?dateBegin=&dateEnd=&status=";
+					//window.location.href = "${pageContext.request.contextPath}/uploadExcel/dataList.do?dateBegin=&dateEnd=&status=";
 					$("#upfile").val("");
 				}
 				function errorMsg() {
@@ -621,7 +619,7 @@
 		});
 		$('#btn_update').click(function() {
 			$('#unicomForm').ajaxSubmit({
-				url : '${basePath}/unicomUpload/uploadExcelUnicom?act=update',
+				url : '${pageContext.request.contextPath}/unicomUpload/uploadExcelUnicom?act=update',
 				dataType : 'text',
 				success : resutlMsg,
 				error : errorMsg
@@ -645,7 +643,7 @@
 	$(document).ready(function() {
 		$('#btn_mlb').click(function() {
 			$('#mlbForm').ajaxSubmit({
-				url : '${basePath}/unicomUpload/uploadExcelUnicom?act=insert',
+				url : '${pageContext.request.contextPath}/unicomUpload/uploadExcelUnicom',
 				dataType : 'text',
 				success : resutlMsg,
 				error : errorMsg
