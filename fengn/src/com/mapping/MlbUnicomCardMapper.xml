@@ -36,6 +36,18 @@
       #{dayusagedata,jdbcType=DOUBLE}, #{amountusagedata,jdbcType=DOUBLE}, #{totalmonthusageflow,jdbcType=DOUBLE}
       )
   </insert>
+   <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">  
+    insert into mlb_unicom_card_copy (guid, packageName, 
+      simState, expireTime, oddTime, 
+      dayUsageData, amountUsageData, totalMonthUsageFlow  )  
+    values   
+    <foreach collection="list" item="item" index="index" separator="," >  
+        ( #{item.guid}, #{item.packagename}, 
+      #{item.simstate}, #{item.expiretime}, #{item.oddtime}, 
+      #{item.dayusagedata}, #{item.amountusagedata}, #{item.totalmonthusageflow}
+      ) 
+    </foreach>  
+  </insert> 
   <insert id="insertSelective" parameterType="com.model.MlbUnicomCard">
     insert into mlb_unicom_card
     <trim prefix="(" suffix=")" suffixOverrides=",">

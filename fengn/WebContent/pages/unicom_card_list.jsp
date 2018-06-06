@@ -32,19 +32,11 @@
 			        {field : 'id', visible: false  },
 					{field:'iccid',title:'ICCID',align:'center', valign: 'middle'},
 					{field:'name',title:'所属代理商',align:'center', valign: 'middle'},
-					{field:'imsi',title:'卡号',align:'center', valign: 'middle'},
 					{field:'gprsUsed',title:'使用流量',align:'center', valign: 'middle'},
+					{field:'gprsRest',title:'剩余流量',align:'center', valign: 'middle'},
 					{field:'packageType',title:'套餐类型',align:'center', valign: 'middle'},
-					{field:'orderStatus' , title:'订单状态' , align:'center' , valign: 'middle',
-						formatter: function(value,row,index){
-							if (value =='1'){
-								return "已充值";
-							} else {
-								return "未充值";
-							}
-						}
-					},
-					{field:'remark',title:'备注',align:'center', valign: 'middle'}
+					{field:'cardStatus',title:'卡类型',align:'center', valign: 'middle'},
+					{field:'remark',title:'到期日期',align:'center', valign: 'middle'}
 			     ],  
 		        silent : true, // 刷新事件必须设置  
 		    }); 
@@ -67,10 +59,10 @@
 			             <button id="btn_edit" type="button" class="btn btn-default" onclick="moveData()">  
 			                <span class="glyphicon glyphicon-forward" aria-hidden="true" ></span>分配
 			            </button> 
-			            <button id="btn_edit" type="button" class="btn btn-default" onclick="updateOrderStatus()">  
+			            <!-- <button id="btn_edit" type="button" class="btn btn-default" onclick="updateOrderStatus()">  
 			                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
 			                修改订单状态
-			            </button>
+			            </button> -->
 			        </div>  
 				  </div>
 			</div>

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import com.model.History;
 import com.model.InfoPackage;
 import com.model.InfoVo;
+import com.model.MlbUnicomCard;
 
 /**
  * @author lx g
@@ -28,54 +29,30 @@ public class UnicomUploadDao {
 	private JdbcTemplate jdbcTemplate;
 	// 存储数据数组List
 	List<List<Object>> objectList = new ArrayList<List<Object>>();
+	List<MlbUnicomCard> mlbunicomList = new ArrayList<>();
 	// 存储list
 	List<InfoVo> voList = new ArrayList<InfoVo>();
 	List<String> iccidList = new ArrayList<String>();
 	// 存储当前表的插入语句
 	String INSERTSQL = "";
 	StringBuffer mailMessage = new StringBuffer("");
-	String columuns = "ICCID,  IMSI,packageType ,	monthTotalStream,  	gprsUsed, gprsRest , deadline , "
-			+ "	cardStatus,company_level ,	packageDetail ,updateTime  , remark	";
+	String columuns = "ICCID, packageType ,	monthTotalStream,  	gprsUsed, gprsRest , deadline , "
+			+ "	cardStatus  ,updateTime  , remark	";
 
-	public int insertDataTemp(List<List<Object>> listob ) {
-		String insertsqlTemp = "INSERT INTO mlb_unicom_card_copy (  ICCID ) "
+	public int insertDataTemp(List<MlbUnicomCard> listob ,String table ) {
+		String insertsqlTemp = "INSERT INTO  mlb_" + table + "_card_copy (  guid ) "
 				+ "VALUES (? )";
-		objectList = listob;
+		mlbunicomList = listob;
 		// batchUpdate可以高效进行批量插入操作
 		try {
-			if (objectList != null && objectList.size() > 0) {
+			if (mlbunicomList != null && objectList.size() > 0) {
 				jdbcTemplate.batchUpdate(insertsqlTemp,
 						new BatchPreparedStatementSetter() {
 							public void setValues(PreparedStatement ps, int i) {
 								try {
 									// 并根据数据类型对Statement 中的占位符进行赋值
 									List<Object> valueList = objectList.get(i);
-									if (valueList.size() > 11) {
-										ps.setString(
-												1,
-												String.valueOf(valueList.get(0))
-														.trim());//ICCID
-										ps.setString(2, String
-												.valueOf(valueList.get(1)).trim()); //IMSI
-										ps.setString(3, String
-												.valueOf(valueList.get(2)).trim()); //套餐名称 packageType
-										ps.setString(4, String
-												.valueOf(valueList.get(3)).trim());//总量/剩余流量 monthTotalStream
-										ps.setString(5, String
-												.valueOf(valueList.get(4)));//本月用量 gprsUsed
-										ps.setString(6, String
-												.valueOf(valueList.get(5)));//剩余流量 gprsRest
-										ps.setString(7, String
-												.valueOf(valueList.get(6)));//剩余天数deadline
-										ps.setString(8, String
-												.valueOf(valueList.get(7)));//状态 cardStatus
-										ps.setString(9, String
-												.valueOf(valueList.get(8)));//实名等级company_level
-										ps.setString(10, String
-												.valueOf(valueList.get(11)));//套餐详情  packageDetail
-										ps.setString(11,valueList.size() > 12? String
-												.valueOf(valueList.get(12).toString()):"");//备注 remark
-									}
+									ps.setString(1, String.valueOf(valueList.get(0)).trim());//ICCID
 								} catch (Exception e) {
 									e.printStackTrace();
 									System.out.println("出错的" + i);
@@ -179,10 +156,10 @@ public class UnicomUploadDao {
 		return list;
 	}
 
-	public int insertAgentCard(String agentId) {
-		String insertsqlTemp = "insert u_card_agent (iccid , agentid ) select t.iccid , '" + agentId+ "'"
-				+ " from u_cmtp_temp t  "
-				+ " where  t.iccid not in (select iccid  from  u_card_agent ) ";
+	public int insertAgentCard(String agentId , String table) {
+		String insertsqlTemp = "insert " + table +"_card_agent (iccid , agentid ) select t.guid , '" + agentId+ "'"
+				+ " from  mlb_"+ table +"_card_copy  t  "
+				+ " where  t.guid not in (select guid  from  " + table+ "_card_agent ) ";
 		return jdbcTemplate.update(insertsqlTemp);
 	}
 	
@@ -240,9 +217,14 @@ public class UnicomUploadDao {
 			return map;
 	}
 
-	public int insertData() {
-		String insertsqlTemp = "insert into u_cmtp  ( " + columuns +"	)  select distinct " + columuns + " from u_cmtp_temp "
-				+ " where iccid not in (select iccid  from  u_cmtp )";
+	public int insertData(String table) {
+		String insertsqlTemp = "insert into  mlb_" + table +  "_card  (  guid, packageName, " + 
+				"      simState, expireTime, oddTime, " + 
+				"      dayUsageData, amountUsageData, totalMonthUsageFlow	) "
+				+ " select   guid, packageName, " + 
+				"      simState, expireTime, oddTime, " + 
+				"	   dayUsageData, amountUsageData, totalMonthUsageFlow  from mlb_"+table+"_card_copy "
+				+ " where guid not in (select guid  from  mlb_"+table+"_card )";
 		return jdbcTemplate.update(insertsqlTemp);
 	}
 

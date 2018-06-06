@@ -14,4 +14,6 @@ public interface MlbCmccCardMapper {
     int updateByPrimaryKeySelective(MlbCmccCard record);
 
     int updateByPrimaryKey(MlbCmccCard record);
+    
+    
 }

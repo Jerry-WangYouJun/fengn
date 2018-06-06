@@ -3,21 +3,21 @@ package com.model;
 public class MlbUnicomCard {
     private Integer id;
 
-    private String guid;
+    private String guid; //iccid
 
-    private String packagename;
+    private String packagename; //packageType
 
-    private String simstate;
+    private String simstate;//cardStatus
 
-    private String expiretime;
+    private String expiretime; //
 
-    private String oddtime;
+    private String oddtime; //deadline
 
-    private Double dayusagedata;
+    private Double dayusagedata;//
 
-    private Double amountusagedata;
+    private Double amountusagedata;//剩余流量gprsRest
 
-    private Double totalmonthusageflow;
+    private Double totalmonthusageflow;//历史用量gprsUsed
 
     public Integer getId() {
         return id;

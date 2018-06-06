@@ -4,12 +4,9 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.json.JSONObject;
 
 import org.apache.http.util.TextUtils;
 import org.jsoup.Connection;
@@ -19,7 +16,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import net.sf.json.JSONObject;
+
 public class ResponseURLDataUtil {
+	public static String token = "";
+	
 	public static JSONObject getLmbJsonData(String url) throws UnsupportedEncodingException {
 		String jsonString;
 		JSONObject jsonObject  = null;
@@ -230,30 +231,38 @@ public class ResponseURLDataUtil {
 				  }
 			}
  		}
-		System.out.println(token);
 		return token ;
 	}
 	
-	
-	public static void main(String[] args) throws UnsupportedEncodingException {
+	public static void main(String[] args) {
+		try {
+			getUnicomCard(1,30000 , "" , "2,3,4");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public static JSONObject getUnicomCard(int pindex,int pRowCount , String iccids , String storeStatus) throws UnsupportedEncodingException {
 		String jsonString;
 		JSONObject jsonObject  = null;
 		try {
 			String url = getQueryUnicomUrl();
 			Map map = new HashMap();
-			map.put("p", "1");
-			map.put("pRowCount", "1000");
+			map.put("p",  pindex);
+			map.put("pRowCount", pRowCount);
 			map.put("loginHoldId", "12896");
 			map.put("key", "");
-			map.put("storeState", "2");
+			map.put("storeState", storeStatus);
 			map.put("noChild", "0");
 			map.put("groupHoldId", "0");
+			map.put("batchCardStr", iccids);
+			map.put("batchType", "1");
 			JSONObject json = JSONObject.fromObject(map);
 			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString());
 			 jsonObject  = JSONObject.fromObject(jsonString);  
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-			System.out.println(jsonObject.toString());
+			return jsonObject ;
 	}
 }

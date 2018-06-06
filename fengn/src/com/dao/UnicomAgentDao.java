@@ -88,9 +88,9 @@ public class UnicomAgentDao {
 	}
 
 	public void updateCardAgent(String iccids, String agentid) {
-		String sql = "update u_card_agent set  agentid = " +
+		String sql = "update unicom_card_agent set  agentid = " +
 				agentid + "  where iccid in ("
-				+ " select iccid from u_cmtp  where id in (" + iccids  + "  0 ) )" ;
+				+ " select guid from mlb_unicom_card  where id in (" + iccids  + "  0 ) )" ;
 		jdbcTemplate.update(sql);
 	}
 

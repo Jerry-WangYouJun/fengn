@@ -40,7 +40,7 @@ public class UnicomUploadController {
 	
 
 	@ResponseBody
-	@RequestMapping(value = "uploadExcelUnicom", method = { RequestMethod.GET,
+	@RequestMapping(value = "/uploadExcelUnicom", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	public void uploadExcelUnicom(HttpServletRequest request,
 			HttpServletResponse response , String act, HttpSession session) throws Exception {
@@ -51,12 +51,24 @@ public class UnicomUploadController {
 		System.out.println("导入表数据开始：" + DateUtils.formatDate("MM-dd:HH-mm-ss"));
 		List<List<Object>> listob = dataServices.getDataList(multipartRequest, response);
 		String agentId = session.getAttribute("agentId").toString();
+		String apiCode = request.getParameter("apiCode");
+		String tableName = "";
+		switch (apiCode) {
+		case "1":
+			tableName="cmcc";
+			break;
+		case "2":
+			tableName ="unicom";
+			break;
+		default:
+			break;
+		}
 		if(listob != null ){
 			System.out.println("读取xls数据用时：" + (System.currentTimeMillis() - startTime));
 			String msg = "";
-			dataServices.deleteDataTemp("mlb_unicom_card_copy");
+			dataServices.deleteDataTemp( "mlb_" + tableName + "_card_copy");
 			System.out.println("删除临时表,用时" + (System.currentTimeMillis() - startTime));
-				msg = dataServices.insertUnicomList(listob ,agentId);
+				msg = dataServices.insertUnicomList(listob ,agentId , tableName);
 			out.print(msg);
 		}
 		out.flush();
