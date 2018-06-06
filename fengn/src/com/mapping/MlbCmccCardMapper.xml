@@ -41,6 +41,22 @@
       #{flowleftvalue,jdbcType=DOUBLE}, #{monthusagedata,jdbcType=DOUBLE}, #{totalmonthusageflow,jdbcType=DOUBLE}
       )
   </insert>
+  
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">  
+    insert into mlb_cmcc_card_copy (guid, simid, 
+      sim, packageName, bootState, 
+      expireTime, oddTime, amountUsageData, 
+      flowLeftValue, monthUsageData, totalMonthUsageFlow  )  
+    values   
+    <foreach collection="list" item="item" index="index" separator="," >  
+        ( #{item.guid}, #{item.simid}, #{item.sim},
+      #{item.packagename}, #{item.bootstate}, #{item.expiretime}, 
+      #{item.oddtime}, #{item.amountusagedata}, #{item.flowleftvalue} 
+      , #{item.monthusagedata}, #{item.totalmonthusageflow} 
+      ) 
+    </foreach>  
+  </insert> 
+  
   <insert id="insertSelective" parameterType="com.model.MlbCmccCard">
     insert into mlb_cmcc_card
     <trim prefix="(" suffix=")" suffixOverrides=",">

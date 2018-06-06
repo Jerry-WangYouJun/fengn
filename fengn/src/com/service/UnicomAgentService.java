@@ -91,9 +91,10 @@ public class UnicomAgentService {
 		return mapTree;
 	}
 
-	public void updateCardAgent(String iccids, String agentid) {
-		   dao.updateCardAgent(iccids,agentid );
+	public void updateCardAgent(String iccids, String agentid , String table ) {
+		   dao.updateCardAgent(iccids,agentid , table );
 	}
+	
 
 	public int queryTatol(QueryData qo) {
 		return dao.queryTotal(qo);

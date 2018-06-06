@@ -47,7 +47,25 @@ public class UnicomAgentController {
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out;
 		try {
-			service.updateCardAgent(iccids,agentid);
+			service.updateCardAgent(iccids,agentid , "unicom");
+			out = response.getWriter();
+			JSONObject json = new JSONObject();
+			json.put("msg", "操作成功");
+			json.put("success", true);
+			out.println(json);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("/cmcc_card_move")
+	public void moveCmccCard(String iccids , String agentid ,HttpServletResponse response  ){
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out;
+		try {
+			service.updateCardAgent(iccids,agentid , "cmcc");
 			out = response.getWriter();
 			JSONObject json = new JSONObject();
 			json.put("msg", "操作成功");
@@ -114,8 +132,25 @@ public class UnicomAgentController {
 		//System.out.println(userName);
 		Pagination page =  new Pagination(pageNo, pageSize , 100) ;
 	    CodeUtil.initPagination(page);
-	    List<UnicomInfoVo>  list = cardAgentService.queryCardInfo(agentId , page , qo);
-	    Long total = (long)cardAgentService.queryCardTotal(agentId, qo);
+	    List<UnicomInfoVo>  list = cardAgentService.queryCardInfo(agentId , page , qo , "unicom");
+	    Long total = (long)cardAgentService.queryCardTotal(agentId, qo , "unicom");
+	    grid.setRows(list);
+	    grid.setTotal(total);
+	    return grid;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/cmcc_card_query/{agentId}")
+	public Grid queryCmccCard(@PathVariable("agentId") Integer agentId, HttpServletResponse response, 
+			HttpServletRequest request  ,HttpSession session , QueryData qo) {
+		Grid grid = new  Grid();
+		String pageNo = request.getParameter("pageNumber");
+		String pageSize = request.getParameter("pageSize");
+		//System.out.println(userName);
+		Pagination page =  new Pagination(pageNo, pageSize , 100) ;
+	    CodeUtil.initPagination(page);
+	    List<UnicomInfoVo>  list = cardAgentService.queryCardInfo(agentId , page , qo , "cmcc");
+	    Long total = (long)cardAgentService.queryCardTotal(agentId, qo , "cmcc");
 	    grid.setRows(list);
 	    grid.setTotal(total);
 	    return grid;
@@ -124,6 +159,23 @@ public class UnicomAgentController {
 	@ResponseBody
 	@RequestMapping("/kickback_query/{agentId}")
 	public Grid   queryKickback(@PathVariable("agentId") Integer agentId, HttpServletResponse response, 
+			HttpServletRequest request  ,HttpSession session , QueryData qo ) {
+		String pageNo = request.getParameter("pageNumber");
+		String pageSize = request.getParameter("pageSize");
+		//System.out.println(userName);
+		Grid grid = new Grid();
+		Pagination page =  new Pagination(pageNo, pageSize , 100) ;
+	    CodeUtil.initPagination(page);
+	    List<Map<String,String>>  list = cardAgentService.queryKickbackInfo(agentId, qo  , page , qo.getTimeType());
+	    Map<String , Double > map = cardAgentService.queryKickbackTotal(agentId , qo , qo.getTimeType());
+	   grid.setRows(list);
+	   grid.setTotal(map.get("total").longValue());
+	    return grid;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/cmcc_kickback_query/{agentId}")
+	public Grid   queryCmccKickback(@PathVariable("agentId") Integer agentId, HttpServletResponse response, 
 			HttpServletRequest request  ,HttpSession session , QueryData qo ) {
 		String pageNo = request.getParameter("pageNumber");
 		String pageSize = request.getParameter("pageSize");

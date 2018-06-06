@@ -46,6 +46,35 @@ public class UnicomCardAgentDao {
 		});
 		return list;
 	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<UnicomInfoVo> queryCmccDataList(String selectSql) {
+		final List<UnicomInfoVo> list = new ArrayList<UnicomInfoVo>();
+		jdbcTemplate.query(selectSql, new RowMapper() {
+			public Object mapRow(ResultSet rs, int arg1) throws SQLException {
+				UnicomInfoVo vo = new UnicomInfoVo();
+				vo.setId(rs.getString("id"));
+				//vo.setIMSI(rs.getString("IMSI"));
+				vo.setICCID(rs.getString("guid"));
+				vo.setCardStatus(rs.getString("bootstate"));
+				vo.setGprsUsed(rs.getString("monthusagedata"));
+				vo.setGprsRest(rs.getString("flowleftvalue"));
+				//vo.setCompanyLevel(rs.getString("company_level"));
+				//vo.setWithGPRSService(rs.getString("withGPRSService"));
+				vo.setPackageType(rs.getString("packagename"));
+				//vo.setPackageDetail(rs.getString("packageDetail"));
+				//vo.setMonthTotalStream(rs.getString("monthTotalStream"));
+				//vo.setUpdateTime(rs.getString("updateTime"));
+				vo.setDeadline(rs.getString("oddtime"));
+				//vo.setOrderStatus(rs.getString("orderStatus"));
+				vo.setRemark(rs.getString("expiretime"));//截止日期暂用remark
+				vo.setName(rs.getString("name"));
+				list.add(vo);
+				return null;
+			}
+		});
+		return list;
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public int queryDataTotal(String sql) {

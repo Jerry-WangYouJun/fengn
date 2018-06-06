@@ -68,7 +68,11 @@ public class UnicomUploadController {
 			String msg = "";
 			dataServices.deleteDataTemp( "mlb_" + tableName + "_card_copy");
 			System.out.println("删除临时表,用时" + (System.currentTimeMillis() - startTime));
+			if("unicom".equals(tableName)) {
 				msg = dataServices.insertUnicomList(listob ,agentId , tableName);
+			}else {
+				msg = dataServices.insertCmccList(listob, agentId, tableName);
+			}
 			out.print(msg);
 		}
 		out.flush();
