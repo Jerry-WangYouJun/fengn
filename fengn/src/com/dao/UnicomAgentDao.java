@@ -94,6 +94,12 @@ public class UnicomAgentDao {
 		jdbcTemplate.update(sql);
 	}
 	
+	public void updateCardAgent(String iccids, String agentid) {
+		String sql = "update u_card_agent set  agentid = " +
+				agentid + "  where iccid in ("
+				+ " select iccid from u_cmtp  where id in (" + iccids  + "  0 ) )" ;
+		jdbcTemplate.update(sql);
+	}
 
 	public String whereSQL(QueryData qo){
 		String whereSql = "";

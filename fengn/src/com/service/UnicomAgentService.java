@@ -95,6 +95,10 @@ public class UnicomAgentService {
 		   dao.updateCardAgent(iccids,agentid , table );
 	}
 	
+	public void updateCardAgent(String iccids, String agentid ) {
+		   dao.updateCardAgent(iccids,agentid  );
+	}
+	
 
 	public int queryTatol(QueryData qo) {
 		return dao.queryTotal(qo);

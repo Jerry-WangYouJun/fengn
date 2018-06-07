@@ -25,20 +25,20 @@ public class UnicomCardAgentDao {
 			public Object mapRow(ResultSet rs, int arg1) throws SQLException {
 				UnicomInfoVo vo = new UnicomInfoVo();
 				vo.setId(rs.getString("id"));
-				//vo.setIMSI(rs.getString("IMSI"));
-				vo.setICCID(rs.getString("guid"));
-				vo.setCardStatus(rs.getString("simstate"));
-				vo.setGprsUsed(rs.getString("totalmonthusageflow"));
-				vo.setGprsRest(rs.getString("amountusagedata"));
-				//vo.setCompanyLevel(rs.getString("company_level"));
-				//vo.setWithGPRSService(rs.getString("withGPRSService"));
-				vo.setPackageType(rs.getString("packagename"));
-				//vo.setPackageDetail(rs.getString("packageDetail"));
-				//vo.setMonthTotalStream(rs.getString("monthTotalStream"));
-				//vo.setUpdateTime(rs.getString("updateTime"));
-				vo.setDeadline(rs.getString("oddtime"));
-				//vo.setOrderStatus(rs.getString("orderStatus"));
-				vo.setRemark(rs.getString("expiretime"));//截止日期暂用remark
+				vo.setIMSI(rs.getString("IMSI"));
+				vo.setICCID(rs.getString("ICCID"));
+				vo.setCardStatus(rs.getString("cardStatus"));
+				vo.setGprsUsed(rs.getString("gprsUsed"));
+				vo.setGprsRest(rs.getString("gprsrest"));
+				vo.setCompanyLevel(rs.getString("company_level"));
+				vo.setWithGPRSService(rs.getString("withGPRSService"));
+				vo.setPackageType(rs.getString("packageType"));
+				vo.setPackageDetail(rs.getString("packageDetail"));
+				vo.setMonthTotalStream(rs.getString("monthTotalStream"));
+				vo.setUpdateTime(rs.getString("updateTime"));
+				vo.setDeadline(rs.getString("deadline"));
+				vo.setOrderStatus(rs.getString("orderStatus"));
+				vo.setRemark(rs.getString("remark"));
 				vo.setName(rs.getString("name"));
 				list.add(vo);
 				return null;

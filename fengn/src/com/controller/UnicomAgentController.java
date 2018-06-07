@@ -47,7 +47,7 @@ public class UnicomAgentController {
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out;
 		try {
-			service.updateCardAgent(iccids,agentid , "unicom");
+			service.updateCardAgent(iccids,agentid );
 			out = response.getWriter();
 			JSONObject json = new JSONObject();
 			json.put("msg", "操作成功");
@@ -132,7 +132,7 @@ public class UnicomAgentController {
 		//System.out.println(userName);
 		Pagination page =  new Pagination(pageNo, pageSize , 100) ;
 	    CodeUtil.initPagination(page);
-	    List<UnicomInfoVo>  list = cardAgentService.queryCardInfo(agentId , page , qo , "unicom");
+	    List<UnicomInfoVo>  list = cardAgentService.queryCardInfo(agentId , page , qo );
 	    Long total = (long)cardAgentService.queryCardTotal(agentId, qo , "unicom");
 	    grid.setRows(list);
 	    grid.setTotal(total);

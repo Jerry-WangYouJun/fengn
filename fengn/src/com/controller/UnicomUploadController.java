@@ -67,11 +67,12 @@ public class UnicomUploadController {
 			System.out.println("读取xls数据用时：" + (System.currentTimeMillis() - startTime));
 			String msg = "";
 			dataServices.deleteDataTemp( "mlb_" + tableName + "_card_copy");
-			System.out.println("删除临时表,用时" + (System.currentTimeMillis() - startTime));
 			if("unicom".equals(tableName)) {
 				msg = dataServices.insertUnicomList(listob ,agentId , tableName);
 			}else {
+				System.out.println("开始获取数据" + DateUtils.formatDate("yyyyMMddHHmmss"));
 				msg = dataServices.insertCmccList(listob, agentId, tableName);
+				System.out.println("插入数据表,用时" + (System.currentTimeMillis() - startTime));
 			}
 			out.print(msg);
 		}

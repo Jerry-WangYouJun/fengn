@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.common.DateUtils;
 import com.common.ResponseURLDataUtil;
 import com.dao.HistoryMapper;
 import com.dao.MlbCmccCardMapper;
@@ -38,51 +39,57 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 	@Autowired
 	MlbCmccCardMapper  cmccMapper;
 
-	public String insertUnicomList(List<List<Object>> listObject, String agentId ,String table) throws UnsupportedEncodingException {
+	public String insertUnicomList(List<List<Object>> listObject, String agentId ,String table) throws Exception {
 		StringBuffer sb = new StringBuffer();
+		String token = ResponseURLDataUtil.getToken();
 		List<MlbUnicomCard> mucList = new ArrayList<>();
-		JSONObject jsonForCount = ResponseURLDataUtil.getUnicomCard(1,1, "", "2,3,4");
-		int count = ((JSONArray)jsonForCount.get("result")).getJSONObject(0).getInt("records");
-		int index = count%10000  == 0 ?  count /10000 : count/10000 + 1 ;
-		for (int i = 1; i <= index ; i++) {
-			JSONObject json = ResponseURLDataUtil.getUnicomCard(i,10000, "", "2,3,4");
-			mucList.addAll(getResultUnicomFromMlb(json)) ;
-			//break;
-		}
 		List<MlbUnicomCard> mucInsertList = new ArrayList<>();
-		for(List<Object> iccid : listObject) {
-			 for (MlbUnicomCard mu : mucList) {
-				  if(iccid.get(0).equals(mu.getGuid())) {
-					  mucInsertList.add(mu);
-				  }
+		JSONObject jsonForCount = ResponseURLDataUtil.getUnicomCard(1,1, "", "2,3,4" ,token);
+		int size = 1000;
+		int count = ((JSONArray)jsonForCount.get("result")).getJSONObject(0).getInt("records");
+		int index = count%size  == 0 ?  count /size : count/size + 1 ;
+		int total = 0 ;
+		for (int i = 1; i <= index ; i++) {
+			JSONObject json = ResponseURLDataUtil.getUnicomCard(i,size, "", "2,3,4" ,token);
+			mucList  = getResultUnicomFromMlb(json);
+			for (MlbUnicomCard mu : mucList) {
+				for(List<Object> iccid : listObject) {
+					  if(iccid.get(0).equals(mu.getGuid())) {
+						  mucInsertList.add(mu);
+					  }
+				}
 			}
+			 total +=  unicomMapper.insertBatch(mucInsertList);
 		}
-	  	int total =  unicomMapper.insertBatch(mucInsertList);
 	  	int actual = uploadDao.insertData(table);
 	  	int aaa  =  uploadDao.insertAgentCard(agentId , table );
 	  	
 	  	return  "共"+ total + "条数据, 插入成功 " + actual + "条" ;
 	}
 	
-	public String insertCmccList(List<List<Object>> listObject, String agentId ,String table) throws UnsupportedEncodingException {
+	public String insertCmccList(List<List<Object>> listObject, String agentId ,String table) throws Exception {
 		List<MlbCmccCard> mccList = new ArrayList<>();
-		JSONObject jsonForCount = ResponseURLDataUtil.getCmccCard(1,1, "", "all");
+		String token = ResponseURLDataUtil.getToken();
+		JSONObject jsonForCount = ResponseURLDataUtil.getCmccCard(1,1, "", "all" ,token);
 		int count = ((JSONArray)jsonForCount.get("result")).getJSONObject(0).getInt("records");
-		int index = count%10000  == 0 ?  count /10000 : count/10000 + 1 ;
+		int size = 10000;
+		int index = count%size  == 0 ?  count /size : count/size + 1 ;
+		int total = 0 ;
 		for (int i = 1; i <= index ; i++) {
-			JSONObject json = ResponseURLDataUtil.getCmccCard(i,1000, "", "all");
-			mccList.addAll(getResultCmccFromMlb(json)) ;
-			break;
-		}
-		List<MlbCmccCard> mccInsertList = new ArrayList<>();
-		for(List<Object> iccid : listObject) {
-			 for (MlbCmccCard mc : mccList) {
-				  if(iccid.get(0).equals(mc.getGuid())) {
-					  mccInsertList.add(mc);
-				  }
+			System.out.println("读取第"+i+"次数据" + DateUtils.formatDate("yyyyMMddHHmmss"));
+			JSONObject json = ResponseURLDataUtil.getCmccCard(i,size, "", "all" ,token);
+			mccList = getResultCmccFromMlb(json) ;
+			System.out.println("读取" + mccList.size() + "条");
+			//break;
+			if(mccList.size() > 0){
+				System.out.println("开始第"+i+"次插入数据" + DateUtils.formatDate("yyyyMMddHHmmss"));
+					int temp = cmccMapper.insertBatch(mccList);
+					System.out.println("插入" + temp + "条");
+					total += temp;
+					System.out.println("结束第"+i+"次插入数据" + DateUtils.formatDate("yyyyMMddHHmmss"));	
 			}
 		}
-	  	int total =  cmccMapper.insertBatch(mccInsertList);
+	  	System.out.println("累计插入" + total);
 	  	int actual = uploadDao.insertCmccData(table);
 	  	int aaa  =  uploadDao.insertAgentCard(agentId , table );
 	  	
@@ -147,4 +154,7 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 		historyDao.insertBatch(historyList);
 		historyDao.insertData();
 	}
+	
+	
+	
 }

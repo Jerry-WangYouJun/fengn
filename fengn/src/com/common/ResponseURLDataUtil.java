@@ -4,9 +4,14 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.sf.json.JSONObject;
 
 import org.apache.http.util.TextUtils;
 import org.jsoup.Connection;
@@ -15,8 +20,6 @@ import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-
-import net.sf.json.JSONObject;
 
 public class ResponseURLDataUtil {
 	public static String token = "";
@@ -138,7 +141,7 @@ public class ResponseURLDataUtil {
      * @return 查询结果
      * @throws UnsupportedEncodingException
      */
-    public static String getPOSTReturnDataWithCookie(String urlString ,String json) throws UnsupportedEncodingException {  
+    public static String getPOSTReturnDataWithCookie(String urlString ,String json , String token) throws UnsupportedEncodingException {  
         String res = "";   
         try {   
             URL url = new URL(urlString);  
@@ -149,7 +152,8 @@ public class ResponseURLDataUtil {
             conn.setUseCaches(false);
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("Charset", "UTF-8");
-            conn.setRequestProperty("cookie", getCookie(getToken("青岛丰宁贸易新", "8989123")));
+           // conn.setRequestProperty("cookie", getCookie(getToken("青岛丰宁贸易新", "8989123")));
+            conn.setRequestProperty("cookie", getCookie(token));
             conn.setRequestMethod("POST");   
             conn.setRequestProperty("Content-Type","application/json; charset=UTF-8");
             conn.setRequestProperty("accept","application/json");
@@ -175,6 +179,9 @@ public class ResponseURLDataUtil {
         return res;  
     } 
     
+    public static String getToken() throws Exception{
+    	return getToken("青岛丰宁贸易新", "8989123");
+    }
     
     /**
 	 * 模拟登陆 ， 获取token生成cookie
@@ -235,7 +242,7 @@ public class ResponseURLDataUtil {
 	}
 	
 	
-	public static JSONObject getUnicomCard(int pindex,int pRowCount , String iccids , String storeStatus) throws UnsupportedEncodingException {
+	public static JSONObject getUnicomCard(int pindex,int pRowCount , String iccids , String storeStatus  , String token) throws UnsupportedEncodingException {
 		String jsonString;
 		JSONObject jsonObject  = null;
 		try {
@@ -251,7 +258,7 @@ public class ResponseURLDataUtil {
 			map.put("batchCardStr", iccids);
 			map.put("batchType", "1");
 			JSONObject json = JSONObject.fromObject(map);
-			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString());
+			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString() ,token);
 			 jsonObject  = JSONObject.fromObject(jsonString);  
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -262,14 +269,20 @@ public class ResponseURLDataUtil {
 	
 	public static void main(String[] args) {
 		try {
-			getCmccCard(1,1000 , "" , "all");
+			
+			System.out.println(DateUtils.formatDate("yyyyMMddHHmmss"));
+			getCmccCard(1,10000 , "" , "all" , getToken("青岛丰宁贸易新", "8989123"));
+			System.out.println(DateUtils.formatDate("yyyyMMddHHmmss"));
 		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	public static JSONObject getCmccCard(int pindex,int pRowCount , String iccids , String storeStatus) throws UnsupportedEncodingException {
+	public static JSONObject getCmccCard(int pindex,int pRowCount , String iccids , String storeStatus , String token) throws UnsupportedEncodingException {
 		String jsonString;
 		JSONObject jsonObject  = null;
 		try {
@@ -285,7 +298,7 @@ public class ResponseURLDataUtil {
 			map.put("batchCardStr", iccids);
 			map.put("batchType", "1");
 			JSONObject json = JSONObject.fromObject(map);
-			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString());
+			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString() , token);
 			 jsonObject  = JSONObject.fromObject(jsonString);  
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

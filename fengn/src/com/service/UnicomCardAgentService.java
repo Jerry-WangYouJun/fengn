@@ -1,5 +1,6 @@
 package com.service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,31 @@ public class UnicomCardAgentService {
 		 
 		 @Autowired
 		 CardInfoMapper cardInfoDao;
+		 
+		 public List<UnicomInfoVo> queryCardInfo(Integer agentid , Pagination page, QueryData qo ){
+			 String sql = "select c.* , ag.name from u_card_agent a , u_cmtp c , a_agent ag "
+				 		+ "where a.iccid = c.ICCID   and ag.id=a.agentid " + 
+				 		"and ag.code like  CONCAT((select code from a_agent where id ="
+				 		+ agentid + "),'%' ) ";
+			if(StringUtils.isNotEmpty(qo.getIccidStart())){
+				 sql += " and c.ICCID >= '" + qo.getIccidStart() + "'" ;
+			}
+			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
+				 sql += " and  c.ICCID <= '" + qo.getIccidEnd() + "'" ;
+			}
+			if(StringUtils.isNotEmpty(qo.getType())){
+				String packageType  = "";
+				try {
+					 packageType =  new String(qo.getType().getBytes("ISO-8859-1"),"UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				sql += " and  packageType  like '%" + packageType + "%'" ;
+			}
+			 String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
+			 return dao.queryDataList(finalSql);
+		 }
+		 
 		 public List<UnicomInfoVo> queryCardInfo(Integer agentid , Pagination page, QueryData qo  , String table ){
 			 String sql = "select c.* , ag.name from "+table+"_card_agent a , mlb_"+table+"_card c , a_agent ag "
 				 		+ "where a.iccid = c.guid   and ag.id=a.agentid " + 
