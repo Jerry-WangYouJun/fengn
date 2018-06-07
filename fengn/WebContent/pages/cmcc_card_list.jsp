@@ -19,6 +19,11 @@
 		        cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）  
 		        sidePagination : "server", // 分页方式：client客户端分页，server服务端分页（*）  
 		        queryParamsType:'',
+		        queryParams : function(params) { 
+		        		      params.iccidStart = $("#idstart").val();
+		        		      params.iccidEnd = $("#idend").val();
+		                 return params;
+		        	},
 		        pagination : true, // 是否显示分页（*）  
 		        pageNumber: 1,    //如果设置了分页，首页页码  
 		        pageSize: 50,                       //每页的记录行数（*）  
@@ -42,6 +47,9 @@
 		    }); 
 	});
 
+	function queryData(){
+		$("#infoTable").bootstrapTable("refresh");
+	}
 </script>
 <style type="text/css">
   .panel-body {
@@ -55,10 +63,30 @@
 			<div >
 				  <div class="panel-body" id="a3" style="display:block">
 				  	    <table id="infoTable"> </table>
-					<div id="toolbar" class="btn-group">  
-			             <button id="btn_edit" type="button" class="btn btn-default" onclick="moveData()">  
-			                <span class="glyphicon glyphicon-forward" aria-hidden="true" ></span>分配
-			            </button> 
+					<div id="toolbar" class="btn-group"> 
+						 <form class="form-inline" role="form">
+								<div class="form-group">
+									<label class="sr-only" for="name">名称</label>
+									<input type="text" class="form-control" id="idstart" 
+										   placeholder="请输入ICCID">
+								</div> -
+								<div class="form-group">
+									<label class="sr-only" for="name">名称</label>
+									<input type="text" class="form-control" id="idend" 
+										   placeholder="请输入ICCID">
+								</div>
+								
+								<button id="btn_edit" type="button" class="btn btn-default" onclick="queryData()">  
+					                <span class="glyphicon glyphicon-search" aria-hidden="true" ></span>查询
+					            </button>
+					            <button id="btn_edit" type="reset" class="btn btn-default" >  
+					                <span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span>重置
+					            </button>
+					            
+					             <button id="btn_edit" type="button" class="btn btn-default" onclick="moveData()">  
+					                <span class="glyphicon glyphicon-forward" aria-hidden="true" ></span>分配
+					            </button> 
+							</form>
 			            <!-- <button id="btn_edit" type="button" class="btn btn-default" onclick="updateOrderStatus()">  
 			                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
 			                修改订单状态
@@ -209,6 +237,8 @@
 			});
 		}
 	}
+	
+	
 </script>
 </body>
 </html>
