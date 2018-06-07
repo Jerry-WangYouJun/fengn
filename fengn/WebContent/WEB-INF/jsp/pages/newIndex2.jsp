@@ -148,12 +148,6 @@
                             <li class="dropdown">
                                 <a href="#" style="padding: 12px" data-toggle="dropdown"><i class="st-settings"></i></a>
                                 <ul class="dropdown-menu right" role="menu">
-                                    <li><a href="#"><i class="st-user"></i> Profile</a>
-                                    </li>
-                                    <li><a href="#"><i class="st-cloud"></i> Files</a>
-                                    </li>
-                                    <li><a href="#"><i class="st-settings"></i> Settings</a>
-                                    </li>
                                     <li><a href="${pageContext.request.contextPath}/loginOut"><i class="im-exit"></i>注销用户</a>
                                     </li>
                                 </ul>
@@ -192,7 +186,36 @@
                             </c:if>
                         </ul>
                     </li>
-                 <c:if test="${roleid eq '1' }">
+                    <li><a href="#">联通物联卡 <i class="fa-file-text"></i></a>
+                        <ul class="nav sub" id="unicom_card">
+						</ul>
+                    </li>
+                    <li><a href="#">移动物联卡 <i class="fa-file-text"></i></a>
+                        <ul class="nav sub" id="cmcc_card">
+						</ul>
+                    </li>
+                    <li><a href="#">电信物联卡 <i class="fa-file-text"></i></a>
+                        <ul class="nav sub" id="dx_card">
+						</ul>
+                    </li>
+                    <li>
+                        <a href="#"> 续费明细 <i class="im-paragraph-justify"></i></a>
+                        <ul class="nav sub">
+                             <li><a href="#">联通返佣 <i class="fa-money"></i></a>
+		                        <ul class="nav sub" id="unicom_kickback">
+								</ul>
+		                    </li>
+		                    <li><a href="#">移动返佣 <i class="fa-money"></i></a>
+		                        <ul class="nav sub" id="cmcc_kickback">
+								</ul>
+		                    </li>
+		                    <li><a href="#">电信返佣 <i class="fa-money"></i></a>
+		                        <ul class="nav sub" id="dx_kickback">
+								</ul>
+		                    </li>
+                        </ul>
+                    </li>
+                   <c:if test="${roleid eq '1' }">
                     <li><a href="#">丰宁/永思卡信息 <i class="fa-save"></i></a>
                         <ul class="nav sub" id="card">
 						</ul>
@@ -202,22 +225,6 @@
 						</ul>
                     </li>
                  </c:if>
-                    <li><a href="#">联通卡信息 <i class="fa-file-text"></i></a>
-                        <ul class="nav sub" id="unicom_card">
-						</ul>
-                    </li>
-                    <li><a href="#">联通返佣 <i class="fa-money"></i></a>
-                        <ul class="nav sub" id="unicom_kickback">
-						</ul>
-                    </li>
-                    <li><a href="#">移动卡信息 <i class="fa-file-text"></i></a>
-                        <ul class="nav sub" id="cmcc_card">
-						</ul>
-                    </li>
-                    <li><a href="#">移动返佣 <i class="fa-money"></i></a>
-                        <ul class="nav sub" id="cmcc_kickback">
-						</ul>
-                    </li>
                 </ul>
             </div>
             <!-- End .sidebar-inner -->
