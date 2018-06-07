@@ -133,7 +133,7 @@ public class UnicomAgentController {
 		Pagination page =  new Pagination(pageNo, pageSize , 100) ;
 	    CodeUtil.initPagination(page);
 	    List<UnicomInfoVo>  list = cardAgentService.queryCardInfo(agentId , page , qo );
-	    Long total = (long)cardAgentService.queryCardTotal(agentId, qo , "unicom");
+	    Long total = (long)cardAgentService.queryCardTotal(agentId, qo );
 	    grid.setRows(list);
 	    grid.setTotal(total);
 	    return grid;

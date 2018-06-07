@@ -12,6 +12,11 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap-table.js"></script>
 <script type="text/JavaScript" src="${basePath}/js/jquery.form.js"></script>
 
+<link href="${pageContext.request.contextPath}/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />  
+<script src="${pageContext.request.contextPath}/js/moment-with-locales.js"></script>  
+<script src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.min.js"></script> 
+<script src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.zh-CN.js"></script> 
+
 <script type="text/javascript">
 		
 		function addInfo() {

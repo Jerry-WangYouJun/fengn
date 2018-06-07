@@ -43,7 +43,7 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 		StringBuffer sb = new StringBuffer();
 		String token = ResponseURLDataUtil.getToken();
 		List<MlbUnicomCard> mucList = new ArrayList<>();
-		List<MlbUnicomCard> mucInsertList = new ArrayList<>();
+		//List<MlbUnicomCard> mucInsertList = new ArrayList<>();
 		JSONObject jsonForCount = ResponseURLDataUtil.getUnicomCard(1,1, "", "2,3,4" ,token);
 		int size = 1000;
 		int count = ((JSONArray)jsonForCount.get("result")).getJSONObject(0).getInt("records");
@@ -52,14 +52,14 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 		for (int i = 1; i <= index ; i++) {
 			JSONObject json = ResponseURLDataUtil.getUnicomCard(i,size, "", "2,3,4" ,token);
 			mucList  = getResultUnicomFromMlb(json);
-			for (MlbUnicomCard mu : mucList) {
-				for(List<Object> iccid : listObject) {
-					  if(iccid.get(0).equals(mu.getGuid())) {
-						  mucInsertList.add(mu);
-					  }
-				}
-			}
-			 total +=  unicomMapper.insertBatch(mucInsertList);
+//			for (MlbUnicomCard mu : mucList) {
+//				for(List<Object> iccid : listObject) {
+//					  if(iccid.get(0).equals(mu.getGuid())) {
+//						  mucInsertList.add(mu);
+//					  }
+//				}
+//			}
+			 total +=  unicomMapper.insertBatch(mucList);
 		}
 	  	int actual = uploadDao.insertData(table);
 	  	int aaa  =  uploadDao.insertAgentCard(agentId , table );

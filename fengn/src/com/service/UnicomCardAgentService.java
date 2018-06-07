@@ -49,6 +49,21 @@ public class UnicomCardAgentService {
 			 return dao.queryDataList(finalSql);
 		 }
 		 
+		 public int queryCardTotal(Integer agentid ,  QueryData qo){
+			 String sql = "select count(*) total from u_card_agent a , u_cmtp c , a_agent ag "
+				 		+ "where a.iccid = c.ICCID  and ag.id=a.agentid  " 
+				 		+  "and ag.code like  CONCAT((select code from a_agent where id ="
+				 		+ agentid + "),'%' ) ";;
+			if(StringUtils.isNotEmpty(qo.getIccidStart())){
+				 sql += " and c.ICCID >= '" + qo.getIccidStart() + "'" ;
+			}
+			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
+				 sql += " and  c.ICCID <= '" + qo.getIccidEnd() + "'" ;
+			}
+			
+			 return dao.queryDataTotal(sql);
+		 }
+		 
 		 public List<UnicomInfoVo> queryCardInfo(Integer agentid , Pagination page, QueryData qo  , String table ){
 			 String sql = "select c.* , ag.name from "+table+"_card_agent a , mlb_"+table+"_card c , a_agent ag "
 				 		+ "where a.iccid = c.guid   and ag.id=a.agentid " + 
@@ -82,6 +97,7 @@ public class UnicomCardAgentService {
 			
 			 return dao.queryDataTotal(sql);
 		 }
+		 
 
 		public List<Map<String,String>> queryKickbackInfo(Integer id , QueryData qo ,  Pagination page , int timeType) {
 			List<Map<String,String>>  list = new ArrayList<>();

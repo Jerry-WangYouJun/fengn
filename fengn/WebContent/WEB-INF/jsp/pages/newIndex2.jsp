@@ -5,7 +5,7 @@
 <html>
 <head>
         <meta charset="utf-8">
-        <title>丰宁贸易</title>
+        <title> 物联卡管理系统</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <meta name="author" content="SuggeElson" />
         <meta name="description" content=""/>
@@ -23,8 +23,11 @@
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="${pageContext.request.contextPath}/assets/img/ico/apple-touch-icon-72-precomposed.png">
         <link rel="apple-touch-icon-precomposed" href="${pageContext.request.contextPath}/assets/img/ico/apple-touch-icon-57-precomposed.png">
         <link rel="icon" href="${pageContext.request.contextPath}/assets/img/ico/favicon.ico" type="image/png">
+           <link href="${pageContext.request.contextPath}/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />  
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-theme.min.css">
         <script src="${pageContext.request.contextPath}/assets/js/jquery-1.8.3.min.js"></script>
         <script type="text/JavaScript" src="${pageContext.request.contextPath}/js/jquery.form.js"></script>
+        
         <meta name="msapplication-TileColor" content="#3399cc" />
         <script type="text/javascript">
         function openSub(obj){
@@ -112,6 +115,7 @@
  			document.getElementById('frameContent').src = path;
  			$('#dlg-frame').dialog('open');
  		}
+ 		
         </script>
     </head>
 <body>
@@ -121,7 +125,7 @@
                 <div class="navbar">
                     <div class="navbar-header">
                         <a class="navbar-brand" href="index.html">
-                            <i class="im-windows8 text-logo-element animated bounceIn"></i><span class="text-logo">丰宁</span><span class="text-slogan">贸易</span> 
+                            <i class="im-windows8 text-logo-element animated bounceIn"></i><span class="text-logo"> 物联卡管理系统</span><span class="text-slogan"></span> 
                         </a>
                     </div>
                     <nav class="top-nav" role="navigation">
@@ -174,25 +178,21 @@
             <div class="sidebar-inner">
                 <!-- Start #sideNav -->
                 <ul id="sideNav" class="nav nav-pills nav-stacked">
-                    <li class="top-search">
-                        <form>
-                            <input type="text" name="search" placeholder="Search ...">
-                            <button type="submit"><i class="ec-search s20"></i>
-                            </button>
-                        </form>
-                    </li>
                     <li>
-                        <a href="#"> 基本信息管理 <i class="im-paragraph-justify"></i></a>
+                        <a href="#"> 用户管理 <i class="im-paragraph-justify"></i></a>
                         <ul class="nav sub">
                             <li>
                             	<a href="#" class="ec-users" onclick='addTab("user","${pageContext.request.contextPath}/pages/user_list.jsp","代理商管理")'>
-							代理商管理</a>
+								代理商管理</a>
                             </li>
-                            <li><a href="#" class="st-bag" onclick='addTab("pac","${pageContext.request.contextPath}/pages/pac_list.jsp","套餐管理")'>
-							套餐管理</a>
-                            </li>
+                             <c:if test="${roleid eq '1' }">
+	                            <li><a href="#" class="st-bag" onclick='addTab("pac","${pageContext.request.contextPath}/pages/pac_list.jsp","套餐管理")'>
+								套餐管理</a>
+	                            </li>
+                            </c:if>
                         </ul>
                     </li>
+                 <c:if test="${roleid eq '1' }">
                     <li><a href="#">丰宁/永思卡信息 <i class="fa-save"></i></a>
                         <ul class="nav sub" id="card">
 						</ul>
@@ -201,6 +201,7 @@
                         <ul class="nav sub" id="kickback">
 						</ul>
                     </li>
+                 </c:if>
                     <li><a href="#">联通卡信息 <i class="fa-file-text"></i></a>
                         <ul class="nav sub" id="unicom_card">
 						</ul>
@@ -426,6 +427,10 @@
         <script src="${pageContext.request.contextPath}/assets/js/jquery.sprFlat.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/app.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/pages/dashboard.js"></script>
+    
+<script src="${pageContext.request.contextPath}/js/moment-with-locales.js"></script>  
+<script src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.min.js"></script> 
+<script src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.zh-CN.js"></script> 
         
         <script>
 		/**
@@ -542,13 +547,16 @@
 			<div class="modal-content">
 				<div class="modal-body">
 					   	<form class="form-signin" role="form" method="POST"
-						enctype="multipart/form-data" id="mlbForm"
+						 id="mlbForm"
 						action="${pageContext.request.contextPath}/uploadExcel/upload.do">
 						<div class="form-group">
-							<label for="message-text" class="control-label">上传文件:</label>
-							 <input class="form-control" style="float:left"
-									id="upfile" type="file" name="upfile"
-									class="col-md-12" required>	
+							<label for="message-text" class="control-label">发卡时间:</label>
+							 <div class='input-group date' id='datetimepicker1'  >  
+					                <input type='text' class="form-control" readonly name="createdate" />  
+					                <span class="input-group-addon" >  
+					                    <span class="glyphicon glyphicon-calendar"></span>  
+					                </span>  
+					            </div>   
 						</div>
 						<div class="form-group">
 						   <label for="message-text" class="control-label">选择卡类型:</label>
@@ -668,5 +676,15 @@
 			}
 	});
 	});
+	
+	$(function(){
+			if($('#datetimepicker1')[0] != undefined){
+				$('#datetimepicker1').datetimepicker({  
+				    todayBtn: true,//显示今日按钮
+				    autoclose: true,
+				    locale: moment.locale('zh-cn')
+				});
+			}
+		});
 </script>
 </html>

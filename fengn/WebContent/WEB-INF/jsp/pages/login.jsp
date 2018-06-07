@@ -24,7 +24,7 @@
   </head>
   <body class="login">
 	<div class="logo">
-		<h2 style="color: white;">青岛丰宁贸易</h2>
+		<h2 style="color: white;">物联卡管理系统</h2>
 	</div>
 
 	<div class="content">
@@ -66,7 +66,7 @@
 
 	<div class="copyright">
 
-		2017 &copy; 青岛丰宁贸易
+		2017 &copy; 物联卡管理系统
 
 	</div>
 

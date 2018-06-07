@@ -96,6 +96,15 @@ public class TreeController {
 		}
 	}
 
+	/**
+	 * 丰宁、永思接口数据查询
+	 * @param agentId
+	 * @param response
+	 * @param request
+	 * @param session
+	 * @param qo
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/card_query/{agentId}")
 	public Grid  queryCard(@PathVariable("agentId") Integer agentId, HttpServletResponse response,

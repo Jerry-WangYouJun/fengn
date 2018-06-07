@@ -44,12 +44,12 @@ public class UnicomUploadController {
 			RequestMethod.POST })
 	public void uploadExcelUnicom(HttpServletRequest request,
 			HttpServletResponse response , String act, HttpSession session) throws Exception {
-		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+		//MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		response.setCharacterEncoding("utf-8");
 		Long startTime = System.currentTimeMillis(); 
 		PrintWriter out =  response.getWriter();
 		System.out.println("导入表数据开始：" + DateUtils.formatDate("MM-dd:HH-mm-ss"));
-		List<List<Object>> listob = dataServices.getDataList(multipartRequest, response);
+		//List<List<Object>> listob = dataServices.getDataList(multipartRequest, response);
 		String agentId = session.getAttribute("agentId").toString();
 		String apiCode = request.getParameter("apiCode");
 		String tableName = "";
@@ -63,19 +63,19 @@ public class UnicomUploadController {
 		default:
 			break;
 		}
-		if(listob != null ){
+		//if(listob != null ){
 			System.out.println("读取xls数据用时：" + (System.currentTimeMillis() - startTime));
 			String msg = "";
 			dataServices.deleteDataTemp( "mlb_" + tableName + "_card_copy");
 			if("unicom".equals(tableName)) {
-				msg = dataServices.insertUnicomList(listob ,agentId , tableName);
+				msg = dataServices.insertUnicomList(null ,agentId , tableName);
 			}else {
 				System.out.println("开始获取数据" + DateUtils.formatDate("yyyyMMddHHmmss"));
-				msg = dataServices.insertCmccList(listob, agentId, tableName);
+				msg = dataServices.insertCmccList(null, agentId, tableName);
 				System.out.println("插入数据表,用时" + (System.currentTimeMillis() - startTime));
 			}
 			out.print(msg);
-		}
+		//}
 		out.flush();
 		out.close();
 	}
