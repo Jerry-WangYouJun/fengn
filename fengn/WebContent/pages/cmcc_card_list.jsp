@@ -45,6 +45,8 @@
 			     ],  
 		        silent : true, // 刷新事件必须设置  
 		    }); 
+		 
+		 $('#infoTable').bootstrapTable({locale:'en-US'});
 	});
 
 	function queryData(){
@@ -62,7 +64,7 @@
 	<div >
 			<div >
 				  <div class="panel-body" id="a3" style="display:block">
-				  	    <table id="infoTable"> </table>
+				  	    <table id="infoTable" > </table>
 					<div id="toolbar" class="btn-group"> 
 						 <form class="form-inline" role="form">
 								<div class="form-group">

@@ -27,7 +27,7 @@ public class CardInfoService {
 	
 	
 	public InfoVo queryInfoByICCID(String iccid) throws Exception {
-		String sql = "select * from cmtp where iccid = '" + iccid + "'  or imsi = '" + iccid + "'";
+		String sql = "select * , '' name from cmtp where iccid = '" + iccid + "'  or imsi = '" + iccid + "'";
 		 List<InfoVo>  infoList =  dao.queryDataList(sql);
 		 if(infoList.size() > 0 ){
 			 InfoVo  info = infoList.get(0);

@@ -10,6 +10,7 @@
 <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script> 
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-table.min.css" />  
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap-table.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap-table-zh-CN.js"></script>
 <script type="text/JavaScript" src="${basePath}/js/jquery.form.js"></script>
 
 <link href="${pageContext.request.contextPath}/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />  

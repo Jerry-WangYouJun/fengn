@@ -32,7 +32,6 @@
 		        clickToSelect : true, // 是否启用点击选中行  
 		        showToggle : false, // 是否显示详细视图和列表视图的切换按钮  
 		        search:true,   //是否启用搜索框 
-		        
 		        columns : [ {   checkbox : true } ,
 			        {field : 'id', visible: false  },
 					{field:'iccid',title:'ICCID',align:'center', valign: 'middle'},
