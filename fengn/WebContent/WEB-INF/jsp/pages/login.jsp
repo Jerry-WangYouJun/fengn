@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="en">
   <head>
-      <title>欢迎登录青岛丰宁</title>
+      <title>物联卡管理系统</title>
     <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
     <meta http-equiv="description" content="this is my page">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
