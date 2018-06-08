@@ -27,7 +27,7 @@
 		        pagination : true, // 是否显示分页（*）  
 		        pageNumber: 1,    //如果设置了分页，首页页码  
 		        pageSize: 50,                       //每页的记录行数（*）  
-		        pageList: [50,100,300,600],        //可供选择的每页的行数（*）  
+		        pageList: [50,100,300,600,1000],        //可供选择的每页的行数（*）  
 		        showRefresh : true, // 是否显示刷新按钮  
 		        clickToSelect : true, // 是否启用点击选中行  
 		        showToggle : false, // 是否显示详细视图和列表视图的切换按钮  
