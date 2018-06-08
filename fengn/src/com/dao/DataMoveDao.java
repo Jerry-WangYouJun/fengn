@@ -257,7 +257,6 @@ public class DataMoveDao {
 				vo.setUpdateTime(rs.getString("updateTime"));
 				vo.setFlag(rs.getString("flag"));
 				vo.setApiCode(rs.getString("apicode"));
-				vo.setName(rs.getString("name"));
 				Long restDays = 0L;
 				String deadLine;
 				if (vo.getUpdateTime() == null) {
