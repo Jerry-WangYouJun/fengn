@@ -555,7 +555,7 @@
                         _this.next('ul').addClass('show');
                         _this.addClass('expand').removeClass('notExpand');
                         if(plugin.settings.sideNav.showArrows) {
-                            _this.find('.sideNav-arrow').transition({rotate: '-180deg'});
+                            _this.find('.sideNav-arrow').removeClass("im-plus").removeClass("sideNav-arrow").addClass("im-minus sideNav-arrow");
                         }                   
                     } else if (_this.hasClass('expand')) {
                         e.preventDefault();
@@ -564,7 +564,7 @@
                         _this.next('ul').slideUp(plugin.settings.sideNav.subCloseSpeed, plugin.settings.sideNav.animationEasing);
                         _this.addClass('notExpand').removeClass('expand');
                         if(plugin.settings.sideNav.showArrows) {
-                            _this.find('.sideNav-arrow').transition({rotate: '0deg'});
+                            _this.find('.sideNav-arrow').removeClass("im-minus").removeClass("sideNav-arrow").addClass("im-plus sideNav-arrow");
                         }
                     }
                 });

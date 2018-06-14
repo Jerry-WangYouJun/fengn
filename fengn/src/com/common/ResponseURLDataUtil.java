@@ -4,14 +4,10 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Formatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.json.JSONObject;
 
 import org.apache.http.util.TextUtils;
 import org.jsoup.Connection;
@@ -20,6 +16,8 @@ import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+
+import net.sf.json.JSONObject;
 
 public class ResponseURLDataUtil {
 	public static String token = "";
@@ -266,12 +264,11 @@ public class ResponseURLDataUtil {
 			return jsonObject ;
 	}
 	
-	
+	//10000  -114   1000 - 6  2000 -10  
 	public static void main(String[] args) {
 		try {
-			
 			System.out.println(DateUtils.formatDate("yyyyMMddHHmmss"));
-			getCmccCard(1,10000 , "" , "all" , getToken("青岛丰宁贸易新", "8989123"));
+			JSONObject json  = getCmccCard( 1, 1500 , null , "all",getToken());
 			System.out.println(DateUtils.formatDate("yyyyMMddHHmmss"));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -305,4 +302,40 @@ public class ResponseURLDataUtil {
 		}
 			return jsonObject ;
 	}
+	
+	public static JSONObject getCmccCardBind( String token) throws UnsupportedEncodingException {
+		String jsonString;
+		JSONObject jsonObject  = null;
+		try {
+			String url = "https://www.m-m10086.com/api/YDSimListFire/Binding";
+			Map map = new HashMap();
+			List<String> arr = new ArrayList<>();
+			arr.add("9946186");
+			arr.add("9946184");
+			arr.add("9946176");
+			map.put("simIds", arr);
+			JSONObject json = JSONObject.fromObject(map);
+			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString() , token);
+			 jsonObject  = JSONObject.fromObject(jsonString);  
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+			return jsonObject ;
+	}
+	
+	
+	public static JSONObject getMLBData( String token , String url , Map params) throws UnsupportedEncodingException {
+		String jsonString;
+		JSONObject jsonObject  = null;
+		try {
+			JSONObject json = JSONObject.fromObject(params);
+			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString() ,token);
+			 jsonObject  = JSONObject.fromObject(jsonString);  
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+			return jsonObject ;
+	}
+	
+	
 }

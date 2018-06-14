@@ -14,10 +14,15 @@
     <result column="flowLeftValue" jdbcType="DOUBLE" property="flowleftvalue" />
     <result column="monthUsageData" jdbcType="DOUBLE" property="monthusagedata" />
     <result column="totalMonthUsageFlow" jdbcType="DOUBLE" property="totalmonthusageflow" />
+    <result column="createTime" jdbcType="VARCHAR" property="createTime" />
+    <result column="holdName" jdbcType="VARCHAR" property="holdName" />
+    <result column="packagePeriodSrc" jdbcType="VARCHAR" property="packagePeriodSrc" />
+    <result column="activeTime" jdbcType="VARCHAR" property="activeTime" />
   </resultMap>
   <sql id="Base_Column_List">
     id, guid, simId, sim, packageName, bootState, expireTime, oddTime, amountUsageData, 
-    flowLeftValue, monthUsageData, totalMonthUsageFlow
+    flowLeftValue, monthUsageData, totalMonthUsageFlow ,createTime
+    , activeTime,holdName ,packagePeriodSrc
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -25,6 +30,11 @@
     from mlb_cmcc_card
     where id = #{id,jdbcType=INTEGER}
   </select>
+  
+   <select id="selectNoSIM" parameterType="java.lang.String" resultType="java.lang.String">
+     select  simid from mlb_cmcc_card where  createTime  is null  
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from mlb_cmcc_card
     where id = #{id,jdbcType=INTEGER}
@@ -33,7 +43,7 @@
     insert into mlb_cmcc_card (id, guid, simId, 
       sim, packageName, bootState, 
       expireTime, oddTime, amountUsageData, 
-      flowLeftValue, monthUsageData, totalMonthUsageFlow
+      flowLeftValue, monthUsageData, totalMonthUsageFlow , 
       )
     values (#{id,jdbcType=INTEGER}, #{guid,jdbcType=VARCHAR}, #{simid,jdbcType=INTEGER}, 
       #{sim,jdbcType=VARCHAR}, #{packagename,jdbcType=VARCHAR}, #{bootstate,jdbcType=VARCHAR}, 
@@ -52,10 +62,40 @@
         ( #{item.guid}, #{item.simid}, #{item.sim},
       #{item.packagename}, #{item.bootstate}, #{item.expiretime}, 
       #{item.oddtime}, #{item.amountusagedata}, #{item.flowleftvalue} 
-      , #{item.monthusagedata}, #{item.totalmonthusageflow} 
+      , #{item.monthusagedata}, #{item.totalmonthusageflow}
       ) 
     </foreach>  
   </insert> 
+  
+  <update id="updateBatch" parameterType="java.util.List">
+        update mlb_cmcc_card
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="holdName =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.holdName}
+                </foreach>
+            </trim>
+            <trim prefix="packagePeriodSrc =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.packagePeriodSrc}
+                </foreach>
+            </trim>
+            <trim prefix="packagename =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.packagename}
+                </foreach>
+            </trim>
+            <trim prefix="activeTime =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.activeTime}
+                </foreach>
+            </trim>
+        </trim>
+        where simId in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.simid,jdbcType=INTEGER}
+        </foreach>
+    </update> 
   
   <insert id="insertSelective" parameterType="com.model.MlbCmccCard">
     insert into mlb_cmcc_card

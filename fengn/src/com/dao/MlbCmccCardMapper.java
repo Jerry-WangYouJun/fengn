@@ -18,6 +18,10 @@ public interface MlbCmccCardMapper {
     int updateByPrimaryKey(MlbCmccCard record);
 
 	int insertBatch(List<MlbCmccCard> mccInsertList);
+
+	List<String> selectNoSIM(String createdate);
+	
+	int updateBatch(List<MlbCmccCard> mccInsertList);
     
     
 }

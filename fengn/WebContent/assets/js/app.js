@@ -73,10 +73,10 @@ $(document).ready(function() {
             hover: false, //shows subs on hover or click
             showNotificationNumbers: 'onhover',//show how many elements menu have with notifcation style values - always, onhover, never
             showArrows: true,//show arrow to indicate sub
-            sideNavArrowIcon: 'en-arrow-down5', //arrow icon for navigation
+            sideNavArrowIcon: 'im-plus', //arrow icon for navigation
             showIndicator: false,//show indicator when hover links
             notificationColor: 'red', //green, red
-            subOpenSpeed: 300,//animation speed for open subs
+            subOpenSpeed: 300,//animation speed for open subsim-plus
             subCloseSpeed: 400,//animation speed for close subs
             animationEasing: 'linear',//animation easing
             absoluteUrl: false, //put true if use absolute path links. example http://www.host.com/dashboard instead of /dashboard

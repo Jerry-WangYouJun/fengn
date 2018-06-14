@@ -54,7 +54,7 @@ public class UnicomCardAgentDao {
 			public Object mapRow(ResultSet rs, int arg1) throws SQLException {
 				UnicomInfoVo vo = new UnicomInfoVo();
 				vo.setId(rs.getString("id"));
-				//vo.setIMSI(rs.getString("IMSI"));
+				vo.setSim(rs.getString("sim"));
 				vo.setICCID(rs.getString("guid"));
 				vo.setCardStatus(rs.getString("bootstate"));
 				vo.setGprsUsed(rs.getString("monthusagedata"));
@@ -66,8 +66,10 @@ public class UnicomCardAgentDao {
 				//vo.setMonthTotalStream(rs.getString("monthTotalStream"));
 				//vo.setUpdateTime(rs.getString("updateTime"));
 				vo.setDeadline(rs.getString("oddtime"));
+				vo.setExpireTime(rs.getString("expiretime"));
 				//vo.setOrderStatus(rs.getString("orderStatus"));
-				vo.setRemark(rs.getString("expiretime"));//截止日期暂用remark
+				vo.setActiveTime(rs.getString("activeTime"));
+				//vo.setRemark(rs.getString(""));//截止日期暂用remark
 				vo.setName(rs.getString("name"));
 				list.add(vo);
 				return null;

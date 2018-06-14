@@ -1,24 +1,19 @@
 package com.controller;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.common.ContextString;
 import com.common.DateUtils;
-import com.model.UnicomHistory;
 import com.service.UnicomUploadService;
 
 @Controller
@@ -43,7 +38,7 @@ public class UnicomUploadController {
 	@RequestMapping(value = "/uploadExcelUnicom", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	public void uploadExcelUnicom(HttpServletRequest request,
-			HttpServletResponse response , String act, HttpSession session) throws Exception {
+			HttpServletResponse response ,  HttpSession session, String apiCode, String createdate) throws Exception {
 		//MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		response.setCharacterEncoding("utf-8");
 		Long startTime = System.currentTimeMillis(); 
@@ -51,7 +46,6 @@ public class UnicomUploadController {
 		System.out.println("导入表数据开始：" + DateUtils.formatDate("MM-dd:HH-mm-ss"));
 		//List<List<Object>> listob = dataServices.getDataList(multipartRequest, response);
 		String agentId = session.getAttribute("agentId").toString();
-		String apiCode = request.getParameter("apiCode");
 		String tableName = "";
 		switch (apiCode) {
 		case "1":
@@ -79,4 +73,6 @@ public class UnicomUploadController {
 		out.flush();
 		out.close();
 	}
+	
+	
 }

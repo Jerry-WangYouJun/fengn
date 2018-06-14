@@ -9,10 +9,13 @@ public class MlbCmccCard {
 
     private String sim;
 
+    //package
     private String packagename;
 
     private String bootstate;
-
+	/**
+	 * 到期日期
+	 */
     private String expiretime;
 
     private String oddtime;
@@ -24,6 +27,17 @@ public class MlbCmccCard {
     private Double monthusagedata;
 
     private Double totalmonthusageflow;
+    
+    private String createTime ;
+    
+    //bind获取字段
+    private String holdName ;
+    private String packagePeriodSrc;
+    private String activeTime;
+    
+    
+    
+    
 
     public Integer getId() {
         return id;
@@ -120,4 +134,37 @@ public class MlbCmccCard {
     public void setTotalmonthusageflow(Double totalmonthusageflow) {
         this.totalmonthusageflow = totalmonthusageflow;
     }
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getHoldName() {
+		return holdName;
+	}
+
+	public void setHoldName(String holdName) {
+		this.holdName = holdName;
+	}
+
+	public String getPackagePeriodSrc() {
+		return packagePeriodSrc;
+	}
+
+	public void setPackagePeriodSrc(String packagePeriodSrc) {
+		this.packagePeriodSrc = packagePeriodSrc;
+	}
+
+	public String getActiveTime() {
+		return activeTime;
+	}
+
+	public void setActiveTime(String activeTime) {
+		this.activeTime = activeTime;
+	}
+    
 }

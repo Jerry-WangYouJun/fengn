@@ -36,12 +36,15 @@
 		        columns : [ {   checkbox : true } ,
 			        {field : 'id', visible: false  },
 					{field:'iccid',title:'ICCID',align:'center', valign: 'middle'},
+					{field:'sim',title:'SIM',align:'center', valign: 'middle'},
 					{field:'name',title:'所属代理商',align:'center', valign: 'middle'},
-					{field:'gprsUsed',title:'使用流量',align:'center', valign: 'middle'},
-					{field:'gprsRest',title:'剩余流量',align:'center', valign: 'middle'},
 					{field:'packageType',title:'套餐类型',align:'center', valign: 'middle'},
 					{field:'cardStatus',title:'卡状态',align:'center', valign: 'middle'},
-					{field:'deadline',title:'到期日期',align:'center', valign: 'middle'}
+					{field:'gprsRest',title:'剩余流量',align:'center', valign: 'middle'},
+					{field:'gprsUsed',title:'使用流量',align:'center', valign: 'middle'},
+					{field:'activeTime',title:'激活日期',align:'center', valign: 'middle'},
+					{field:'expireTime',title:'到期日期',align:'center', valign: 'middle'},
+					{field:'remark',title:'标签',align:'center', valign: 'middle'}
 			     ],  
 		        silent : true, // 刷新事件必须设置  
 		    }); 

@@ -37,20 +37,20 @@
                 //expand ul and change class to expand
                 _this.next('ul').slideDown("slow");
                 _this.next('ul').addClass('show');
-                _this.addClass('expand').removeClass('notExpand');
+                _this.removeClass('notExpand').addClass('expand');
                 $(".active").removeClass("active");
                 _this.addClass('active');
                 //if(plugin.settings.sideNav.showArrows) {
-                    _this.find('.sideNav-arrow').transition({rotate: '-180deg'});
+                    _this.find('.sideNav-arrow').removeClass("im-plus").removeClass("sideNav-arrow").addClass("im-minus sideNav-arrow");
                // }                   
             } else if (_this.hasClass('expand')) {
               //  e.preventDefault();
                 //collapse ul and change class to notExpand
                 _this.next('ul').removeClass('show');
                 _this.next('ul').slideUp("slow");
-                _this.addClass('notExpand').removeClass('expand');
+                _this.removeClass('expand').addClass('notExpand');
                 //if(plugin.settings.sideNav.showArrows) {
-                    _this.find('.sideNav-arrow').transition({rotate: '0deg'});
+                     _this.find('.sideNav-arrow').removeClass("im-minus").removeClass("sideNav-arrow").addClass("im-plus sideNav-arrow");
                 //}
             }
         }
@@ -63,7 +63,7 @@
  					  htmlStr += '<li><a class="notExpand" ' 
  					  + getTabData(datas[childNode])
  					  + ' href="javascript:;">' + datas[childNode].menu
- 					  + ' <i class="en-arrow-down5 sideNav-arrow" onclick="openSub(this)" ></i></a>'
+ 					  + ' <i class="im-plus sideNav-arrow" onclick="openSub(this)" ></i></a>'
  					  +'<ul  class="nav sub">' +  getTreeData(datas[childNode].children)
  					  +'</ul></li>';
  					 index ++ ;

@@ -6,6 +6,7 @@ public class UnicomInfoVo {
 	private String id ;
 	private String remark; // 备注
 	private String  IMSI ; 
+	private String sim ;//
 	private String ICCID ;
 	private String cardStatus ; // 卡状态
 	private String gprsUsed; //使用流量
@@ -19,7 +20,8 @@ public class UnicomInfoVo {
 	private String updateTime ; //开卡时间、修改时间
 	private String orderStatus ; //充值状态（根据操作修改订单状态，判断跳转链接）
 	private String deadline; // 剩余时间
-	
+	private String activeTime;
+	private String expireTime;
 	private String name ;
 	
 	public String getName() {
@@ -123,6 +125,24 @@ public class UnicomInfoVo {
 	}
 	public void setDeadline(String deadline) {
 		this.deadline = deadline;
+	}
+	public String getSim() {
+		return sim;
+	}
+	public void setSim(String sim) {
+		this.sim = sim;
+	}
+	public String getActiveTime() {
+		return activeTime;
+	}
+	public void setActiveTime(String activeTime) {
+		this.activeTime = activeTime;
+	}
+	public String getExpireTime() {
+		return expireTime;
+	}
+	public void setExpireTime(String expireTime) {
+		this.expireTime = expireTime;
 	}
 	
 }

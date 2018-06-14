@@ -53,7 +53,7 @@ public class UnicomCardAgentService {
 			 String sql = "select count(*) total from u_card_agent a , u_cmtp c , a_agent ag "
 				 		+ "where a.iccid = c.ICCID  and ag.id=a.agentid  " 
 				 		+  "and ag.code like  CONCAT((select code from a_agent where id ="
-				 		+ agentid + "),'%' ) ";;
+				 		+ agentid + "),'%' ) ";
 			if(StringUtils.isNotEmpty(qo.getIccidStart())){
 				 sql += " and c.ICCID >= '" + qo.getIccidStart() + "'" ;
 			}
