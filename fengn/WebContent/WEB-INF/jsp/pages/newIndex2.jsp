@@ -116,6 +116,19 @@
  			$('#dlg-frame').dialog('open');
  		}
  		
+ 		function uploadBindData(table){
+ 			$.ajax( {
+ 				url : "${pageContext.request.contextPath}/unicomUpload/"+ table +"_update" ,
+ 				type : 'post',
+ 				dataType : 'json',
+ 				success : function(data) {
+ 					alert(data.msg);
+ 				},
+ 				error : function(transport) {
+ 					alert("系统有误，请重试或联系管理员");
+ 				}
+ 			});
+ 		}
         </script>
     </head>
 <body>
@@ -138,10 +151,14 @@
                         <ul class="nav navbar-nav pull-right">
                          <c:if test="${roleid eq '1' }">
 	                      	  <li class="dropdown">
-	                                <a href="#" style="padding: 12px" data-toggle="dropdown"><i class="im-paste">&nbsp;导入</i></a>
+	                                <a href="#" style="padding: 12px" data-toggle="dropdown"><i class="im-paste">&nbsp;导入/更新</i></a>
 	                                <ul class="dropdown-menu right" role="menu">
-	                                    <li><a href="#" onclick="uploadMlbData()"> 麦联宝导入</a>
+	                                    <li><a href="#" onclick="uploadMlbData()"><i class="im-upload2"></i> 麦联宝导入</a>
 	                                    </li>
+	                                     <li><a href="#" onclick="uploadBindData('unicom')"><i class="br-refresh"></i>更新联通数据</a>
+                                   		 </li>
+                                   		  <li><a href="#" onclick="uploadBindData('cmcc')"><i class="br-refresh"></i>更新移动数据</a>
+                                   		 </li>
 	                                </ul>
 	                            </li>
                          </c:if>

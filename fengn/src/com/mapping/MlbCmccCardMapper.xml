@@ -32,7 +32,7 @@
   </select>
   
    <select id="selectNoSIM" parameterType="java.lang.String" resultType="java.lang.String">
-     select  simid from mlb_cmcc_card where  createTime  is null  
+     select  simid from mlb_cmcc_card where  sim  is null  
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

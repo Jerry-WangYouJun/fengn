@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.model.MlbUnicomCard">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="guid" jdbcType="VARCHAR" property="guid" />
+    <result column="simid" jdbcType="VARCHAR" property="simid" />
     <result column="packageName" jdbcType="VARCHAR" property="packagename" />
     <result column="simState" jdbcType="VARCHAR" property="simstate" />
     <result column="expireTime" jdbcType="VARCHAR" property="expiretime" />
@@ -11,16 +12,25 @@
     <result column="dayUsageData" jdbcType="DOUBLE" property="dayusagedata" />
     <result column="amountUsageData" jdbcType="DOUBLE" property="amountusagedata" />
     <result column="totalMonthUsageFlow" jdbcType="DOUBLE" property="totalmonthusageflow" />
+     <result column="sim" jdbcType="VARCHAR" property="sim" />
+    <result column="holdName" jdbcType="VARCHAR" property="holdname" />
+     <result column="lastActiveTime" jdbcType="VARCHAR" property="lastactivetime" />
+    <result column="flowLeftTime" jdbcType="VARCHAR" property="flowlefttime" />
+    <result column="outWarehouseDate" jdbcType="VARCHAR" property="outWarehouseDate" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, guid, packageName, simState, expireTime, oddTime, dayUsageData, amountUsageData, 
-    totalMonthUsageFlow
+    id, guid, simid, packageName, simState, expireTime, oddTime, dayUsageData, amountUsageData, 
+    totalMonthUsageFlow ,sim , holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from mlb_unicom_card
     where id = #{id,jdbcType=INTEGER}
+  </select>
+   <select id="selectNoSIM" parameterType="java.lang.String" resultType="java.lang.String">
+     select  simid from mlb_unicom_card where  sim  is null  
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from mlb_unicom_card
@@ -37,17 +47,55 @@
       )
   </insert>
    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">  
-    insert into mlb_unicom_card_copy (guid, packageName, 
+    insert into mlb_unicom_card_copy (guid,simid, packageName, 
       simState, expireTime, oddTime, 
-      dayUsageData, amountUsageData, totalMonthUsageFlow  )  
+      dayUsageData, amountUsageData, totalMonthUsageFlow,sim , 
+      holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark  )  
     values   
     <foreach collection="list" item="item" index="index" separator="," >  
-        ( #{item.guid}, #{item.packagename}, 
+        ( #{item.guid},#{item.simid}, #{item.packagename}, 
       #{item.simstate}, #{item.expiretime}, #{item.oddtime}, 
-      #{item.dayusagedata}, #{item.amountusagedata}, #{item.totalmonthusageflow}
+      #{item.dayusagedata}, #{item.amountusagedata}, #{item.totalmonthusageflow},
+       #{item.sim}, #{item.holdname}, #{item.lastactivetime}, 
+      #{item.flowlefttime}, #{item.outWarehouseDate}, #{item.remark}
       ) 
     </foreach>  
   </insert> 
+  
+   <update id="updateBatch" parameterType="java.util.List">
+        update mlb_unicom_card
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="sim =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.sim}
+                </foreach>
+            </trim>
+            <trim prefix="outWarehouseDate =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.outWarehouseDate}
+                </foreach>
+            </trim>
+            <trim prefix="flowlefttime =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.flowlefttime}
+                </foreach>
+            </trim>
+            <trim prefix="imsi =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.imsi}
+                </foreach>
+            </trim>
+            <trim prefix="lastactivetime =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.lastactivetime}
+                </foreach>
+            </trim>
+        </trim>
+        where simId in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.simid,jdbcType=INTEGER}
+        </foreach>
+    </update> 
   <insert id="insertSelective" parameterType="com.model.MlbUnicomCard">
     insert into mlb_unicom_card
     <trim prefix="(" suffix=")" suffixOverrides=",">

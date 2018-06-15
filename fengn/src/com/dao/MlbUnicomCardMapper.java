@@ -18,4 +18,8 @@ public interface MlbUnicomCardMapper {
     int updateByPrimaryKey(MlbUnicomCard record);
     
     public int insertBatch(List<MlbUnicomCard>  list);
+
+	List<String> selectNoSIM(String createdate);
+
+	int updateBatch(List<MlbUnicomCard> list);
 }

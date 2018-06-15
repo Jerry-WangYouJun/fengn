@@ -163,7 +163,6 @@ public class UnicomUploadDao {
 		return jdbcTemplate.update(insertsqlTemp);
 	}
 	
-	
 	public int insertMlbHistory( String  cmtpTable , String historyTable) {
 		String insertsqlTemp = "insert "+historyTable +" "
 				+ "(iccid , imsi ,packageType ,money , update_date , packagedetail , orderno  ) " + 
@@ -219,12 +218,15 @@ public class UnicomUploadDao {
 	}
 
 	public int insertData(String table) {
-		String insertsqlTemp = "insert into  mlb_" + table +  "_card  (  guid, packageName, " + 
-				"      simState, expireTime, oddTime, " + 
-				"      dayUsageData, amountUsageData, totalMonthUsageFlow	) "
-				+ " select   guid, packageName, " + 
-				"      simState, expireTime, oddTime, " + 
-				"	   dayUsageData, amountUsageData, totalMonthUsageFlow  from mlb_"+table+"_card_copy "
+		String insertsqlTemp = "insert into  mlb_" + table +  "_card  (guid,simid, packageName, "
+				+ "  simState, expireTime, oddTime, "
+			    + "  dayUsageData, amountUsageData, totalMonthUsageFlow,sim , "
+			    + "  holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark  	)  "
+				+ " select  guid,simid, packageName, "
+				+ "  simState, expireTime, oddTime, "
+			    + "  dayUsageData, amountUsageData, totalMonthUsageFlow,sim , "
+			    + "  holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark "
+				+ "  from mlb_"+table+"_card_copy "
 				+ " where guid not in (select guid  from  mlb_"+table+"_card )";
 		return jdbcTemplate.update(insertsqlTemp);
 	}

@@ -17,7 +17,7 @@ public class UnicomInfoVo {
 	private String withGPRSService ;
 	private String packageType ; //套餐名
 	private String packageDetail;// 套餐详情
-	private String updateTime ; //开卡时间、修改时间
+	private String updateTime ; //开卡时间、修改时间、出场时间
 	private String orderStatus ; //充值状态（根据操作修改订单状态，判断跳转链接）
 	private String deadline; // 剩余时间
 	private String activeTime;
