@@ -82,14 +82,17 @@
 								</div>
 								
 								<button id="btn_edit" type="button" class="btn btn-default" onclick="queryData()">  
-					                <span class="glyphicon glyphicon-search" aria-hidden="true" ></span>查询
+					               查询
 					            </button>
 					            <button id="btn_edit" type="reset" class="btn btn-default" >  
-					                <span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span>重置
+					                重置
 					            </button>
 					            
 					             <button id="btn_edit" type="button" class="btn btn-default" onclick="moveData()">  
-					                <span class="glyphicon glyphicon-forward" aria-hidden="true" ></span>分配
+					                分配
+					            </button> 
+					            <button id="btn_edit" type="button" class="btn btn-default" onclick="remarkData()">  
+					                批量添加备注
 					            </button> 
 							</form>
 			            <!-- <button id="btn_edit" type="button" class="btn btn-default" onclick="updateOrderStatus()">  
@@ -121,6 +124,34 @@
 		</div>
 		<!-- /.modal -->
 	</div>
+	
+	<div class="modal fade" id="reamrkModal" tabindex="-2" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="height: ">
+				<form action="${basePath}/treeindex/updateRemark/cmcc" method="post" id="remarkForm">
+					<div class="modal-content">
+						<div class="modal-body">
+							    <table data-toggle="table">
+								    <thead>
+								        <tr>
+								            <th>ICCID</th>
+								            <th>标签</th>
+								        </tr>
+								    </thead>
+								     <tbody id = "remarks">
+								    </tbody>
+								</table>
+					        </div> 
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+								<button type="button" class="btn btn-default" onclick="subRemark('cmcc')">提交</button>
+							</div>
+						</div>
+			  </form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
 	<script type="text/javascript">
 	$(function(){
 		var tabName = parent.$("#deviceulid > li.active").attr("id");
@@ -165,19 +196,36 @@
 	        }}],  
 	        silent : true, // 刷新事件必须设置  
 	    });  
+	    
+	    
+	    $('#remarkTable').bootstrapTable({  
+	        method : 'get', // 请求方式（*）  
+	        toolbar : '#remarkToolbar', // 工具按钮用哪个容器  
+	        cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）  
+	        sidePagination : "client", // 分页方式：client客户端分页，server服务端分页（*）  
+	        queryParamsType:'',
+	        pagination : true, // 是否显示分页（*）  
+	        pageNumber: 1,    //如果设置了分页，首页页码  
+	        pageSize: 50,                       //每页的记录行数（*）  
+	        pageList: [100,300,600],        //可供选择的每页的行数（*）  
+	        showRefresh : true, // 是否显示刷新按钮  
+	        showToggle : false, // 是否显示详细视图和列表视图的切换按钮  
+	        silent : true, // 刷新事件必须设置  
+	    });  
 	});
 	 
 	
 	
 	function moveData() {
 		var selectRow =  $("#infoTable").bootstrapTable('getSelections')[0];
-		console.info($("#infoTable").bootstrapTable('getSelections').length);
 		if($("#infoTable").bootstrapTable('getSelections').length  == 0){
 			 alert("选择要分配的卡！");
 			 return false;
 		}
 		$("#myModal").modal("show");
 	}
+	
+	
 	
 	function moveCardByAgent(){
 		var ids = "";

@@ -19,6 +19,7 @@ public class Agent implements Serializable{
 	  private Integer parengId ;
 	  private String userNo;
 	  private Integer groupId;
+	  private String telphone;
 	public Integer getId() {
 		return id;
 	}
@@ -91,4 +92,11 @@ public class Agent implements Serializable{
 	public void setGroupId(Integer groupId) {
 		this.groupId = groupId;
 	}
+	public String getTelphone() {
+		return telphone;
+	}
+	public void setTelphone(String telphone) {
+		this.telphone = telphone;
+	}
+	
 }

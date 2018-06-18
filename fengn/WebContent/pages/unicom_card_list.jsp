@@ -87,6 +87,9 @@
 					             <button id="btn_edit" type="button" class="btn btn-default" onclick="moveData()">  
 					                <span class="glyphicon glyphicon-forward" aria-hidden="true" ></span>分配
 					            </button> 
+					            <button id="btn_edit" type="button" class="btn btn-default" onclick="remarkData()">  
+					                批量添加备注
+					            </button> 
 							</form>  
 			            <!-- <button id="btn_edit" type="button" class="btn btn-default" onclick="updateOrderStatus()">  
 			                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
@@ -117,6 +120,33 @@
 		</div>
 		<!-- /.modal -->
 	</div>
+	
+	<div class="modal fade" id="reamrkModal" tabindex="-2" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="height: ">
+				<form action="${basePath}/treeindex/updateRemark/cmcc" method="post" id="remarkForm">
+					<div class="modal-content">
+						<div class="modal-body">
+							    <table data-toggle="table">
+								    <thead>
+								        <tr>
+								            <th>ICCID</th>
+								            <th>标签</th>
+								        </tr>
+								    </thead>
+								     <tbody id = "remarks">
+								    </tbody>
+								</table>
+					        </div> 
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+								<button type="button" class="btn btn-default" onclick="subRemark('unicom')">提交</button>
+							</div>
+						</div>
+			  </form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
 	<script type="text/javascript">
 	$(function(){
 		var tabName = parent.$("#deviceulid > li.active").attr("id");

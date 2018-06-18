@@ -162,6 +162,7 @@ public class AgentController {
 			Agent temp = service.getById(agent.getId());
 			temp.setName(agent.getName());
 			temp.setGroupId(agent.getGroupId());
+			temp.setTelphone(agent.getTelphone());
 			service.update(temp);
 		}else{
 			agent.setCreater(session.getAttribute("user").toString());

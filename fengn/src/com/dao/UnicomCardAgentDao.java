@@ -71,7 +71,7 @@ public class UnicomCardAgentDao {
 				vo.setExpireTime(rs.getString("expiretime"));
 				//vo.setOrderStatus(rs.getString("orderStatus"));
 				vo.setActiveTime(rs.getString("activeTime"));
-				//vo.setRemark(rs.getString(""));//截止日期暂用remark
+				vo.setRemark(rs.getString("remark"));//截止日期暂用remark
 				vo.setName(rs.getString("name"));
 				list.add(vo);
 				return null;

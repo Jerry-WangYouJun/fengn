@@ -26,6 +26,7 @@ import com.service.AgentService;
 import com.service.CardAgentService;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/treeindex")
@@ -153,6 +154,25 @@ public class TreeController {
 			response.setContentType("text/html;charset=UTF-8");
 			out = response.getWriter();
 			out.println(map.get("sumKick"));
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(value="/updateRemark/{type}")
+	public void  updateInit(@PathVariable("type") String table , HttpServletResponse response,
+			String iccid , String remark){
+		response.setContentType("text/text;charset=UTF-8");
+		PrintWriter out;
+		try {
+			cardAgentService.updateRemarks(iccid,remark , table );
+			out = response.getWriter();
+			JSONObject json = new JSONObject();
+			json.put("msg", "操作成功");
+			json.put("success", true);
+			out.println(json);
 			out.flush();
 			out.close();
 		} catch (IOException e) {

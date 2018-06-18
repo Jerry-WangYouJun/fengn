@@ -47,7 +47,7 @@ public class UserDao {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<Agent> queryList(User user, Pagination page) {
 		String sql = "select u.id , u.userno , u.username ,u.pwd , u.roleid , u.agentid , u.agentid "
-				+ " , a.name  ,a.code ,a.groupid ,  p.renew , p.typename ,a.type,p.cost from a_user u , a_agent a "
+				+ " , a.name  ,a.code ,a.groupid ,  p.renew , p.typename ,a.type,p.cost , a.telphone from a_user u , a_agent a "
 				+ " left join t_package p on  p.id = a.type where u.agentid = a.id   " + whereSql(user);
 		String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
          final  List<Agent> list =   new ArrayList<>();
@@ -70,6 +70,7 @@ public class UserDao {
 //					}
 //					vo.setRenew(rs.getDouble("renew"));
 //					vo.setCost(rs.getDouble("cost"));
+					vo.setTelphone(rs.getString("telphone"));
 					list.add(vo);
 				 return null ;
 			}

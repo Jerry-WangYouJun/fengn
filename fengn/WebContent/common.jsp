@@ -99,4 +99,45 @@
 			}
 		}
 		
+		
+		function remarkData() {
+			var selectRow =  $("#infoTable").bootstrapTable('getSelections');
+			console.info($("#infoTable").bootstrapTable('getSelections'));
+			if($("#infoTable").bootstrapTable('getSelections').length  > 0){
+				$(".no-records-found").hide();
+				for(var i in selectRow){
+					var txt = "<tr><td>" + selectRow[i].iccid + "</td>"+
+					"<td><input  name='remark' value=' ' ><input name='iccid' type='hidden' value='"+
+					 selectRow[i].iccid  +"'></td></tr>" ;
+					$("#remarks").append(txt);
+					
+				}
+				$("#reamrkModal").modal("show");
+			}
+		}
+		
+		function subRemark(name){
+			var path = "${basePath}/treeindex/updateRemark/" + name;
+			$.ajax({
+				url : path,
+				type : 'post',
+				data : $("#remarkForm").serialize(),
+				dataType : 'json',
+				success : function(data) {
+					if (data.success) {
+						alert(data.msg);
+						$("#infoTable").bootstrapTable("refresh");
+						$("#reamrkModal").modal("hide");
+						$("#remarks").empty();
+					} else {
+						alert(data.msg);
+					}
+		
+				},
+				error : function(transport) {
+					alert("系统产生错误,请联系管理员!");
+				}
+			});
+		}
+		
 </script>

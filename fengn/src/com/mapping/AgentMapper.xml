@@ -12,9 +12,10 @@
     <result column="creatdate" jdbcType="VARCHAR" property="createdate" />
     <result column="parentId" jdbcType="INTEGER" property="parengId" />
     <result column="groupId" jdbcType="INTEGER" property="groupId" />
+    <result column="telphone" jdbcType="VARCHAR" property="telphone" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, code, name, cost, renew, type, creater, creatdate, parentId, groupId
+    id, code, name, cost, renew, type, creater, creatdate, parentId, groupId,telphone
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -33,11 +34,11 @@
     insert into a_agent ( code, name, 
       cost, renew, type, 
       creater, creatdate, parentId, 
-      groupId)
+      groupId , telphone)
     values ( #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{cost,jdbcType=DECIMAL}, #{renew,jdbcType=DECIMAL}, #{type,jdbcType=VARCHAR}, 
       #{creater,jdbcType=VARCHAR}, #{createdate,jdbcType=VARCHAR}, #{parengId,jdbcType=INTEGER}, 
-      #{groupId,jdbcType=INTEGER})
+      #{groupId,jdbcType=INTEGER},#{telphone,jdbcType=VARCHAR})
        
   </insert>
   <insert id="insertSelective" parameterType="com.model.Agent">
@@ -150,7 +151,8 @@
       creater = #{creater,jdbcType=VARCHAR},
       creatdate = #{createdate,jdbcType=VARCHAR},
       parentId = #{parengId,jdbcType=INTEGER},
-      groupId = #{groupId,jdbcType=INTEGER}
+      groupId = #{groupId,jdbcType=INTEGER},
+      telphone=#{telphone,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

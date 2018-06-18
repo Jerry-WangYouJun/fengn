@@ -30,7 +30,7 @@ public class UnicomCardInfoController {
 	    
 	    @RequestMapping("/q")
 	    public ModelAndView getCardInfo(String iccid){
-	    	ModelAndView mv = new ModelAndView("unicom/cardInfo");
+	    	ModelAndView mv = new ModelAndView("pages/cardInfo");
 			try {
 				UnicomInfoVo  cardInfo = cardInfoDao.selectByIccid(iccid);
 		    	if(cardInfo!=null ){

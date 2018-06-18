@@ -115,4 +115,18 @@ public class CardAgentService {
 				}
 			 return dao.querySumKick(sql);
 		 }
+
+		public void updateRemarks(String iccid, String remark, String table) {
+			String[]  iccidArr = iccid.split(",");
+			String[]  remarkArr= remark.split(",");
+			String sql = "update mlb_"+ table+"_card set  remark = case guid " ; 
+			String iccids = "";
+			for(int i = 0 ; i < iccidArr.length ; i ++) {
+				   sql +=  " when '" + iccidArr[i] + "' then '" +  remarkArr[i].trim() +"'";
+				   iccids += "'" + iccidArr[i] + "' , ";
+			}
+			sql += " end where guid in (" + iccids + " '')"  ; 
+			 dao.update(sql);
+			
+		}
 }

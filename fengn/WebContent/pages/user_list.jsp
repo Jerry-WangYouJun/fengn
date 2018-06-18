@@ -61,6 +61,10 @@
 					           <option value="3">联通，移动</option>  
 					        </select>	
 						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label">客服电话:</label> 
+								<input type="text" class="form-control" name="telphone" id="telphone">
+						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
@@ -119,7 +123,9 @@
 							} else if(value =='3' ){
 									return  "移动,联通";
 							}
-			        }}],  
+			        }},{  
+			            field : 'telphone',   title : '客服电话',  align: 'center',   valign: 'middle'  
+			        }],  
 			        silent : true, // 刷新事件必须设置  
 			    });  
 		});
