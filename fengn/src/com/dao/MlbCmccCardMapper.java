@@ -12,6 +12,8 @@ public interface MlbCmccCardMapper {
     int insertSelective(MlbCmccCard record);
 
     MlbCmccCard selectByPrimaryKey(Integer id);
+    
+    MlbCmccCard selectByIccid(String guid);
 
     int updateByPrimaryKeySelective(MlbCmccCard record);
 

@@ -12,6 +12,8 @@ public interface MlbUnicomCardMapper {
     int insertSelective(MlbUnicomCard record);
 
     MlbUnicomCard selectByPrimaryKey(Integer id);
+    
+    MlbUnicomCard selectByIccid(String guid);
 
     int updateByPrimaryKeySelective(MlbUnicomCard record);
 

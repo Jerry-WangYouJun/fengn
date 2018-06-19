@@ -45,6 +45,12 @@ public class CardInfoService {
 		return  null ;
 	}
 	
+	public String queryTelByICCID(String iccid, String table) throws Exception {
+		String sql = "select a.telphone from mlb_"+table+"_card  c, "+ table+"_card_agent cca, a_agent a "
+				+ " where c.guid = cca.iccid and  cca.agentid=a.id  and  c.guid= '" + iccid + "'";
+		return  dao.queryTelphone(sql);
+	}
+	
 	public void getDetail(InfoVo  info) throws Exception{
 			JSONObject  jsonCardInfo = getResultData(info,StringCommons.API_YONGSI_GPRSSTAUTS);
 		    String gprsStatus = jsonCardInfo.get("GPRSSTATUS").toString();

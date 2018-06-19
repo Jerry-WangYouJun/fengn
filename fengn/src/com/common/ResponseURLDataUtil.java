@@ -268,13 +268,23 @@ public class ResponseURLDataUtil {
 	public static void main(String[] args) {
 		try {
 			System.out.println(DateUtils.formatDate("yyyyMMddHHmmss"));
-			JSONObject json  = getCmccCard( 1, 1500 , null , "all",getToken());
+			Map map = new HashMap();
+//			map.put("p",  1);
+			map.put("pRowCount", 1);
+			map.put("loginHoldId", "12896");
+//			map.put("key", "");
+			//map.put("storeState", "3,4");
+			map.put("bootState", 2);
+//			map.put("noChild", "0");
+//			map.put("groupHoldId", "0");
+//			map.put("batchCardStr", "898604010118C1517243");
+//			map.put("batchType", "1");
+			JSONObject json  = getMLBData( getToken(), ContextString.URL_CMCC_SEARCH,map);
+			System.out.println(json.toString());
 			System.out.println(DateUtils.formatDate("yyyyMMddHHmmss"));
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -296,7 +306,7 @@ public class ResponseURLDataUtil {
 			map.put("batchType", "1");
 			JSONObject json = JSONObject.fromObject(map);
 			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString() , token);
-			 jsonObject  = JSONObject.fromObject(jsonString);  
+			jsonObject  = JSONObject.fromObject(jsonString);  
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -330,7 +340,7 @@ public class ResponseURLDataUtil {
 		try {
 			JSONObject json = JSONObject.fromObject(params);
 			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString() ,token);
-			 jsonObject  = JSONObject.fromObject(jsonString);  
+			jsonObject  = JSONObject.fromObject(jsonString);  
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

@@ -1,54 +1,134 @@
 package com.controller;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.json.JSONObject;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.dao.CardInfoMapper;
+import com.common.ContextString;
+import com.common.DateUtils;
+import com.common.ResponseURLDataUtil;
+import com.dao.MlbCmccCardMapper;
+import com.dao.MlbUnicomCardMapper;
 import com.model.InfoVo;
+import com.model.MlbCmccCard;
+import com.model.MlbUnicomCard;
 import com.model.UnicomInfoVo;
 import com.pay.util.JsSignUtil;
 import com.service.CardInfoService;
+import com.service.UnicomUploadService;
 
 
 @Controller
-@RequestMapping("/c")
 public class UnicomCardInfoController {
 	  
 	    @Autowired
 	    CardInfoService service;
 	    
 	    @Autowired
-	    CardInfoMapper cardInfoDao ; 
+	    UnicomUploadService  updateService;
 	    
+	    @Autowired
+	    MlbCmccCardMapper cmccDao ; 
 	    
-	    @RequestMapping("/q")
-	    public ModelAndView getCardInfo(String iccid){
+	    @Autowired
+	    MlbUnicomCardMapper unicomDao ;
+	    
+	    @RequestMapping("/c")
+	    public ModelAndView getCmccCardInfo(String iccid){
 	    	ModelAndView mv = new ModelAndView("pages/cardInfo");
 			try {
-				UnicomInfoVo  cardInfo = cardInfoDao.selectByIccid(iccid);
-		    	if(cardInfo!=null ){
-		    		if("1".equals(cardInfo.getOrderStatus())) {
-		    			return new ModelAndView("redirect:http://open.m-m10010.com/Html/Terminal/"
-		    					+ "simcard_lt_new.aspx?simNo="+iccid+"&apptype=null"
-		    					+ "&wechatId=oyVv8s1UDHqZ9BtLIYJsD5P8QA9k&mchId=&accessname=null");
-		    		}
-		    		mv.addObject("info", cardInfo);
-		    		
+				MlbCmccCard  cardInfo = cmccDao.selectByIccid(iccid);
+		    	if(cardInfo != null ){
+		    		 if(StringUtils.isEmpty(cardInfo.getSim())){//有卡信息 未更新
+		    			 Map map = new HashMap();
+	    				 map.put("simIds",cardInfo.getSimid() );
+	    				 JSONObject json = ResponseURLDataUtil.getMLBData(ResponseURLDataUtil.getToken(),ContextString.URL_CMCC_BIND , map);
+	    				 List<MlbCmccCard> list =updateService.getResultCmccBind(json);
+	    				 if(list != null){
+	    					 cmccDao.updateBatch(list);
+	    					 if(list.size() == 1){
+	    						 MlbCmccCard muc = list.get(0);
+	    						 cardInfo.setActiveTime(muc.getActiveTime());
+	    						 cardInfo.setPackagePeriodSrc(muc.getPackagePeriodSrc());
+	    						 cardInfo.setPackagename(muc.getPackagename());
+	    						 cardInfo.setHoldName(muc.getHoldName());
+	    						 mv.addObject("cmccCard", cardInfo);
+	    					 }else{
+	    						 UnicomInfoVo   wrongInfo = new UnicomInfoVo();
+	    						 wrongInfo.setGprsRest("卡号重复，请联系管理员确认");
+	    						 mv.addObject("info", wrongInfo);
+	    					 }
+	    				 }
+		    		 }else{
+		    			 mv.addObject("cmccCard", cardInfo);
+		    		 }
 		    	}else{
 		    		UnicomInfoVo   wrongInfo = new UnicomInfoVo();
-		    		wrongInfo.setGprsRest("卡号错误，请联系管理员确认");
+		    		wrongInfo.setGprsRest("卡号不存在，请联系管理员确认");
 		    		mv.addObject("info", wrongInfo);
 		    	}
+		    	String tel = service.queryTelByICCID(iccid , "cmcc");
+		    	mv.addObject("tel", tel);
 			} catch (Exception e) {
 				InfoVo   wrongInfo = new InfoVo();
-				wrongInfo.setUserStatus("卡号错误:" + e.getMessage());
+				wrongInfo.setUserStatus("系统错误，请联系管理员:" + e.getMessage());
+				mv.addObject("info", wrongInfo);
+			}
+	    	return mv ;
+	    	
+	    }
+	    
+	    @RequestMapping("/u")
+	    public ModelAndView getUnicomCardInfo(String iccid){
+	    	ModelAndView mv = new ModelAndView("pages/cardInfo");
+			try {
+				MlbUnicomCard  cardInfo = unicomDao.selectByIccid(iccid);
+		    	if(cardInfo!=null ){
+		    		 if(StringUtils.isEmpty(cardInfo.getSim())){
+		    			 Map map = new HashMap();
+	    				 map.put("simIds",cardInfo.getSimid() );
+	    				 JSONObject json = ResponseURLDataUtil.getMLBData(ResponseURLDataUtil.getToken(),ContextString.URL_UNICOM_BIND , map);
+	    				 List<MlbUnicomCard> list =updateService.getResultUnicomBind(json);
+	    				 if(list != null){
+	    					 unicomDao.updateBatch(list);
+	    					 if(list.size() == 1){
+	    						 MlbUnicomCard muc = list.get(0);
+	    						 cardInfo.setSim(muc.getSim());
+	    						 cardInfo.setOutWarehouseDate(muc.getOutWarehouseDate());
+	    						 cardInfo.setFlowlefttime(muc.getFlowlefttime());
+	    						 cardInfo.setImsi(muc.getImsi());
+	    						 cardInfo.setLastactivetime(muc.getLastactivetime());
+	    						 mv.addObject("unicomCard", cardInfo);
+	    					 }else{
+	    						 UnicomInfoVo   wrongInfo = new UnicomInfoVo();
+	    						 wrongInfo.setGprsRest("卡号重复，请联系管理员确认");
+	    						 mv.addObject("info", wrongInfo);
+	    					 }
+	    				 }
+		    		 }else{
+		    			 mv.addObject("unicomCard", cardInfo);
+		    		 }
+		    	}else{
+		    		UnicomInfoVo   wrongInfo = new UnicomInfoVo();
+		    		wrongInfo.setGprsRest("卡号不存在，请联系管理员确认");
+		    		mv.addObject("info", wrongInfo);
+		    	}
+		    	String tel = service.queryTelByICCID(iccid , "unicom");
+		    	mv.addObject("tel", tel);
+			} catch (Exception e) {
+				InfoVo   wrongInfo = new InfoVo();
+				wrongInfo.setUserStatus("系统错误，请联系管理员:" + e.getMessage());
 				mv.addObject("info", wrongInfo);
 			}
 	    	return mv ;

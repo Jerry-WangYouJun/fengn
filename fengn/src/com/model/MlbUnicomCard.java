@@ -17,7 +17,7 @@ public class MlbUnicomCard {
 
     private Double dayusagedata;//
 
-    private Double amountusagedata;//剩余流量gprsRest
+    private Double amountusagedata;//总流量gprsRest
 
     private Double totalmonthusageflow;//历史用量gprsUsed
     
@@ -34,6 +34,10 @@ public class MlbUnicomCard {
     private String imsi ; 
     
     private String remark;
+    
+    private  Double monthUsageData;
+    
+    private Double flowLeftValue;
 
     public Integer getId() {
         return id;
@@ -169,6 +173,22 @@ public class MlbUnicomCard {
 
 	public void setImsi(String imsi) {
 		this.imsi = imsi;
+	}
+
+	public Double getMonthUsageData() {
+		return monthUsageData;
+	}
+
+	public void setMonthUsageData(Double monthUsageData) {
+		this.monthUsageData = monthUsageData;
+	}
+
+	public Double getFlowLeftValue() {
+		return flowLeftValue;
+	}
+
+	public void setFlowLeftValue(Double flowLeftValue) {
+		this.flowLeftValue = flowLeftValue;
 	}
     
     

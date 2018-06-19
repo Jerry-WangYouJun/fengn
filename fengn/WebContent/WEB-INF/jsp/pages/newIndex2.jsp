@@ -145,7 +145,7 @@
                         <ul class="nav navbar-nav pull-left">
                             <li id="toggle-sidebar-li">
                                 <a href="#" style="padding: 12px" id="toggle-sidebar"><i class="en-arrow-left2"></i>
-                        </a>
+                        		</a>
                             </li>
                         </ul>
                         <ul class="nav navbar-nav pull-right">
@@ -452,9 +452,9 @@
         <script src="${pageContext.request.contextPath}/assets/js/app.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/pages/dashboard.js"></script>
     
-<script src="${pageContext.request.contextPath}/js/moment-with-locales.js"></script>  
-<script src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.min.js"></script> 
-<script src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.zh-CN.js"></script> 
+		<script src="${pageContext.request.contextPath}/js/moment-with-locales.js"></script>  
+		<script src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.min.js"></script> 
+		<script src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.zh-CN.js"></script> 
         
         <script>
 		/**
@@ -574,7 +574,7 @@
 						 id="mlbForm"
 						action="${pageContext.request.contextPath}/uploadExcel/upload.do">
 						<div class="form-group">
-							<label for="message-text" class="control-label">发卡时间:</label>
+							<label for="message-text" class="control-label" id="timetext">发卡时间:</label>
 							 <div class='input-group date' id='datetimepicker1'  >  
 					                <input type='text' class="form-control" readonly name="createdate" />  
 					                <span class="input-group-addon" >  
@@ -704,6 +704,8 @@
 	$(function(){
 			if($('#datetimepicker1')[0] != undefined){
 				$('#datetimepicker1').datetimepicker({  
+					minView: "month",
+					format: 'yyyy-mm-dd',
 				    todayBtn: true,//显示今日按钮
 				    autoclose: true,
 				    locale: moment.locale('zh-cn')

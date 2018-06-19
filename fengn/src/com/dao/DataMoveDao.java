@@ -393,6 +393,12 @@ public class DataMoveDao {
 		});
 		return total[0];
 	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public String queryTelphone(String selectSql) {
+		 String  tel = jdbcTemplate.queryForObject(selectSql, String.class);
+		return tel;
+	}
 
 	public void update(String sql) {
 

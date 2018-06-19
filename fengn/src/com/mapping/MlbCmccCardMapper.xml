@@ -31,6 +31,13 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
   
+    <select id="selectByIccid" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mlb_cmcc_card
+    where guid = #{guid,jdbcType=INTEGER}
+  </select>
+  
    <select id="selectNoSIM" parameterType="java.lang.String" resultType="java.lang.String">
      select  simid from mlb_cmcc_card where  sim  is null  
   </select>

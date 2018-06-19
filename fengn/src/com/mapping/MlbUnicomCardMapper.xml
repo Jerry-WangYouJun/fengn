@@ -10,6 +10,8 @@
     <result column="expireTime" jdbcType="VARCHAR" property="expiretime" />
     <result column="oddTime" jdbcType="VARCHAR" property="oddtime" />
     <result column="dayUsageData" jdbcType="DOUBLE" property="dayusagedata" />
+     <result column="monthUsageData" jdbcType="DOUBLE" property="monthUsageData" />
+      <result column="flowLeftValue" jdbcType="DOUBLE" property="flowLeftValue" />
     <result column="amountUsageData" jdbcType="DOUBLE" property="amountusagedata" />
     <result column="totalMonthUsageFlow" jdbcType="DOUBLE" property="totalmonthusageflow" />
      <result column="sim" jdbcType="VARCHAR" property="sim" />
@@ -21,7 +23,8 @@
   </resultMap>
   <sql id="Base_Column_List">
     id, guid, simid, packageName, simState, expireTime, oddTime, dayUsageData, amountUsageData, 
-    totalMonthUsageFlow ,sim , holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark
+    totalMonthUsageFlow ,sim , holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark 
+    ,monthUsageData,flowLeftValue
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -29,6 +32,14 @@
     from mlb_unicom_card
     where id = #{id,jdbcType=INTEGER}
   </select>
+  
+  <select id="selectByIccid" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mlb_unicom_card
+    where guid = #{guid,jdbcType=INTEGER}
+  </select>
+  
    <select id="selectNoSIM" parameterType="java.lang.String" resultType="java.lang.String">
      select  simid from mlb_unicom_card where  sim  is null  
   </select>
@@ -40,24 +51,28 @@
     insert into mlb_unicom_card (id, guid, packageName, 
       simState, expireTime, oddTime, 
       dayUsageData, amountUsageData, totalMonthUsageFlow
+       ,monthUsageData,flowLeftValue
       )
     values (#{id,jdbcType=INTEGER}, #{guid,jdbcType=VARCHAR}, #{packagename,jdbcType=VARCHAR}, 
       #{simstate,jdbcType=VARCHAR}, #{expiretime,jdbcType=VARCHAR}, #{oddtime,jdbcType=VARCHAR}, 
       #{dayusagedata,jdbcType=DOUBLE}, #{amountusagedata,jdbcType=DOUBLE}, #{totalmonthusageflow,jdbcType=DOUBLE}
+      , #{monthUsageData,jdbcType=DOUBLE}, #{flowLeftValue,jdbcType=DOUBLE}
       )
   </insert>
    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">  
     insert into mlb_unicom_card_copy (guid,simid, packageName, 
       simState, expireTime, oddTime, 
       dayUsageData, amountUsageData, totalMonthUsageFlow,sim , 
-      holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark  )  
+      holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark 
+       ,monthUsageData,flowLeftValue)  
     values   
     <foreach collection="list" item="item" index="index" separator="," >  
         ( #{item.guid},#{item.simid}, #{item.packagename}, 
       #{item.simstate}, #{item.expiretime}, #{item.oddtime}, 
       #{item.dayusagedata}, #{item.amountusagedata}, #{item.totalmonthusageflow},
        #{item.sim}, #{item.holdname}, #{item.lastactivetime}, 
-      #{item.flowlefttime}, #{item.outWarehouseDate}, #{item.remark}
+      #{item.flowlefttime}, #{item.outWarehouseDate}, #{item.remark},
+       #{item.monthUsageData}, #{item.flowLeftValue}
       ) 
     </foreach>  
   </insert> 
@@ -196,7 +211,9 @@
       oddTime = #{oddtime,jdbcType=VARCHAR},
       dayUsageData = #{dayusagedata,jdbcType=DOUBLE},
       amountUsageData = #{amountusagedata,jdbcType=DOUBLE},
-      totalMonthUsageFlow = #{totalmonthusageflow,jdbcType=DOUBLE}
+      totalMonthUsageFlow = #{totalmonthusageflow,jdbcType=DOUBLE},
+      flowLeftValue=#{flowLeftValue,jdbcType=DOUBLE},
+       monthUsageData=#{monthUsageData,jdbcType=DOUBLE}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

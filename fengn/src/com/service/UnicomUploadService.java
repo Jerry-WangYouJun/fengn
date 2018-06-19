@@ -216,7 +216,7 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 		  return list ;
 	}
 	
-	private List<MlbUnicomCard> getResultUnicomBind(JSONObject json) {
+	public List<MlbUnicomCard> getResultUnicomBind(JSONObject json) {
 		if("null".equals(json.getString("result"))) {
 			   return  null;
 		  }
