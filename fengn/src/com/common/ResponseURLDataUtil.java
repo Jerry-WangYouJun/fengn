@@ -274,12 +274,13 @@ public class ResponseURLDataUtil {
 			map.put("loginHoldId", "12896");
 //			map.put("key", "");
 			//map.put("storeState", "3,4");
-			map.put("bootState", 2);
+			//map.put("bootState", 3);
+			map.put("distributeDate", "2018-06-01");
 //			map.put("noChild", "0");
 //			map.put("groupHoldId", "0");
 //			map.put("batchCardStr", "898604010118C1517243");
 //			map.put("batchType", "1");
-			JSONObject json  = getMLBData( getToken(), ContextString.URL_CMCC_SEARCH,map);
+			JSONObject json  = getMLBData( getToken(), ContextString.URL_UNICOM_SEARCH,map);
 			System.out.println(json.toString());
 			System.out.println(DateUtils.formatDate("yyyyMMddHHmmss"));
 		} catch (UnsupportedEncodingException e) {
