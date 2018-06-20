@@ -84,6 +84,28 @@ public class UnicomUploadController {
 		//List<List<Object>> listob = dataServices.getDataList(multipartRequest, response);
 		String msg = "";
 		System.out.println("开始获取数据" + DateUtils.formatDate("yyyyMMddHHmmss"));
+			dataServices.deleteDataTemp("mlb_cmcc_card_copy");
+			msg =  dataServices.insertCmccTemp("update" , "cmcc" , "1");
+		System.out.println("插入数据表,用时" + (System.currentTimeMillis() - startTime));
+		JSONObject json = new JSONObject();
+		json.put("msg", msg);
+		out.print(json);
+		out.flush();
+		out.close();
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/unicom_update", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public void updateUnicomData(HttpServletResponse response ,  HttpSession session) throws Exception {
+		//MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+		response.setCharacterEncoding("utf-8");
+		Long startTime = System.currentTimeMillis(); 
+		PrintWriter out =  response.getWriter();
+		System.out.println("导入表数据开始：" + DateUtils.formatDate("MM-dd:HH-mm-ss"));
+		//List<List<Object>> listob = dataServices.getDataList(multipartRequest, response);
+		String msg = "";
+		System.out.println("开始获取数据" + DateUtils.formatDate("yyyyMMddHHmmss"));
 			dataServices.deleteDataTemp("mlb_unicom_card_copy");
 			msg =  dataServices.insertUnicomTemp("update" , "unicom" , "3");
 		System.out.println("插入数据表,用时" + (System.currentTimeMillis() - startTime));

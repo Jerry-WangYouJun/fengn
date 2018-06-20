@@ -302,7 +302,7 @@ public class ResponseURLDataUtil {
 			if(createDateOrState.length() > 1 ){
 				map.put("distributeDate", createDateOrState);
 			}else{
-				map.put("storeState", createDateOrState);
+				map.put("bootState", createDateOrState);
 			}
 			JSONObject json = JSONObject.fromObject(map);
 			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString() , token);

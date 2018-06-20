@@ -40,7 +40,6 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 	MlbCmccCardMapper  cmccMapper;
 
 	public String insertUnicomTemp(String type, String table , String createdate) throws Exception {
-		StringBuffer sb = new StringBuffer();
 		String token = ResponseURLDataUtil.getToken();
 		List<MlbUnicomCard> mucList = new ArrayList<>();
 		//List<MlbUnicomCard> mucInsertList = new ArrayList<>();
@@ -82,7 +81,7 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 	}
 	
 	
-	public String insertCmccTemp( String type ,String createDate ,String table) throws Exception {
+	public String insertCmccTemp( String type ,String table ,String createDate) throws Exception {
 		List<MlbCmccCard> mccList = new ArrayList<>();
 		String token = ResponseURLDataUtil.getToken();
 		JSONObject jsonForCount = ResponseURLDataUtil.getCmccCard(1,1,createDate ,token);
