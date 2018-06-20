@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.common.ContextString;
 import com.common.DateUtils;
+import com.dao.UnicomUploadDao;
 import com.service.UnicomUploadService;
 
 @Controller
@@ -23,18 +23,10 @@ import com.service.UnicomUploadService;
 public class UnicomUploadController {
 	
 	@Autowired
+	UnicomUploadDao uploadDao;
+	
+	@Autowired
 	private UnicomUploadService dataServices;
-	
-	@RequestMapping(value = "uploadUnicomInit", method = { RequestMethod.GET,
-			RequestMethod.POST })
-	public String  uploadUnicomInit(HttpSession session ){
-		String roleId =  session.getAttribute("roleid").toString();
-		if(!(ContextString.ROLE_ADMIN_UNICOM.equals(roleId) || ContextString.ROLE_ADMIN.equals(roleId) )){
-			   return "unicom/agent";
-		}
-		 return "unicom/main";
-	}
-	
 
 	@ResponseBody
 	@RequestMapping(value = "/uploadExcelUnicom", method = { RequestMethod.GET,
@@ -55,12 +47,17 @@ public class UnicomUploadController {
 		case "1":
 			tableName="cmcc";
 			dataServices.deleteDataTemp( "mlb_" + tableName + "_card_copy");
-			msg = dataServices.insertCmccList(null, agentId, tableName);
+			msg = dataServices.insertCmccTemp("insert"  , createdate, tableName);
+			uploadDao.insertAgentCard(agentId , tableName );
+			if(msg == null){
+				msg = "当天无出库信息！";
+			}
 			break;
 		case "2":
 			tableName ="unicom";
 			dataServices.deleteDataTemp("mlb_" + tableName + "_card_copy");
-			msg = dataServices.insertUnicomList(null ,agentId , tableName);
+			msg = dataServices.insertUnicomTemp("insert"  , tableName , createdate);
+			uploadDao.insertAgentCard(agentId , tableName );
 			break;
 		default:
 			msg="数据错误，请重试或联系管理员！";
@@ -76,27 +73,6 @@ public class UnicomUploadController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/unicom_update", method = { RequestMethod.GET,
-			RequestMethod.POST })
-	public void updateUnicomData(HttpServletResponse response ,  HttpSession session) throws Exception {
-		//MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-		response.setCharacterEncoding("utf-8");
-		Long startTime = System.currentTimeMillis(); 
-		PrintWriter out =  response.getWriter();
-		System.out.println("导入表数据开始：" + DateUtils.formatDate("MM-dd:HH-mm-ss"));
-		//List<List<Object>> listob = dataServices.getDataList(multipartRequest, response);
-		String msg = "";
-		System.out.println("开始获取数据" + DateUtils.formatDate("yyyyMMddHHmmss"));
-			msg = dataServices.updateUnicomBySIM("");
-		System.out.println("插入数据表,用时" + (System.currentTimeMillis() - startTime));
-		JSONObject json = new JSONObject();
-		json.put("msg", msg);
-		out.print(json);
-		out.flush();
-		out.close();
-	}
-	
-	@ResponseBody
 	@RequestMapping(value = "/cmcc_update", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	public void updateCmccData(HttpServletResponse response ,  HttpSession session) throws Exception {
@@ -108,7 +84,8 @@ public class UnicomUploadController {
 		//List<List<Object>> listob = dataServices.getDataList(multipartRequest, response);
 		String msg = "";
 		System.out.println("开始获取数据" + DateUtils.formatDate("yyyyMMddHHmmss"));
-			msg = dataServices.updateCmccBySIM("");
+			dataServices.deleteDataTemp("mlb_unicom_card_copy");
+			msg =  dataServices.insertUnicomTemp("update" , "unicom" , "3");
 		System.out.println("插入数据表,用时" + (System.currentTimeMillis() - startTime));
 		JSONObject json = new JSONObject();
 		json.put("msg", msg);

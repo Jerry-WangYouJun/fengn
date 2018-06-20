@@ -64,7 +64,8 @@
       simState, expireTime, oddTime, 
       dayUsageData, amountUsageData, totalMonthUsageFlow,sim , 
       holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark 
-       ,monthUsageData,flowLeftValue)  
+       ,monthUsageData,flowLeftValue 
+        ,imsi)  
     values   
     <foreach collection="list" item="item" index="index" separator="," >  
         ( #{item.guid},#{item.simid}, #{item.packagename}, 
@@ -72,22 +73,56 @@
       #{item.dayusagedata}, #{item.amountusagedata}, #{item.totalmonthusageflow},
        #{item.sim}, #{item.holdname}, #{item.lastactivetime}, 
       #{item.flowlefttime}, #{item.outWarehouseDate}, #{item.remark},
-       #{item.monthUsageData}, #{item.flowLeftValue}
+       #{item.monthUsageData}, #{item.flowLeftValue},#{item.imsi}
       ) 
     </foreach>  
   </insert> 
-  
    <update id="updateBatch" parameterType="java.util.List">
         update mlb_unicom_card
         <trim prefix="set" suffixOverrides=",">
-            <trim prefix="sim =case" suffix="end,">
+        	  <trim prefix="packageName =case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                     when simId=#{item.simid} then #{item.sim}
+                     when simId=#{item.simid} then #{item.packagename}
                 </foreach>
             </trim>
-            <trim prefix="outWarehouseDate =case" suffix="end,">
+            <trim prefix="simState =case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                     when simId=#{item.simid} then #{item.outWarehouseDate}
+                     when simId=#{item.simid} then #{item.simstate}
+                </foreach>
+            </trim>
+            <trim prefix="expireTime =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.expiretime}
+                </foreach>
+            </trim>
+        	 <trim prefix="oddTime =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.oddtime}
+                </foreach>
+            </trim>
+             <trim prefix="dayUsageData =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.dayusagedata}
+                </foreach>
+             </trim>
+        	 <trim prefix="amountUsageData =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.amountusagedata}
+                </foreach>
+             </trim>
+        	<trim prefix="totalMonthUsageFlow =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.totalmonthusageflow}
+                </foreach>
+             </trim>
+        	<trim prefix="holdName =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.holdname}
+                </foreach>
+             </trim>
+             <trim prefix="lastactivetime =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.lastactivetime}
                 </foreach>
             </trim>
             <trim prefix="flowlefttime =case" suffix="end,">
@@ -95,16 +130,21 @@
                      when simId=#{item.simid} then #{item.flowlefttime}
                 </foreach>
             </trim>
-            <trim prefix="imsi =case" suffix="end,">
+            <trim prefix="remark =case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                     when simId=#{item.simid} then #{item.imsi}
+                     when simId=#{item.simid} then #{item.remark}
                 </foreach>
-            </trim>
-            <trim prefix="lastactivetime =case" suffix="end,">
+             </trim>
+        	<trim prefix="monthUsageData =case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                     when simId=#{item.simid} then #{item.lastactivetime}
+                     when simId=#{item.simid} then #{item.monthUsageData}
                 </foreach>
-            </trim>
+             </trim>
+        	<trim prefix="flowLeftValue =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.flowLeftValue}
+                </foreach>
+             </trim>
         </trim>
         where simId in
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">

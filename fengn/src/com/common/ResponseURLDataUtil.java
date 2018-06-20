@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 import org.apache.http.util.TextUtils;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
@@ -16,8 +18,6 @@ import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-
-import net.sf.json.JSONObject;
 
 public class ResponseURLDataUtil {
 	public static String token = "";
@@ -264,33 +264,33 @@ public class ResponseURLDataUtil {
 			return jsonObject ;
 	}
 	
-	//10000  -114   1000 - 6  2000 -10  
-	public static void main(String[] args) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static JSONObject getUnicomAll(int pindex,int pRowCount ,String createDateOrState  , String token) throws UnsupportedEncodingException {
+		String jsonString;
+		JSONObject jsonObject  = null;
 		try {
-			System.out.println(DateUtils.formatDate("yyyyMMddHHmmss"));
 			Map map = new HashMap();
-//			map.put("p",  1);
-			map.put("pRowCount", 1);
 			map.put("loginHoldId", "12896");
-//			map.put("key", "");
-			//map.put("storeState", "3,4");
-			//map.put("bootState", 3);
-			map.put("distributeDate", "2018-06-01");
-//			map.put("noChild", "0");
-//			map.put("groupHoldId", "0");
-//			map.put("batchCardStr", "898604010118C1517243");
-//			map.put("batchType", "1");
-			JSONObject json  = getMLBData( getToken(), ContextString.URL_UNICOM_SEARCH,map);
-			System.out.println(json.toString());
-			System.out.println(DateUtils.formatDate("yyyyMMddHHmmss"));
+			map.put("storeState", "2,3,4");
+			map.put("p",  pindex);
+			map.put("pRowCount", pRowCount);
+			if(createDateOrState.length() > 1 ){
+				map.put("distributeDate", createDateOrState);
+			}else{
+				map.put("storeState", createDateOrState);
+			}
+			JSONObject json = JSONObject.fromObject(map);
+			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(ContextString.URL_UNICOM_SEARCH , json.toString() ,token);
+			 jsonObject  = JSONObject.fromObject(jsonString);  
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+			return jsonObject ;
 	}
 	
-	public static JSONObject getCmccCard(int pindex,int pRowCount , String iccids , String storeStatus , String token) throws UnsupportedEncodingException {
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static JSONObject getCmccCard(int pindex,int pRowCount , String createDateOrState , String token) throws UnsupportedEncodingException {
 		String jsonString;
 		JSONObject jsonObject  = null;
 		try {
@@ -299,12 +299,11 @@ public class ResponseURLDataUtil {
 			map.put("p",  pindex);
 			map.put("pRowCount", pRowCount);
 			map.put("loginHoldId", "12896");
-			map.put("key", "");
-			map.put("storeState", storeStatus);
-			map.put("noChild", "0");
-			map.put("groupHoldId", "0");
-			map.put("batchCardStr", iccids);
-			map.put("batchType", "1");
+			if(createDateOrState.length() > 1 ){
+				map.put("distributeDate", createDateOrState);
+			}else{
+				map.put("storeState", createDateOrState);
+			}
 			JSONObject json = JSONObject.fromObject(map);
 			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString() , token);
 			jsonObject  = JSONObject.fromObject(jsonString);  
@@ -314,20 +313,16 @@ public class ResponseURLDataUtil {
 			return jsonObject ;
 	}
 	
-	public static JSONObject getCmccCardBind( String token) throws UnsupportedEncodingException {
-		String jsonString;
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static JSONObject getBind(int pindex,int pRowCount , List<String> simidList , String url , String token) throws UnsupportedEncodingException {
 		JSONObject jsonObject  = null;
 		try {
-			String url = "https://www.m-m10086.com/api/YDSimListFire/Binding";
 			Map map = new HashMap();
-			List<String> arr = new ArrayList<>();
-			arr.add("9946186");
-			arr.add("9946184");
-			arr.add("9946176");
-			map.put("simIds", arr);
-			JSONObject json = JSONObject.fromObject(map);
-			jsonString = ResponseURLDataUtil.getPOSTReturnDataWithCookie(url , json.toString() , token);
-			 jsonObject  = JSONObject.fromObject(jsonString);  
+			map.put("p",  pindex);
+			map.put("pRowCount", pRowCount);
+			map.put("loginHoldId", "12896");
+			map.put("simIds", simidList);
+			jsonObject = ResponseURLDataUtil.getMLBData(url  , token, map);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -335,7 +330,8 @@ public class ResponseURLDataUtil {
 	}
 	
 	
-	public static JSONObject getMLBData( String token , String url , Map params) throws UnsupportedEncodingException {
+	@SuppressWarnings("rawtypes")
+	public static JSONObject getMLBData( String url , String token , Map params) throws UnsupportedEncodingException {
 		String jsonString;
 		JSONObject jsonObject  = null;
 		try {
@@ -348,5 +344,21 @@ public class ResponseURLDataUtil {
 			return jsonObject ;
 	}
 	
-	
+	//10000  -114   1000 - 6  2000 -10  
+		public static void main(String[] args) {
+			try {
+				System.out.println(DateUtils.formatDate("yyyyMMddHHmmss"));
+				List<String> list = new ArrayList<>();
+				list.add("7588306");
+				list.add("7588300");
+				list.add("7588208");
+				JSONObject json  = getBind(1,1, list , ContextString.URL_UNICOM_BIND, getToken());
+				System.out.println(json.toString());
+				System.out.println(DateUtils.formatDate("yyyyMMddHHmmss"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 }

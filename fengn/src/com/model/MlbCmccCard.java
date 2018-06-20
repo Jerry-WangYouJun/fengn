@@ -5,7 +5,7 @@ public class MlbCmccCard {
 
     private String guid;
 
-    private Integer simid;
+    private String simid;
 
     private String sim;
 
@@ -55,11 +55,11 @@ public class MlbCmccCard {
         this.guid = guid == null ? null : guid.trim();
     }
 
-    public Integer getSimid() {
+    public String getSimid() {
         return simid;
     }
 
-    public void setSimid(Integer simid) {
+    public void setSimid(String simid) {
         this.simid = simid;
     }
 

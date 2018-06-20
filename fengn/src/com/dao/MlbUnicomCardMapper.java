@@ -21,7 +21,7 @@ public interface MlbUnicomCardMapper {
     
     public int insertBatch(List<MlbUnicomCard>  list);
 
-	List<String> selectNoSIM(String createdate);
+	List<String> selectNoSIM();
 
 	int updateBatch(List<MlbUnicomCard> list);
 }

@@ -528,43 +528,6 @@
       
 	</script>
 	
-	
-	<div class="modal fade" id="uploadModal" tabindex="-2" role="dialog"
-		aria-labelledby="uploadModalLabel" aria-hidden="true">
-		<div class="modal-dialog" style="width:400px; ">
-			<div class="modal-content">
-				<div class="modal-body">
-					 <form class="form-signin" role="form" method="POST"
-						enctype="multipart/form-data" id="form1"
-						action="${pageContext.request.contextPath}/uploadExcel/upload.do">
-						<div class="form-group">
-							<label for="message-text" class="control-label">上传文件:</label>
-							 <input class="form-control" style="float:left"
-									id="upfile" type="file" name="upfile"
-									class="col-md-12" required>	
-						</div>
-						<div class="form-group">
-						  <div class="col-xs-3 ">
-						   <label for="message-text" class="control-label">选择接口:</label>
-						  </div>
-						    <select name="apiCode" id = "apiCode" class="form-control" >
-						      <option value="1">永思接口数据</option>
-						      <option value="2">丰宁接口数据</option>
-						    </select>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" id="btn_api" class="btn btn-primary" data-dismiss="modal" onclick="">上传数据</button>
-				</div>
-			</div>
-			<!-- /.modal-content -->
-		</div>
-		<!-- /.modal -->
-	</div>
-	
-	
 	<div class="modal fade" id="mlbModal" tabindex="-2" role="dialog"
 		aria-labelledby="uploadModalLabel" aria-hidden="true">
 		<div class="modal-dialog" style="width:400px; ">
@@ -574,9 +537,9 @@
 						 id="mlbForm"
 						action="${pageContext.request.contextPath}/uploadExcel/upload.do">
 						<div class="form-group">
-							<label for="message-text" class="control-label" id="timetext">发卡时间:</label>
+							<label for="message-text" class="control-label" id="timetext">出库时间:</label>
 							 <div class='input-group date' id='datetimepicker1'  >  
-					                <input type='text' class="form-control" readonly name="createdate" />  
+					                <input type='text' class="form-control" readonly name="createdate"  id="createdate"/>  
 					                <span class="input-group-addon" >  
 					                    <span class="glyphicon glyphicon-calendar"></span>  
 					                </span>  
@@ -684,6 +647,10 @@
 	
 	$(document).ready(function() {
 		$('#btn_mlb').click(function() {
+			if($("#createdate").val() == ''){
+				 alert("请添加出库时间");
+				 return false;
+			}
 			$('#mlbForm').ajaxSubmit({
 				url : '${pageContext.request.contextPath}/unicomUpload/uploadExcelUnicom',
 				dataType : 'text',
@@ -708,7 +675,8 @@
 					format: 'yyyy-mm-dd',
 				    todayBtn: true,//显示今日按钮
 				    autoclose: true,
-				    locale: moment.locale('zh-cn')
+				    language:"zh-CN",
+				    clearBtn: true 
 				});
 			}
 		});

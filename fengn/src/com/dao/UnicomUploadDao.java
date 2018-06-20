@@ -54,43 +54,61 @@ public class UnicomUploadDao {
 	}
 	
 
-
-	public int insertData(String table) {
+    
+	public int insertUnicomData(String table) {
 		String insertsqlTemp = "insert into  mlb_" + table +  "_card  (guid,simid, packageName, "
 				+ "  simState, expireTime, oddTime, "
-			    + "  dayUsageData, amountUsageData, totalMonthUsageFlow,sim , "
-			    + "  holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark  	)  "
+			    + "  dayUsageData, amountUsageData, totalMonthUsageFlow, sim , "
+			    + "  holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark, "
+			    + "  monthUsageData,flowLeftValue  ,imsi 	)  "
 				+ " select  guid,simid, packageName, "
 				+ "  simState, expireTime, oddTime, "
 			    + "  dayUsageData, amountUsageData, totalMonthUsageFlow,sim , "
-			    + "  holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark "
+			    + "  holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark ,"
+			    + "  monthUsageData,flowLeftValue  ,imsi 	"
 				+ "  from mlb_"+table+"_card_copy "
 				+ " where guid not in (select guid  from  mlb_"+table+"_card )";
 		return jdbcTemplate.update(insertsqlTemp);
 	}
+	
+	public int updateUnicomData(String table) {
+		String updateTemp = "update mlb_unicom_card u , mlb_unicom_card_copy uc set "
+			+ "u.packageName=uc.packageName ,u.simState=uc.simState , u.expiretime=uc.expiretime ,"
+			+ "u.amountusagedata=uc.amountusagedata , u.totalMonthUsageFlow=uc.totalMonthUsageFlow , "
+			+ "u.holdName=uc.holdName ,u.lastActiveTime=uc.lastActiveTime ,u.flowLeftTime=uc.flowLeftTime , "
+			+ "u.remark=uc.remark ,u.monthUsageData=uc.monthUsageData ,u.flowLeftValue=uc.flowLeftValue "
+			+ "where u.guid=uc.guid ";
+		return jdbcTemplate.update(updateTemp);
+	}
+	
 	
 	public int insertCmccData(String table) {
 		String insertsqlTemp = "insert into  mlb_" + table +  "_card  ( guid, simId, " + 
 				"      sim, packageName, bootState, " + 
 				"      expireTime, oddTime, amountUsageData, " + 
-				"      flowLeftValue, monthUsageData, totalMonthUsageFlow 	) "
-				+ " select  guid, simId, " + 
+				"      flowLeftValue, monthUsageData, totalMonthUsageFlow ,	" +
+				"    activeTime,holdName ,packagePeriodSrc ,remark) " +
+				"    select  guid, simId, " + 
 				"     sim, packageName, bootState,  " + 
-				"	  expireTime, oddTime, amountUsageData,"
-				+ "  flowLeftValue, monthUsageData, totalMonthUsageFlow  "
-				+ "  from mlb_"+table+"_card_copy "
-				+ " where guid not in (select guid  from  mlb_"+table+"_card )";
+				"	  expireTime, oddTime, amountUsageData," +
+				"  flowLeftValue, monthUsageData, totalMonthUsageFlow  ," +
+				"  activeTime,holdName ,packagePeriodSrc  ,remark " + 
+				"  from mlb_"+table+"_card_copy " +
+				" where guid not in (select guid  from  mlb_"+table+"_card )";
 		return jdbcTemplate.update(insertsqlTemp);
 	}
-
-	public int updateData() {
-		String updateSqlTemp = "UPDATE u_cmtp c , u_cmtp_temp t SET c.cardStatus=t.cardStatus , "
-				+ "c.company_level=t.company_level , c.deadline = t.deadline , c.gprsRest = t.gprsRest , "
-				+ "c.gprsUsed=t.gprsUsed  , c.monthTotalStream = t.monthTotalStream  , c.packageDetail=t.packageDetail , "
-				+ "c.packageType =t.packageType , c.remark=t.remark , c.updateTime = t.updateTime WHERE c.ICCID = t.ICCID ";
-		return jdbcTemplate.update(updateSqlTemp);
-	}
 	
+	public int updateCmccData(String table) {
+		String updateTemp = "update mlb_cmcc_card u , mlb_cmcc_card_copy uc set "
+			+ "u.packageName=uc.packageName ,u.bootState=uc.bootState , u.expiretime=uc.expiretime ,"
+			+ "u.oddTime=uc.oddTime , u.amountUsageData=uc.amountUsageData , "
+			+ "u.flowLeftValue=uc.flowLeftValue ,u.monthUsageData=uc.monthUsageData ,"
+			+ "u.totalMonthUsageFlow=uc.totalMonthUsageFlow , u.remark=uc.remark ,"
+			+ "u.activeTime=uc.activeTime ,u.holdName=uc.holdName ,u.packagePeriodSrc=uc.packagePeriodSrc "
+			+ "where u.guid=uc.guid ";
+		return jdbcTemplate.update(updateTemp);
+	}
+
 	
 	/**
 	 *  以下方法暂未用到
@@ -102,6 +120,15 @@ public class UnicomUploadDao {
 	 *  
 	 */
 	
+	
+
+	public int updateData() {
+		String updateSqlTemp = "UPDATE u_cmtp c , u_cmtp_temp t SET c.cardStatus=t.cardStatus , "
+				+ "c.company_level=t.company_level , c.deadline = t.deadline , c.gprsRest = t.gprsRest , "
+				+ "c.gprsUsed=t.gprsUsed  , c.monthTotalStream = t.monthTotalStream  , c.packageDetail=t.packageDetail , "
+				+ "c.packageType =t.packageType , c.remark=t.remark , c.updateTime = t.updateTime WHERE c.ICCID = t.ICCID ";
+		return jdbcTemplate.update(updateSqlTemp);
+	}
 	
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

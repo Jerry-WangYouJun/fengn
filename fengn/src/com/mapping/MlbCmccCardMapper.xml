@@ -50,7 +50,7 @@
     insert into mlb_cmcc_card (id, guid, simId, 
       sim, packageName, bootState, 
       expireTime, oddTime, amountUsageData, 
-      flowLeftValue, monthUsageData, totalMonthUsageFlow , 
+      flowLeftValue, monthUsageData, totalMonthUsageFlow 
       )
     values (#{id,jdbcType=INTEGER}, #{guid,jdbcType=VARCHAR}, #{simid,jdbcType=INTEGER}, 
       #{sim,jdbcType=VARCHAR}, #{packagename,jdbcType=VARCHAR}, #{bootstate,jdbcType=VARCHAR}, 
@@ -63,13 +63,15 @@
     insert into mlb_cmcc_card_copy (guid, simid, 
       sim, packageName, bootState, 
       expireTime, oddTime, amountUsageData, 
-      flowLeftValue, monthUsageData, totalMonthUsageFlow  )  
+      flowLeftValue, monthUsageData, totalMonthUsageFlow  
+      , activeTime,holdName ,packagePeriodSrc)  
     values   
     <foreach collection="list" item="item" index="index" separator="," >  
         ( #{item.guid}, #{item.simid}, #{item.sim},
       #{item.packagename}, #{item.bootstate}, #{item.expiretime}, 
       #{item.oddtime}, #{item.amountusagedata}, #{item.flowleftvalue} 
-      , #{item.monthusagedata}, #{item.totalmonthusageflow}
+      , #{item.monthusagedata}, #{item.totalmonthusageflow}, #{item.activeTime} 
+      , #{item.holdName}, #{item.packagePeriodSrc}
       ) 
     </foreach>  
   </insert> 
