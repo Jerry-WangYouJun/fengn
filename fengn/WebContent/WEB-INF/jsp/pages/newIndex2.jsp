@@ -557,7 +557,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" id="btn_mlb" class="btn btn-primary" data-dismiss="modal" onclick="">上传数据</button>
+					<button type="button" id="btn_mlb" class="btn btn-primary" data-dismiss="modal" onclick="">导入数据</button>
 				</div>
 			</div>
 			<!-- /.modal-content -->

@@ -49,7 +49,7 @@ public class UnicomUploadDao {
 	public int insertAgentCard(String agentId , String table) {
 		String insertsqlTemp = "insert " + table +"_card_agent (iccid , agentid ) select t.guid , '" + agentId+ "'"
 				+ " from  mlb_"+ table +"_card_copy  t  "
-				+ " where  t.guid not in (select guid  from  " + table+ "_card_agent ) ";
+				+ " where  t.guid not in (select iccid  from  " + table+ "_card_agent ) ";
 		return jdbcTemplate.update(insertsqlTemp);
 	}
 	
@@ -78,7 +78,8 @@ public class UnicomUploadDao {
 			+ "u.holdName=uc.holdName ,u.lastActiveTime=uc.lastActiveTime ,u.flowLeftTime=uc.flowLeftTime , "
 			+ "u.remark=uc.remark ,u.monthUsageData=uc.monthUsageData ,u.flowLeftValue=uc.flowLeftValue "
 			+ "where u.guid=uc.guid ";
-		return jdbcTemplate.update(updateTemp);
+		int  count = jdbcTemplate.update(updateTemp);
+		return  count;
 	}
 	
 	

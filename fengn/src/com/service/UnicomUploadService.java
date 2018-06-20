@@ -68,15 +68,15 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 					System.out.println("开始第"+i+"次操作数据" + DateUtils.formatDate("yyyyMMddHHmmss"));
 						int temp = 0 ;
 						temp = unicomMapper.insertBatch(mucList);
-						if("insert".equals(type)){
-							totalUpdate += uploadDao.insertUnicomData(table);
-						}else{
-							totalUpdate += uploadDao.updateUnicomData(table);
-						}
 						System.out.println("操作" + temp + "条");
 						total += temp;
 						System.out.println("结束第"+i+"次操作数据" + DateUtils.formatDate("yyyyMMddHHmmss"));	
 				}
+		}
+		if("insert".equals(type)){
+			totalUpdate = uploadDao.insertUnicomData(table);
+		}else{
+			totalUpdate = uploadDao.updateUnicomData(table);
 		}
 	  	return  "共"+ total + "条数据; 更新" + totalUpdate + "条" ;
 	}
@@ -108,15 +108,15 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 					int temp = cmccMapper.insertBatch(mccList);
 					System.out.println("插入" + temp + "条");
 					total += temp;
-					if("insert".equals(type)){
-						actual += uploadDao.insertCmccData(table);
-					}else{
-						actual += uploadDao.updateCmccData(table);
-					}
 					System.out.println("结束第"+i+"次插入数据" + DateUtils.formatDate("yyyyMMddHHmmss"));	
 			}
 		}
 	  	System.out.println("累计插入" + total);
+	  	if("insert".equals(type)){
+	  		actual += uploadDao.insertCmccData(table);
+	  	}else{
+	  		actual += uploadDao.updateCmccData(table);
+	  	}
 	  	return  "共"+ total + "条数据, 操作成功 " + actual + "条"   ;
 	}
 	
