@@ -17,19 +17,53 @@
      
      <!--  定时器配置  备用-->
 	<bean name="taskJob" class="com.task.RefreshDataTask" />
- 	<bean id="quartzTestJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+ 	<bean id="unicomNormalJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="taskJob"></property>
-        <property name="targetMethod" value="myExecutor"></property>
+        <property name="targetMethod" value="unicomUpdateNormal"></property>
         <property name="concurrent" value="false"></property>
     </bean>
-    <bean id="quartzTestTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="quartzTestJob"/>
-        <property name="cronExpression" value="0 5 * * * ?"></property>
+    <bean id="unicomNormalTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="unicomNormalJob"/>
+        <property name="cronExpression" value="0 0 4/4 * * ?"></property>
     </bean>
+    
+    <bean id="unicomDisbaleJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="taskJob"></property>
+        <property name="targetMethod" value="unicomUpdateDisable"></property>
+        <property name="concurrent" value="false"></property>
+    </bean>
+    <bean id="unicomDisableTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="unicomDisbaleJob"/>
+        <property name="cronExpression" value="5 15 5/4 * * ?"></property>
+    </bean>
+    
+    <bean id="cmccNormalJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="taskJob"></property>
+        <property name="targetMethod" value="cmccUpdateNormal"></property>
+        <property name="concurrent" value="false"></property>
+    </bean>
+    <bean id="cmccNormalTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="cmccNormalJob"/>
+        <property name="cronExpression" value="10 30 6/4 * * ?"></property>
+    </bean>
+    
+    <bean id="cmccDisableJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="taskJob"></property>
+        <property name="targetMethod" value="cmccUpdateDisable"></property>
+        <property name="concurrent" value="false"></property>
+    </bean>
+    <bean id="cmccDisableTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="cmccDisableJob"/>
+        <property name="cronExpression" value="15 45 7/4 * * ?"></property>
+    </bean>
+    
     <bean lazy-init="false"  class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
     <property name="triggers">  
         <list>  
-        <ref bean="quartzTestTrigger"/>  
+        <ref bean="unicomNormalTrigger"/> 
+        <ref bean="unicomDisableTrigger"/>  
+        <ref bean="cmccNormalTrigger"/> 
+         <ref bean="cmccDisableTrigger"/>   
         </list>  
     </property> 
     </bean>

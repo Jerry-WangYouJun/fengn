@@ -17,4 +17,8 @@ public class ContextString {
 	 
 	 static public final String 
 	 URL_CMCC_BIND ="https://www.m-m10086.com/api/YDSimListFire/Binding";
+	 
+	 static public final String 
+	 URL_RENEW = "https://www.m-m10086.com/api/NewReport/RenewalsOrder";
+	 
 }

@@ -23,16 +23,66 @@ public class RefreshDataTask {
 	TTaskPointMapper task;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void myExecutor(){  
+	public void cmccUpdateDisable(){  
+		System.out.println("cmccUpdateDisable");
 			this.transactionTemplate.execute(new TransactionCallback() {
 	            public Object doInTransaction(TransactionStatus transactionStatus) {
 	      		  try{
-	      			  dataServices.insertUnicomTemp("update" , "unicom" , "3");
+	      			  String s  =dataServices.insertUnicomTemp("update" , "unicom" , "3");
+	      			  System.out.println(s);
 	      		  }catch (Exception e) {
 					  e.getMessage();
 				}
 	      		  return null;
 	         }
 	        });
-  }  
+  } 
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void cmccUpdateNormal(){
+		System.out.println("cmccUpdateNormal");
+		this.transactionTemplate.execute(new TransactionCallback() {
+            public Object doInTransaction(TransactionStatus transactionStatus) {
+      		  try{
+      			 String s =  dataServices.insertUnicomTemp("update" , "cmcc" , "3");
+      			 System.out.println(s);
+      		  }catch (Exception e) {
+				  e.getMessage();
+			}
+      		  return null;
+         }
+        });
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void unicomUpdateNormal(){
+		System.out.println("unicomUpdateNormal");
+		this.transactionTemplate.execute(new TransactionCallback() {
+            public Object doInTransaction(TransactionStatus transactionStatus) {
+      		  try{
+      			 String s =  dataServices.insertUnicomTemp("update" , "unicom" , "3");
+      			 System.out.println(s);
+      		  }catch (Exception e) {
+				  e.getMessage();
+			}
+      		  return null;
+         }
+        });
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void unicomUpdateDisable(){
+		System.out.println("unicomUpdateDisable");
+		this.transactionTemplate.execute(new TransactionCallback() {
+            public Object doInTransaction(TransactionStatus transactionStatus) {
+      		  try{
+      			 String s = dataServices.insertUnicomTemp("update" , "unicom" , "4");
+      			 System.out.println(s);
+      		  }catch (Exception e) {
+				  e.getMessage();
+			}
+      		  return null;
+         }
+        });
+	}
 }
