@@ -90,6 +90,11 @@
                      when simId=#{item.simid} then #{item.simstate}
                 </foreach>
             </trim>
+            <trim prefix="sim =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                     when simId=#{item.simid} then #{item.sim}
+                </foreach>
+            </trim>
             <trim prefix="expireTime =case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                      when simId=#{item.simid} then #{item.expiretime}

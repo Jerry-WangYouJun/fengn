@@ -74,8 +74,9 @@ public class UnicomUploadDao {
 			+ "u.packageName=uc.packageName ,u.simState=uc.simState , u.expiretime=uc.expiretime ,"
 			+ "u.amountusagedata=uc.amountusagedata , u.totalMonthUsageFlow=uc.totalMonthUsageFlow , "
 			+ "u.holdName=uc.holdName ,u.lastActiveTime=uc.lastActiveTime ,u.flowLeftTime=uc.flowLeftTime , "
-			+ "u.remark=uc.remark ,u.monthUsageData=uc.monthUsageData ,u.flowLeftValue=uc.flowLeftValue "
-			+ "where u.guid=uc.guid ";
+			+ "u.remark=uc.remark ,u.monthUsageData=uc.monthUsageData ,u.flowLeftValue=uc.flowLeftValue ,"
+			+ "u.sim = uc.sim "
+			+ " where u.guid=uc.guid ";
 		int  count = jdbcTemplate.update(updateTemp);
 		return  count;
 	}
