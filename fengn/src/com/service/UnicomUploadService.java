@@ -85,6 +85,9 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 		List<MlbCmccCard> mccList = new ArrayList<>();
 		String token = ResponseURLDataUtil.getToken();
 		JSONObject jsonForCount = ResponseURLDataUtil.getCmccCard(1,1,createDate ,token);
+		if("null".equals(jsonForCount.getString("result"))) {
+			   return  null;
+		  }
 		int count = ((JSONArray)jsonForCount.get("result")).getJSONObject(0).getInt("records");
 		int size = 1000;
 		int index = count%size  == 0 ?  count /size : count/size + 1 ;

@@ -48,15 +48,18 @@ public class UnicomUploadController {
 			tableName="cmcc";
 			dataServices.deleteDataTemp( "mlb_" + tableName + "_card_copy");
 			msg = dataServices.insertCmccTemp("insert"  , createdate, tableName);
-			uploadDao.insertAgentCard(agentId , tableName );
 			if(msg == null){
 				msg = "当天无出库信息！";
 			}
+			uploadDao.insertAgentCard(agentId , tableName );
 			break;
 		case "2":
 			tableName ="unicom";
 			dataServices.deleteDataTemp("mlb_" + tableName + "_card_copy");
 			msg = dataServices.insertUnicomTemp("insert"  , tableName , createdate);
+			if(msg == null){
+				msg = "当天无出库信息！";
+			}
 			uploadDao.insertAgentCard(agentId , tableName );
 			break;
 		default:
