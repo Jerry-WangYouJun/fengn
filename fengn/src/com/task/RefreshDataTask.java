@@ -28,7 +28,7 @@ public class RefreshDataTask {
 			this.transactionTemplate.execute(new TransactionCallback() {
 	            public Object doInTransaction(TransactionStatus transactionStatus) {
 	      		  try{
-	      			  String s  =dataServices.insertUnicomTemp("update" , "unicom" , "3");
+	      			  String s  =dataServices.insertCmccTemp("update" , "cmcc" , "3");
 	      			  System.out.println(s);
 	      		  }catch (Exception e) {
 					  e.getMessage();
@@ -44,7 +44,7 @@ public class RefreshDataTask {
 		this.transactionTemplate.execute(new TransactionCallback() {
             public Object doInTransaction(TransactionStatus transactionStatus) {
       		  try{
-      			 String s =  dataServices.insertUnicomTemp("update" , "cmcc" , "3");
+      			 String s =  dataServices.insertCmccTemp("update" , "cmcc" , "3");
       			 System.out.println(s);
       		  }catch (Exception e) {
 				  e.getMessage();
