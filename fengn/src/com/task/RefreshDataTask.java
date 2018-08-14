@@ -28,6 +28,7 @@ public class RefreshDataTask {
 			this.transactionTemplate.execute(new TransactionCallback() {
 	            public Object doInTransaction(TransactionStatus transactionStatus) {
 	      		  try{
+	      			  dataServices.deleteDataTemp("mlb_cmcc_card_copy");
 	      			  String s  =dataServices.insertCmccTemp("update" , "cmcc" , "3");
 	      			  System.out.println(s);
 	      		  }catch (Exception e) {
@@ -44,6 +45,7 @@ public class RefreshDataTask {
 		this.transactionTemplate.execute(new TransactionCallback() {
             public Object doInTransaction(TransactionStatus transactionStatus) {
       		  try{
+      			 dataServices.deleteDataTemp("mlb_cmcc_card_copy");
       			 String s =  dataServices.insertCmccTemp("update" , "cmcc" , "3");
       			 System.out.println(s);
       		  }catch (Exception e) {
@@ -60,6 +62,7 @@ public class RefreshDataTask {
 		this.transactionTemplate.execute(new TransactionCallback() {
             public Object doInTransaction(TransactionStatus transactionStatus) {
       		  try{
+      			dataServices.deleteDataTemp("mlb_unicom_card_copy");
       			 String s =  dataServices.insertUnicomTemp("update" , "unicom" , "3");
       			 System.out.println(s);
       		  }catch (Exception e) {
@@ -76,6 +79,7 @@ public class RefreshDataTask {
 		this.transactionTemplate.execute(new TransactionCallback() {
             public Object doInTransaction(TransactionStatus transactionStatus) {
       		  try{
+      			 dataServices.deleteDataTemp("mlb_unicom_card_copy");
       			 String s = dataServices.insertUnicomTemp("update" , "unicom" , "4");
       			 System.out.println(s);
       		  }catch (Exception e) {
