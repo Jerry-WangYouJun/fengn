@@ -81,7 +81,7 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 	}
 	
 	
-	public String insertCmccTemp( String type ,String table ,String createDate) throws Exception {
+	public String insertCmccTemp( String type ,String createDate,String table ) throws Exception {
 		List<MlbCmccCard> mccList = new ArrayList<>();
 		String token = ResponseURLDataUtil.getToken();
 		JSONObject jsonForCount = ResponseURLDataUtil.getCmccCard(1,1,createDate ,token);
