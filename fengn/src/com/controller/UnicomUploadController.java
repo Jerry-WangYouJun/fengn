@@ -88,7 +88,7 @@ public class UnicomUploadController {
 		String msg = "";
 		System.out.println("开始获取数据" + DateUtils.formatDate("yyyyMMddHHmmss"));
 			dataServices.deleteDataTemp("mlb_cmcc_card_copy");
-			msg =  dataServices.insertCmccTemp("update" , "cmcc" , "1");
+			msg =  dataServices.insertCmccTemp("update" , "1" , "cmcc");
 		System.out.println("插入数据表,用时" + (System.currentTimeMillis() - startTime));
 		JSONObject json = new JSONObject();
 		json.put("msg", msg);
