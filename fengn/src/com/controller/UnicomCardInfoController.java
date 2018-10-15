@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.common.ContextString;
-import com.common.DateUtils;
 import com.common.ResponseURLDataUtil;
 import com.dao.MlbCmccCardMapper;
 import com.dao.MlbUnicomCardMapper;
@@ -54,7 +53,7 @@ public class UnicomCardInfoController {
 		    			 Map map = new HashMap();
 	    				 map.put("simIds",cardInfo.getSimid() );
 	    				 JSONObject json = ResponseURLDataUtil.getMLBData(ResponseURLDataUtil.getToken(),ContextString.URL_CMCC_BIND , map);
-	    				 List<MlbCmccCard> list =updateService.getResultCmccBind(json);
+	    				 List<MlbCmccCard> list =updateService.getResultCmccFromMlb(json);
 	    				 if(list != null){
 	    					 cmccDao.updateBatch(list);
 	    					 if(list.size() == 1){
@@ -99,7 +98,7 @@ public class UnicomCardInfoController {
 		    			 Map map = new HashMap();
 	    				 map.put("simIds",cardInfo.getSimid() );
 	    				 JSONObject json = ResponseURLDataUtil.getMLBData(ResponseURLDataUtil.getToken(),ContextString.URL_UNICOM_BIND , map);
-	    				 List<MlbUnicomCard> list =updateService.getResultUnicomBind(json);
+	    				 List<MlbUnicomCard> list =updateService.getResultUnicomFromMlb(json);
 	    				 if(list != null){
 	    					 unicomDao.updateBatch(list);
 	    					 if(list.size() == 1){

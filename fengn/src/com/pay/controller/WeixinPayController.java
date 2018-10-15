@@ -51,6 +51,14 @@ public class WeixinPayController {
 	private static String baseUrl = "http://www.pay-sf.com";
 	Map<String,String>  excuteResultMap = new HashMap<>();
 	
+	/**
+	 * 验证token
+	 * @param response
+	 * @param signature
+	 * @param timestamp
+	 * @param nonce
+	 * @param echostr
+	 */
 	@RequestMapping("/token")
 	public void getToken(HttpServletResponse response, String signature,
 			String timestamp, String nonce, String echostr) {
@@ -123,15 +131,8 @@ public class WeixinPayController {
 				  return null ;
 			}
 			//获取统一下单需要的openid
-			String openId ="";
-			String URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="
-					+ WxPayConfig.appid + "&secret=" + WxPayConfig.appsecret + "&code=" + code + "&grant_type=authorization_code";
-			System.out.println("URL:"+URL);
-			JSONObject jsonObject = CommonUtil.httpsRequest(URL, "GET", null);
-				if (null != jsonObject) {
-					openId = jsonObject.getString("openid");
-					System.out.println("openId:" + openId);
-				}
+			String openId =getOpenId(code);
+			
 			
 			//获取openId后调用统一支付接口https://api.mch.weixin.qq.com/pay/unifiedorder
 			//随机数 
@@ -242,6 +243,36 @@ public class WeixinPayController {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @param code 网页授权后获取传递的参数
+	 * @return
+	 */
+	private String getOpenId(String code) {
+		String openId = "";
+		String URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="
+				+ WxPayConfig.appid + "&secret=" + WxPayConfig.appsecret + "&code=" + code + "&grant_type=authorization_code";
+		System.out.println("URL:"+URL);
+		JSONObject jsonObject = CommonUtil.httpsRequest(URL, "GET", null);
+		if (null != jsonObject) {
+			openId = jsonObject.getString("openid");
+			System.out.println("openId:" + openId);
+		}
+		return openId ;
+	}
+	
+	private JSONObject getUserInfoByUnionID(String accessToken , String openId){
+		String  userJson = "";
+		String URL =  "https://api.weixin.qq.com/cgi-bin/user/info?access_token="+accessToken+"&openid="+openId+"&lang=zh_CN";
+		JSONObject jsonObject = CommonUtil.httpsRequest(URL, "GET", null);
+		if (null != jsonObject) {
+			openId = jsonObject.getString("openid");
+			System.out.println("userInfo:" + jsonObject.toString());
+			return jsonObject;
+		}
+		return null ;
+	}
+
 	/**
 	 * 微信异步回调，不会跳转页面
 	 * @param request
