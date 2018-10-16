@@ -24,9 +24,8 @@ import com.model.UnicomHistory;
 public class UnicomUploadService extends DataMoveServiceImpl {
 	
 	public static void main(String[] args) {
-		int count = 30000 ;
-		int index = count%10000  == 0 ?  count /10000 : count/10000 + 1 ;
-		 System.out.println(index);
+		String s = "7545978.0";
+		 System.out.println(getSimIdFormat(s));
 	}
 	@Autowired
 	UnicomUploadDao uploadDao;
@@ -101,7 +100,7 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 			for (MlbCmccCard cmccCard : mccList) {
 				simidList.add(cmccCard.getSimid());
 			}
-			JSONObject bindJson = ResponseURLDataUtil.getBind(1, size, simidList, ContextString.URL_CMCC_BIND, ResponseURLDataUtil.getToken());
+ 			JSONObject bindJson = ResponseURLDataUtil.getBind(1, size, simidList, ContextString.URL_CMCC_BIND, ResponseURLDataUtil.getToken());
 			getResultCmccBind(bindJson , mccList);
 			System.out.println("读取" + mccList.size() + "条");
 			//break;
@@ -171,13 +170,21 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 			 muc.setOddtime(job.getString("oddTime"));
 			 muc.setPackagename(job.getString("package"));
 			 muc.setSim(job.getString("sim"));
-			 muc.setSimid(job.getString("simId"));
+			 muc.setSimid(getSimIdFormat(job.getString("simId")));
 			 muc.setTotalmonthusageflow(job.getDouble("totalMonthUsageFlow"));
 			 muc.setCreateTime(job.getString("createTime"));
 			 list.add(muc);
 		  } 
 		  return list ;
 	}
+	
+	public static String getSimIdFormat(String simId){
+		 if(simId.indexOf(".") != -1){
+			 return simId.substring(0, simId.indexOf("."));
+		 }
+		 return simId;
+	}
+	
 	public List<MlbCmccCard> getResultCmccBind(JSONObject json ,List<MlbCmccCard> mcList) {
 		if("null".equals(json.getString("result"))) {
 			   return  null;
