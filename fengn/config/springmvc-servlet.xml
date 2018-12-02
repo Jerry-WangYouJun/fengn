@@ -54,7 +54,17 @@
     </bean>
     <bean id="cmccDisableTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="cmccDisableJob"/>
-        <property name="cronExpression" value="15 45 7/4 * * ?"></property>
+        <property name="cronExpression" value="15 32 * * * ?"></property>
+    </bean>
+    
+    <bean id="unicomUpdateRenewC" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="taskJob"></property>
+        <property name="targetMethod" value="unicomUpdateRenew_C"></property>
+        <property name="concurrent" value="false"></property>
+    </bean>
+    <bean id="renewTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="unicomUpdateRenewC"/>
+        <property name="cronExpression" value="0 0 22 * * ?"></property>
     </bean>
     
     <bean lazy-init="false"  class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
@@ -63,7 +73,8 @@
         <ref bean="unicomNormalTrigger"/> 
         <ref bean="unicomDisableTrigger"/>  
         <ref bean="cmccNormalTrigger"/> 
-         <ref bean="cmccDisableTrigger"/>   
+         <ref bean="cmccDisableTrigger"/> 
+          <ref bean="renewTrigger"/>   
         </list>  
     </property> 
     </bean>

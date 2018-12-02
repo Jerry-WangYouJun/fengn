@@ -99,12 +99,12 @@ public class UnicomCardAgentService {
 		 }
 		 
 
-		public List<Map<String,String>> queryKickbackInfo(Integer id , QueryData qo ,  Pagination page , int timeType) {
+		public List<Map<String,String>> queryKickbackInfo(Integer id , QueryData qo ,  Pagination page , int timeType , String table) {
 			List<Map<String,String>>  list = new ArrayList<>();
-			String sql = "select h.iccid , h.money , c.packageType , h.update_date , h.money - IFNULL(p.cost,u.cost)  kickback "
-					+ "from u_history h , u_cmtp c , u_card_agent a , a_agent u "
+			String sql = "select h.iccid , h.money , h.packageType , h.update_date , h.money - IFNULL(p.cost,u.cost)  kickback "
+					+ "from u_history h , "+table+"_card_agent a , mlb_"+table+"_card c , a_agent u "
 					+ " left join t_package p on p.id=u.type "
-					+ " where h.iccid = c.iccid and c.iccid = a.iccid "
+					+ " where h.iccid = c.guid and c.guid = a.iccid "
 					+ " and  u.id = a.agentid  and  u.id = " + id  ;
 			if(StringUtils.isNotEmpty(qo.getDateStart())){
 				 sql += " and h.update_date >= '" + qo.getDateStart() + "'" ;
@@ -125,11 +125,11 @@ public class UnicomCardAgentService {
 			return list;
 		}
 		
-		 public Map<String , Double > queryKickbackTotal(Integer agentid ,  QueryData qo  , int timeType){
+		 public Map<String , Double > queryKickbackTotal(Integer agentid ,  QueryData qo  , int timeType,String table){
 			 String sql = "select   sum(h.money) - sum(IFNULL(p.cost,u.cost)) sumKick , count(*) total  "
-						+ "from u_history h , u_cmtp c , u_card_agent a , a_agent u"
+					 	+ "from u_history h , "+table+"_card_agent a , mlb_"+table+"_card c , a_agent u "
 						+ " left join t_package p on p.id=u.type "
-						+ " where h.iccid = c.iccid and c.iccid = a.iccid "
+						+ " where h.iccid = c.guid and c.guid = a.iccid "
 						+ " and  u.id = a.agentid  and  u.id = " + agentid  ;
 				if(StringUtils.isNotEmpty(qo.getDateStart())){
 					 sql += " and h.update_date >= '" + qo.getDateStart() + "'" ;

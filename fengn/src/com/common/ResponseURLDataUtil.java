@@ -4,12 +4,9 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.json.JSONObject;
 
 import org.apache.http.util.TextUtils;
 import org.jsoup.Connection;
@@ -18,6 +15,8 @@ import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+
+import net.sf.json.JSONObject;
 
 public class ResponseURLDataUtil {
 	public static String token = "";
@@ -344,21 +343,26 @@ public class ResponseURLDataUtil {
 			return jsonObject ;
 	}
 	
-	//10000  -114   1000 - 6  2000 -10  
-		public static void main(String[] args) {
+		public static JSONObject updateRenewData(int sum , String oldday, String today ) {
+			JSONObject jsonObject  =  null ;
 			try {
-				System.out.println(DateUtils.formatDate("yyyyMMddHHmmss"));
-				List<String> list = new ArrayList<>();
-				list.add("7588306");
-				list.add("7588300");
-				list.add("7588208");
-				JSONObject json  = getBind(1,1, list , ContextString.URL_UNICOM_BIND, getToken());
-				System.out.println(json.toString());
-				System.out.println(DateUtils.formatDate("yyyyMMddHHmmss"));
+				String url = ContextString.URL_RENEW_C;
+				url = url.replace("timeStart", oldday).replace("timeEnd",  today).replace("sum", sum+"") ;
+				System.out.println(url);
+				String jsonString  = getReturnDataWithCookie(url);
+				jsonObject  = JSONObject.fromObject(jsonString);  
+				System.out.println(jsonObject.toString());
+				System.out.println(DateUtils.formatDate("yyyy-MM-dd"));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			return jsonObject;
 		}
+		
+		public static void main(String[] args) {
+			updateRenewData(1000 , "2019-01-01" , "2018-01-01");
+		}
+		
 }

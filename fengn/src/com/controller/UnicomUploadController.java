@@ -119,4 +119,26 @@ public class UnicomUploadController {
 		out.close();
 	}
 	
+	
+	@ResponseBody
+	@RequestMapping(value = "/renew", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public void renew(HttpServletResponse response ,  HttpSession session) throws Exception {
+		//MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+		response.setCharacterEncoding("utf-8");
+		Long startTime = System.currentTimeMillis(); 
+		PrintWriter out =  response.getWriter();
+		System.out.println("导入表数据开始：" + DateUtils.formatDate("MM-dd:HH-mm-ss"));
+		//List<List<Object>> listob = dataServices.getDataList(multipartRequest, response);
+		String msg = "";
+		System.out.println("开始获取数据" + DateUtils.formatDate("yyyyMMddHHmmss"));
+			dataServices.deleteDataTemp("u_history_temp");
+			msg   = dataServices.insertHistoryTemp("2016-10-30","2018-11-30");
+		System.out.println("插入数据表,用时" + (System.currentTimeMillis() - startTime));
+		JSONObject json = new JSONObject();
+		json.put("msg", msg);
+		out.print(json);
+		out.flush();
+		out.close();
+	}
 }

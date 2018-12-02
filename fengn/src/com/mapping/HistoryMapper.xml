@@ -9,17 +9,17 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">  
-    insert into u_history_temp (iccid ,money,update_date ,remark  )  
+    insert into u_history_temp (iccid ,money,update_date ,remark , imsi , packageType , packageDetail  )  
     values   
     <foreach collection="list" item="item" index="index" separator="," >  
-        (#{item.iccid},#{item.money},#{item.updateDate} , #{item.remark})  
+        (#{item.iccid},#{item.money},#{item.updateDate} , #{item.remark},
+        #{item.imsi},#{item.packageType},#{item.packageDetail} )  
     </foreach>  
   </insert>  
   <insert id="insertData"  useGeneratedKeys="true">  
-  		insert into u_history  (  iccid , money ,update_date ,remark )  
-	     select distinct  iccid , money ,update_date  ,remark from u_history_temp 
-		  where iccid not in (select iccid  from  u_history ) 
-		  and update_date not in (select update_date  from  u_history)
+  		insert into u_history  (  iccid , money ,update_date ,remark , imsi , packageType , packageDetail)  
+	     select distinct  iccid , money ,update_date  ,remark , imsi , packageType , packageDetail from u_history_temp 
+		  
   </insert> 
   <delete id="deleteAll" >
 	  delete from u_history_temp

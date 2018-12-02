@@ -166,8 +166,8 @@ public class UnicomAgentController {
 		Grid grid = new Grid();
 		Pagination page =  new Pagination(pageNo, pageSize , 100) ;
 	    CodeUtil.initPagination(page);
-	    List<Map<String,String>>  list = cardAgentService.queryKickbackInfo(agentId, qo  , page , qo.getTimeType());
-	    Map<String , Double > map = cardAgentService.queryKickbackTotal(agentId , qo , qo.getTimeType());
+	    List<Map<String,String>>  list = cardAgentService.queryKickbackInfo(agentId, qo  , page , qo.getTimeType(),"unicom");
+	    Map<String , Double > map = cardAgentService.queryKickbackTotal(agentId , qo , qo.getTimeType() , "unicom");
 	   grid.setRows(list);
 	   grid.setTotal(map.get("total").longValue());
 	    return grid;
@@ -183,8 +183,8 @@ public class UnicomAgentController {
 		Grid grid = new Grid();
 		Pagination page =  new Pagination(pageNo, pageSize , 100) ;
 	    CodeUtil.initPagination(page);
-	    List<Map<String,String>>  list = cardAgentService.queryKickbackInfo(agentId, qo  , page , qo.getTimeType());
-	    Map<String , Double > map = cardAgentService.queryKickbackTotal(agentId , qo , qo.getTimeType());
+	    List<Map<String,String>>  list = cardAgentService.queryKickbackInfo(agentId, qo  , page , qo.getTimeType(),"cmcc");
+	    Map<String , Double > map = cardAgentService.queryKickbackTotal(agentId , qo , qo.getTimeType(),"cmcc");
 	   grid.setRows(list);
 	   grid.setTotal(map.get("total").longValue());
 	    return grid;
