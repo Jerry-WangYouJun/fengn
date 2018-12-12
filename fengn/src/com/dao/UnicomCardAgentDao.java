@@ -29,7 +29,7 @@ public class UnicomCardAgentDao {
 				vo.setICCID(rs.getString("guid"));
 				vo.setCardStatus(rs.getString("simstate"));
 				vo.setGprsUsed(rs.getString("totalmonthusageflow"));
-				vo.setGprsRest(rs.getString("amountusagedata"));
+				vo.setGprsRest(rs.getString("flowLeftValue"));
 				//vo.setCompanyLevel(rs.getString("company_level"));
 				//vo.setWithGPRSService(rs.getString("withGPRSService"));
 				vo.setPackageType(rs.getString("packagename"));
