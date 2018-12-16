@@ -79,6 +79,9 @@ public class AgentService {
 				case "cmcc_kickback":
 					text = "联通返佣-"+ agent.getName() ;
 					break;
+				case "all_kickback":
+				  	text = "返佣管理-"+ agent.getName() ;
+				  	break;
 				default:
 					break;
 				}
@@ -123,6 +126,9 @@ public class AgentService {
 						case "cmcc_kickback":
 							text = "联通返佣-"+ agent.getName() ;
 							break;
+						case "all_kickback":
+						  text = "返佣管理-"+ agent.getName() ;
+						  break;
 					default:
 						break;
 					}

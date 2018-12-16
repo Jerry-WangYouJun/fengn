@@ -88,6 +88,8 @@
  				type : 'post',
  				dataType : 'json',
  				success : function(data) {
+                    console.log("----------------------");
+ 				    console.log(data);
  					 var htmlStr = getTreeData(data[0].children);
  					 $("#" + name).html(htmlStr);
  				},
@@ -107,6 +109,7 @@
  				getMenu("unicom_card");
  				getMenu("unicom_kickback");
  			}
+            getMenu("all_kickback");
  			
  		});
  		
@@ -196,10 +199,15 @@
                             	<a href="#" class="ec-users" onclick='addTab("user","${pageContext.request.contextPath}/pages/user_list.jsp","代理商管理")'>
 								代理商管理</a>
                             </li>
-                             <c:if test="${roleid eq '1' }">
+                             <c:if test="${roleid eq '1' }"><!-- roleid eq '1'  -->
 	                            <li><a href="#" class="st-bag" onclick='addTab("pac","${pageContext.request.contextPath}/pages/pac_list.jsp","套餐管理")'>
 								套餐管理</a>
 	                            </li>
+                            </c:if>
+                            <c:if test="${roleid ne '1' }"><!-- roleid eq '1'  -->
+                            <li><a href="#" class="st-bag" onclick='addTab("packageMaintion","${pageContext.request.contextPath}/pages/pac_maintion.jsp","维护套餐")'>
+                                维护套餐</a>
+                            </li>
                             </c:if>
                         </ul>
                     </li>
@@ -214,6 +222,11 @@
                     <li><a href="#">电信物联卡 <i class="fa-file-text"></i></a>
                         <ul class="nav sub" id="dx_card">
 						</ul>
+                    </li>
+                    <li>
+                        <a href="#"> 续费明细 (新)<i class="im-paragraph-justify" ></i></a>
+                        <ul class="nav sub" id="all_kickback">
+                        </ul>
                     </li>
                     <li>
                         <a href="#"> 续费明细 <i class="im-paragraph-justify"></i></a>

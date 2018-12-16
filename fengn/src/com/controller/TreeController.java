@@ -78,6 +78,13 @@ public class TreeController {
 		getTreeDataBytype(session, response, request, "cmcc_kickback", treeNode);
 	}
 
+	@RequestMapping("/all_kickback")
+	public void getAllKickbackData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+		TreeNode treeNode = new TreeNode();
+		treeNode.setText("返佣管理");
+		getTreeDataBytype(session, response, request, "all_kickback", treeNode);
+	}
+
 	public void getTreeDataBytype(HttpSession session, HttpServletResponse response, HttpServletRequest request 
 			, String urlType , TreeNode treeNode) {
 		try {

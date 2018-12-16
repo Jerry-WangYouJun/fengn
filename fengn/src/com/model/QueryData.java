@@ -32,6 +32,16 @@ public class QueryData {
 	  private String pacId;
 	  private String moveFlag;//卡信息移动时对联通、移动代理商的判断标志
 	  private String moveAgent;//卡信息移动时选中的agentID
+
+	  //额外属性
+	private String packageId;
+	private String simstate;
+	private String simNum;
+	private String activeStartTime;
+	private String activeEndTime;
+
+
+
 	public String getType() {
 		return type;
 	}
@@ -148,6 +158,45 @@ public class QueryData {
 	}
 	public void setMoveAgent(String moveAgent) {
 		this.moveAgent = moveAgent;
-	} 
-	
+	}
+
+	public String getPackageId() {
+		return packageId;
+	}
+
+	public void setPackageId(String packageId) {
+		this.packageId = packageId;
+	}
+
+	public String getSimstate() {
+		return simstate;
+	}
+
+	public void setSimstate(String simstate) {
+		this.simstate = simstate;
+	}
+
+	public String getSimNum() {
+		return simNum;
+	}
+
+	public void setSimNum(String simNum) {
+		this.simNum = simNum;
+	}
+
+	public String getActiveStartTime() {
+		return activeStartTime;
+	}
+
+	public void setActiveStartTime(String activeStartTime) {
+		this.activeStartTime = activeStartTime;
+	}
+
+	public String getActiveEndTime() {
+		return activeEndTime;
+	}
+
+	public void setActiveEndTime(String activeEndTime) {
+		this.activeEndTime = activeEndTime;
+	}
 }

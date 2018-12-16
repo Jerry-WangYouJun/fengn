@@ -19,10 +19,16 @@
 		        cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）  
 		        sidePagination : "server", // 分页方式：client客户端分页，server服务端分页（*）  
 		        queryParamsType:'',
-		        queryParams : function(params) { 
-		        		      params.iccidStart = $("#idstart").val();
-		        		      params.iccidEnd = $("#idend").val();
-		                 return params;
+		        queryParams : function(params) {
+                    params.iccidStart = $("#idstart").val();
+                    params.iccidEnd = $("#idend").val();
+                    params.packageId = $("#pacId").val();
+                    params.simstate = $("#simstate").val();
+                    params.agentName = $("#agentName").val();
+                    params.simNum = $("#simNum").val();
+                    params.activeStartTime = $("#activeStartTime").val();
+                    params.activeEndTime = $("#activeEndTime").val();
+                    return params;
 		        	},
 		        pagination : true, // 是否显示分页（*）  
 		        pageNumber: 1,    //如果设置了分页，首页页码  
@@ -70,31 +76,49 @@
 				  	    <table id="infoTable" > </table>
 					<div id="toolbar" class="btn-group"> 
 						 <form class="form-inline" role="form">
-								<div class="form-group">
-									<label class="sr-only" for="name">名称</label>
-									<input type="text" class="form-control" id="idstart" 
-										   placeholder="请输入ICCID">
-								</div> -
-								<div class="form-group">
-									<label class="sr-only" for="name">名称</label>
-									<input type="text" class="form-control" id="idend" 
-										   placeholder="请输入ICCID">
-								</div>
-								
-								<button id="btn_edit" type="button" class="btn btn-default" onclick="queryData()">  
-					               查询
-					            </button>
-					            <button id="btn_edit" type="reset" class="btn btn-default" >  
-					                重置
-					            </button>
-					            
-					             <button id="btn_edit" type="button" class="btn btn-default" onclick="moveData()">  
-					                分配
-					            </button> 
-					            <button id="btn_edit" type="button" class="btn btn-default" onclick="remarkData()">  
-					                批量添加备注
-					            </button> 
-							</form>
+							 <div style="margin-bottom: 1px;">
+								 <input type='text' class="form-control" id='activeStartTime' placeholder="请输入激活日期起始时间" />
+								 <span>至</span>
+								 <input type='text' class="form-control" id='activeEndTime'   placeholder="请输入激活日期结束时间"/>
+								 <div class="form-group">
+									 <label class="sr-only" for="name">名称</label>
+									 <input type="text" class="form-control" id="idstart"
+											placeholder="请输入ICCID">
+								 </div> -
+								 <div class="form-group">
+									 <label class="sr-only" for="name">名称</label>
+									 <input type="text" class="form-control" id="idend"
+											placeholder="请输入ICCID">
+								 </div>
+							</div>
+						  <br>
+						  <input type="text" class="form-control" id="simNum"
+								 placeholder="请输入SIM号">
+						  <input type="text" class="form-control" id="agentName"
+								 placeholder="请输入代理商名称">
+						  <select class="form-control "  id="pacId"  name="pacId" style="display: inline">
+							  <option value="">全部套餐</option>
+						  </select>
+						  <select class="form-control "  id="simstate"  name="pacId" style="display: inline">
+							  <option value="">卡状态</option>
+							  <option value="0">待激活</option>
+							  <option value="1">正常</option>
+							  <option value="2">停机</option>
+						  </select>
+							<button id="btn_edit" type="button" class="btn btn-default" onclick="queryData()">
+							   查询
+							</button>
+							<button id="btn_edit" type="reset" class="btn btn-default" >
+								重置
+							</button>
+
+							 <button id="btn_edit" type="button" class="btn btn-default" onclick="moveData()">
+								分配
+							</button>
+							<button id="btn_edit" type="button" class="btn btn-default" onclick="remarkData()">
+								批量添加备注
+							</button>
+						</form>
 			            <!-- <button id="btn_edit" type="button" class="btn btn-default" onclick="updateOrderStatus()">  
 			                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
 			                修改订单状态
@@ -110,7 +134,10 @@
 			<div class="modal-content">
 				<div class="modal-body">
 					    <table id="agentTable"> </table>
-					    <div id="agentToolbar" class="btn-group">  
+					    <div id="agentToolbar"  class=" form-inline" >
+						<select class="form-control "  id="packageId"  name="packageId" style="display: inline">
+							<option value="">全部套餐</option>
+						</select>
 			            <button id="btn_edit" type="button" class="btn btn-default" onclick="moveCardByAgent()">  
 			                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>分配  
 			            </button>  
@@ -153,7 +180,60 @@
 		</div>
 		<!-- /.modal -->
 	<script type="text/javascript">
+
+
+        function getMyPackage(){
+            var html = "";
+            $.ajax({
+                url : '${basePath}/pac/getPacList',
+                type : 'post',
+                data : {},
+                dataType : 'json',
+                success : function(data) {
+                    if (data.success) {
+                        var dataInfo = data.dataInfo;
+                        for(var i = 0;i<dataInfo.length;i++){
+                            html+="<option value='"+dataInfo[i].id+"'>"+dataInfo[i].typename+"</option>";
+                        }
+                        $("#packageId").html(html);
+                    } else {
+                        alert("发生异常，请联系管理员");
+                    }
+                },
+                error : function(transport) {
+                    alert(data.msg);
+                }
+            });
+        }
+
+        function getMyPackageMenu(){
+            var html = "";
+            $.ajax({
+                url : '${basePath}/pac/getPacList',
+                type : 'post',
+                data : {},
+                dataType : 'json',
+                success : function(data) {
+                    if (data.success) {
+                        var dataInfo = data.dataInfo;
+                        html += "<option value=''>全部套餐</option>";
+                        for(var i = 0;i<dataInfo.length;i++){
+                            html+="<option value='"+dataInfo[i].id+"'>"+dataInfo[i].typename+"</option>";
+                        }
+                        $("#pacId").html(html);
+                    } else {
+                        alert("发生异常，请联系管理员");
+                    }
+                },
+                error : function(transport) {
+                    alert(data.msg);
+                }
+            });
+        }
+
+
 	$(function(){
+        getMyPackageMenu();
 		var tabName = parent.$("#deviceulid > li.active").attr("id");
 		 var agentId = tabName.split("_")[4];
 	    $('#agentTable').bootstrapTable({  
@@ -211,7 +291,8 @@
 	        showRefresh : true, // 是否显示刷新按钮  
 	        showToggle : false, // 是否显示详细视图和列表视图的切换按钮  
 	        silent : true, // 刷新事件必须设置  
-	    });  
+	    });
+        getMyPackage();
 	});
 	 
 	
@@ -228,6 +309,7 @@
 	
 	
 	function moveCardByAgent(){
+        var pacId = $("#packageId").val();
 		var ids = "";
 		for(var i in $("#infoTable").bootstrapTable('getSelections')){
 			//console.info($("#infoTable").bootstrapTable('getSelections')[i]);
@@ -239,11 +321,11 @@
 		}
 		var id = $("#agentTable").bootstrapTable('getSelections')[0].id;
 		if (id > 0) {
-			var url = "${basePath}/unicom/cmcc_card_move";
+			var url = "${basePath}/unicom/card_move";
 			$.ajax({
 				url : url,
 				type : 'post',
-				data : {iccids: ids , agentid : id},
+				data : {iccids: ids , agentid : id , pacId:pacId,table:"cmcc"},
 				dataType : 'json',
 				success : function(data) {
 					if (data.success) {
@@ -289,8 +371,28 @@
 			});
 		}
 	}
-	
-	
+
+    $('#activeStartTime').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        autoclose :true ,
+        todayHighlight : true,
+        todayBtn : true,
+        minuteStep: 30,
+        minView : 0,
+        initialDate:new Date()
+    });
+
+    $('#activeEndTime').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        autoclose :true ,
+        todayHighlight : true,
+        todayBtn : true,
+        minuteStep: 30,
+        minView : 0,
+        initialDate:new Date()
+    });
 </script>
 </body>
 </html>

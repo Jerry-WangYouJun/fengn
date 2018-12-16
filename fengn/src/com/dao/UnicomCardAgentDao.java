@@ -29,7 +29,7 @@ public class UnicomCardAgentDao {
 				vo.setICCID(rs.getString("guid"));
 				vo.setCardStatus(rs.getString("simstate"));
 				vo.setGprsUsed(rs.getString("totalmonthusageflow"));
-				vo.setGprsRest(rs.getString("flowLeftValue"));
+				vo.setGprsRest(rs.getString("amountusagedata"));
 				//vo.setCompanyLevel(rs.getString("company_level"));
 				//vo.setWithGPRSService(rs.getString("withGPRSService"));
 				vo.setPackageType(rs.getString("packagename"));
@@ -104,6 +104,7 @@ public class UnicomCardAgentDao {
 				map.put("packageType", rs.getString("packageType"));
 				map.put("update_date", rs.getString("update_date"));
 				map.put("kickback", rs.getString("kickback"));
+				map.put("paccost", rs.getString("paccost"));
 				list.add(map);
 				return null;
 			}

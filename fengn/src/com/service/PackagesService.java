@@ -40,4 +40,20 @@ public class PackagesService {
 		return dao.queryTotal(pac);
 	}
 
+
+	public void insertPacRef(String pacids, String agentid, String parentAgentId) {
+		dao.insertPacRef(pacids,agentid,parentAgentId);
+	}
+
+	public void updateChildsPacRef(Packages pac) {
+		dao.updateChildsPacRef(pac);
+	}
+
+	public void insertChildsPacRef(Packages pac) {
+		dao.insertChildsPacRef(pac);
+	}
+
+	public List<Packages> getPacListByAgentId(String agentId) {
+		return dao.getPacListByAgentId(agentId);
+	}
 }

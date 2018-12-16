@@ -61,6 +61,8 @@ public class AgentDao {
 		String sql = "select a.* , u.userno from a_agent a , a_user u   where a.id = u.agentid " ;
 		if(urlType.startsWith("unicom")) {
 			sql += " and a.groupId in (2 , 3 )";
+		}else if(urlType.startsWith("all")){
+			sql += "and a.groupId in ( 1 , 2 , 3 )";
 		}else {
 			sql += " and a.groupId in (1 , 3)";
 		}

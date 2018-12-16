@@ -23,17 +23,11 @@
 					<div id="toolbar" class="btn-group">  
 			            <button id="btn_edit" type="button" class="btn btn-default" onclick="updateData()">  
 			                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>修改  
-			            </button>  
-			            <button id="btn_delete" type="button" class="btn btn-default" onclick="delDish()">  
-			                <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>删除  
-			            </button>  
-			            <button id="btn_delete" type="button" class="btn btn-default" onclick="addInfo()">  
-			            	<span class="glyphicon glyphicon-plus" aria-hidden="true" ></span>新增
 			            </button>
 						<button id="btn_edit" type="button" class="btn btn-default" onclick="moveData()">
 							<span class="glyphicon glyphicon-forward" aria-hidden="true" ></span>分配
 						</button>
-					</div>
+			        </div>
 				  </div>
 			</div>
 		</div>
@@ -58,6 +52,7 @@
 		</div>
 		<!-- /.modal -->
 	</div>
+
 		
 	<div class="modal fade" id="myModal" tabindex="-2" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
@@ -73,15 +68,15 @@
 					 <input  class="form-control" name="id" type="hidden"></input>
 						<div class="form-group">
 							<label for="recipient-name" class="control-label">套餐名:</label> <input
-								type="text" class="form-control" name="typename">
+								type="text" class="form-control" name="typename" disabled>
 						</div>
 						<div class="form-group">
 							<label for="message-text" class="control-label">套餐描述:</label> 
-								<input type="text" class="form-control" name="discrip">
+								<input type="text" class="form-control" name="discrip" disabled>
 						</div>
 						<div class="form-group">
 							<label for="message-text" class="control-label">成本价:</label> <input
-								class="form-control" name="cost"></input>
+								class="form-control" name="cost" disabled></input>
 						</div>
 						<div class="form-group">
 							<label for="message-text" class="control-label">续费价:</label> 
@@ -90,10 +85,6 @@
 						<div class="form-group">
 							<label for="message-text" class="control-label">子代理成本价:</label> <input
 								class="form-control" name="childcost"></input>
-						</div>
-						<div class="form-group">
-							<label for="message-text" class="control-label">备注:</label> <input
-								class="form-control" name="remark"></input>
 						</div>
 					</form>
 				</div>
@@ -108,12 +99,9 @@
 	</div>
 </body>
     <script type="text/javascript">
-
     	$(function(){
-            var tabName = parent.$("#deviceulid > li.active").attr("id");
-            var agentId = tabName.split("_")[4];
-    		 $('#infoTable').bootstrapTable({
-			        url : '${basePath}/pac/query', // 请求后台的URL（*）            
+    		 $('#infoTable').bootstrapTable({  
+			        url : '${basePath}/pac/query', // 请求后台的URL（*）
 			        method : 'get', // 请求方式（*）  
 			        toolbar : '#toolbar', // 工具按钮用哪个容器  
 			        cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）  
@@ -133,7 +121,7 @@
 			        },{  
 			            field : 'id', visible: false 
 			        },{  
-			            field : 'agentId',  visible: false
+			            field : 'agentId',  visible: false 
 			        },{  
 			            field : 'typename',   title : '套餐名称',   align: 'center', valign: 'middle'  
 			        },{  
@@ -159,6 +147,7 @@
         function delDish(){
             deleteDataAll("pac");
         }
+
 
         function moveData() {
             var selectRow =  $("#infoTable").bootstrapTable('getSelections')[0];
@@ -187,7 +176,7 @@
             if(id == parentAgentId){
                 alert("不能选择自己！");
                 return false;
-			}
+            }
             //alert(ids); return false;
             if (id > 0) {
                 var url = "${basePath}/pac/pac_move";

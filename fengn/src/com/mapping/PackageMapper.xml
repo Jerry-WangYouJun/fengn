@@ -6,13 +6,14 @@
     <result column="typename" property="typename" jdbcType="VARCHAR" />
     <result column="discrip" property="discrip" jdbcType="VARCHAR" />
      <result column="cost" property="cost" jdbcType="DOUBLE" />
+      <result column="childcost" property="childcost" jdbcType="DOUBLE" />
      <result column="renew" property="renew" jdbcType="DOUBLE" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <insert id="insertData" parameterType="com.model.Packages"  useGeneratedKeys="true">  
-  		insert into t_package  (  id , typename ,discrip ,cost , renew , remark)  
+  		insert into t_package  (  id , typename ,discrip ,cost , renew , childcost ,remark)
 	     values (#{id,jdbcType=INTEGER}, #{typename,jdbcType=VARCHAR},#{discrip,jdbcType=VARCHAR}, 
-	     #{cost,jdbcType=DOUBLE}, #{renew,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR})
+	     #{cost,jdbcType=DOUBLE}, #{renew,jdbcType=DOUBLE},#{childcost,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR})
   </insert> 
   <delete id="delete" parameterType="java.lang.Integer"  >
 	  delete from t_package where ID = #{id,jdbcType=INTEGER}
@@ -31,6 +32,9 @@
       </if>
       <if test="renew != null" >
         renew = #{renew,jdbcType=VARCHAR},
+      </if>
+      <if test="childcost != null" >
+          childcost = #{childcost,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=INTEGER},

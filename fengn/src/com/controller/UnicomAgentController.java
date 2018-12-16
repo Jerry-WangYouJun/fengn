@@ -43,11 +43,12 @@ public class UnicomAgentController {
 	
 	
 	@RequestMapping("/card_move")
-	public void moveCard(String iccids , String agentid ,HttpServletResponse response  ){
+	public void moveCard(String iccids , String agentid ,String pacId ,String table, HttpServletResponse response  ){
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out;
 		try {
-			service.updateCardAgent(iccids,agentid );
+//			service.updateCardAgent(iccids,agentid );
+			service.updateCardAgent(iccids,agentid,table,pacId );
 			out = response.getWriter();
 			JSONObject json = new JSONObject();
 			json.put("msg", "操作成功");
@@ -188,6 +189,23 @@ public class UnicomAgentController {
 	   grid.setRows(list);
 	   grid.setTotal(map.get("total").longValue());
 	    return grid;
+	}
+
+	@ResponseBody
+	@RequestMapping("/all_kickback_query/{agentId}")
+	public Grid   queryAllKickback(@PathVariable("agentId") Integer agentId, HttpServletResponse response,
+									HttpServletRequest request  ,HttpSession session , QueryData qo ) {
+		String pageNo = request.getParameter("pageNumber");
+		String pageSize = request.getParameter("pageSize");
+		//System.out.println(userName);
+		Grid grid = new Grid();
+		Pagination page =  new Pagination(pageNo, pageSize , 100) ;
+		CodeUtil.initPagination(page);
+		List<Map<String,String>>  list = cardAgentService.queryAllKickbackInfo(agentId, qo  , page , qo.getTimeType(),"cmcc,unicom");
+		Map<String , Double > map = cardAgentService.queryAllKickbackTotal(agentId , qo , qo.getTimeType(),"cmcc,unicom");
+		grid.setRows(list);
+		grid.setTotal(map.get("total").longValue());
+		return grid;
 	}
 	
 }

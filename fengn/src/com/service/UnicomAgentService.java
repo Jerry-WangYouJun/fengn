@@ -107,6 +107,9 @@ public class UnicomAgentService {
 	public void updateOrderStatus(Integer id) {
 		dao.updateOrderStatus(id);
 	}
-	
-	 
+
+
+	public void updateCardAgent(String iccids, String agentid, String table, String pacId) {
+		dao.updateCardAgent(iccids,agentid , table,pacId );
+	}
 }

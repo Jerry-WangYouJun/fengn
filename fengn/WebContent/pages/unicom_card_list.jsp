@@ -22,6 +22,12 @@
 		        queryParams : function(params) { 
       		      params.iccidStart = $("#idstart").val();
       		      params.iccidEnd = $("#idend").val();
+      		      params.packageId = $("#pacId").val();
+      		      params.simstate = $("#simstate").val();
+      		      params.agentName = $("#agentName").val();
+      		      params.simNum = $("#simNum").val();
+      		      params.activeStartTime = $("#activeStartTime").val();
+      		      params.activeEndTime = $("#activeEndTime").val();
 	              return params;
 	      		},
 		        pagination : true, // 是否显示分页（*）  
@@ -52,6 +58,8 @@
 	function queryData(){
 		$("#infoTable").bootstrapTable("refresh");
 	}
+
+
 </script>
 <style type="text/css">
   .panel-body {
@@ -67,17 +75,49 @@
 				  	    <table id="infoTable"> </table>
 					<div id="toolbar" class="btn-group">
 					<form class="form-inline" role="form">
-								<div class="form-group">
-									<label class="sr-only" for="name">名称</label>
-									<input type="text" class="form-control" id="idstart" 
-										   placeholder="请输入ICCID">
-								</div> -
-								<div class="form-group">
-									<label class="sr-only" for="name">名称</label>
-									<input type="text" class="form-control" id="idend" 
-										   placeholder="请输入ICCID">
+						<%--<div class='form-group' >--%>
+							<%--<input type='text' class="form-control" id='startTime'  />--%>
+							<%--<input type='text' class="form-control" id='endTime'  />--%>
+							<%--<span class="input-group-addon">--%>
+								<%--<span class="glyphicon glyphicon-calendar"></span>--%>
+							<%--</span>--%>
+						<%--</div>--%>
+						<%--<div class='input-group date' id='endTime'>--%>
+							<%--<input type='text' class="form-control" />--%>
+							<%--<span class="input-group-addon">--%>
+								<%--<span class="glyphicon glyphicon-calendar"></span>--%>
+							<%--</span>--%>
+						<%--</div>--%>
+								<div style="margin-bottom: 1px;">
+									<input type='text' class="form-control" id='activeStartTime' placeholder="请输入激活日期起始时间" />
+									<span>至</span>
+									<input type='text' class="form-control" id='activeEndTime'   placeholder="请输入激活日期结束时间"/>
+									<div class="form-group">
+										<label class="sr-only" for="name">名称</label>
+										<input type="text" class="form-control" id="idstart"
+											   placeholder="请输入ICCID">
+									</div> -
+									<div class="form-group">
+										<label class="sr-only" for="name">名称</label>
+										<input type="text" class="form-control" id="idend"
+											   placeholder="请输入ICCID">
+									</div>
 								</div>
-								
+								<br>
+								<input type="text" class="form-control" id="simNum"
+									   placeholder="请输入SIM号">
+								<input type="text" class="form-control" id="agentName"
+									   placeholder="请输入代理商名称">
+								<select class="form-control "  id="pacId"  name="pacId" style="display: inline">
+									<option value="">全部套餐</option>
+								</select>
+								<select class="form-control "  id="simstate"  name="pacId" style="display: inline">
+									<option value="">卡状态</option>
+									<option value="0">可激活</option>
+									<option value="1">已激活</option>
+									<option value="2">已停用</option>
+								</select>
+
 								<button id="btn_edit" type="button" class="btn btn-default" onclick="queryData()">  
 					                <span class="glyphicon glyphicon-search" aria-hidden="true" ></span>查询
 					            </button>
@@ -102,15 +142,18 @@
 		
 	<div class="modal fade" id="myModal" tabindex="-2" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog" style="height: ">
+		<div class="modal-dialog" style="">
 			<div class="modal-content">
 				<div class="modal-body">
-					    <table id="agentTable"> </table>
-					    <div id="agentToolbar" class="btn-group">  
-			            <button id="btn_edit" type="button" class="btn btn-default" onclick="moveCardByAgent()">  
-			                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>分配  
-			            </button>  
-			        </div> 
+					<table id="agentTable"> </table>
+					<div id="agentToolbar" class=" form-inline"  >
+						<select class="form-control "  id="packageId"  name="packageId" style="display: inline">
+							<option value="">全部套餐</option>
+						</select>
+						<button id="btn_edit" type="button" class="btn btn-default " onclick="moveCardByAgent()" style="display: inline">
+							<span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>分配
+						</button>
+			        </div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -148,9 +191,62 @@
 			<!-- /.modal-content -->
 		</div>
 	<script type="text/javascript">
+
+	function getMyPackage(){
+	    var html = "";
+        $.ajax({
+            url : '${basePath}/pac/getPacList',
+            type : 'post',
+            data : {},
+            dataType : 'json',
+            success : function(data) {
+                if (data.success) {
+                    var dataInfo = data.dataInfo;
+                    for(var i = 0;i<dataInfo.length;i++){
+                        html+="<option value='"+dataInfo[i].id+"'>"+dataInfo[i].typename+"</option>";
+					}
+                    $("#packageId").html(html);
+                } else {
+                    alert("发生异常，请联系管理员");
+                }
+            },
+            error : function(transport) {
+                alert(data.msg);
+            }
+        });
+	}
+
+    function getMyPackageMenu(){
+        var html = "";
+        $.ajax({
+            url : '${basePath}/pac/getPacList',
+            type : 'post',
+            data : {},
+            dataType : 'json',
+            success : function(data) {
+                if (data.success) {
+                    var dataInfo = data.dataInfo;
+                    html += "<option value=''>全部套餐</option>";
+                    for(var i = 0;i<dataInfo.length;i++){
+                        html+="<option value='"+dataInfo[i].id+"'>"+dataInfo[i].typename+"</option>";
+                    }
+                    $("#pacId").html(html);
+                } else {
+                    alert("发生异常，请联系管理员");
+                }
+            },
+            error : function(transport) {
+                alert(data.msg);
+            }
+        });
+    }
+
+
+
 	$(function(){
+        getMyPackageMenu();
 		var tabName = parent.$("#deviceulid > li.active").attr("id");
-		 var agentId = tabName.split("_")[4];
+		var agentId = tabName.split("_")[4];
 	    $('#agentTable').bootstrapTable({  
 	        url : '${basePath}/agent/user_query', // 请求后台的URL（*）            
 	        method : 'get', // 请求方式（*）  
@@ -190,7 +286,9 @@
 					}
 	        }}],  
 	        silent : true, // 刷新事件必须设置  
-	    });  
+	    });
+
+        getMyPackage();
 	});
 	 
 	
@@ -206,6 +304,7 @@
 	}
 	
 	function moveCardByAgent(){
+	    var pacId = $("#packageId").val();
 		var ids = "";
 		for(var i in $("#infoTable").bootstrapTable('getSelections')){
 			//console.info($("#infoTable").bootstrapTable('getSelections')[i]);
@@ -221,7 +320,7 @@
 			$.ajax({
 				url : url,
 				type : 'post',
-				data : {iccids: ids , agentid : id},
+				data : {iccids: ids , agentid : id , pacId:pacId,table:"unicom"},
 				dataType : 'json',
 				success : function(data) {
 					if (data.success) {
@@ -267,6 +366,28 @@
 			});
 		}
 	}
+
+    $('#activeStartTime').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        autoclose :true ,
+        todayHighlight : true,
+        todayBtn : true,
+        minuteStep: 30,
+        minView : 0,
+        initialDate:new Date()
+    });
+
+    $('#activeEndTime').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        autoclose :true ,
+        todayHighlight : true,
+        todayBtn : true,
+        minuteStep: 30,
+        minView : 0,
+        initialDate:new Date()
+    });
 </script>
 </body>
 </html>

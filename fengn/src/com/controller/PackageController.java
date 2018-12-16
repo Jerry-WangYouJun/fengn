@@ -7,6 +7,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.model.InfoPackage;
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONString;
+import net.sf.json.util.JSONUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,13 +36,60 @@ public class PackageController {
 
 	@ResponseBody
 	@RequestMapping("/query")
-	public List<Packages> quetyList(Packages pac, HttpSession session, String pageNo, String pageSize,
+	public Grid quetyList(Packages pac, HttpSession session, String pageNo, String pageSize,
 			HttpServletResponse response) {
 		// System.out.println(userName);
+		String agentId = session.getAttribute("agentId").toString();
+		pac.setAgentId(agentId);
 		Pagination page = new Pagination(pageNo, pageSize, 100);
 		CodeUtil.initPagination(page);
 		List<Packages> list = service.queryList(pac, page);
-		return list;
+		int total = service.queryCardTotal(pac);
+		Grid grid = new Grid();
+		grid.setRows(list);
+		grid.setTotal((long)total);
+		return grid;
+		//return list;
+	}
+
+
+    @RequestMapping("/getPacList")
+    public void getPacList(HttpSession session, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            String agentId = session.getAttribute("agentId").toString();
+            List<Packages> list = service.getPacListByAgentId(agentId);
+            String jsonStr = JSONArray.fromObject(list).toString();
+
+            out = response.getWriter();
+            JSONObject json = new JSONObject();
+            json.put("success", true);
+            json.put("dataInfo", list);
+            out.println(json);
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+	@RequestMapping("/pac_move")
+	public void pacMove(String pacids , String agentid ,String parentAgentId ,HttpServletResponse response) {
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out;
+		try {
+			service.insertPacRef(pacids,agentid,parentAgentId );
+			out = response.getWriter();
+			JSONObject json = new JSONObject();
+			json.put("msg", "操作成功");
+			json.put("success", true);
+			out.println(json);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@RequestMapping("/addInit")
@@ -48,12 +100,18 @@ public class PackageController {
 		return mv;
 	}
 
-	@RequestMapping("/insert")
+	@RequestMapping("/pac_edit")
 	public void insert(Packages pac, HttpSession session, HttpServletResponse response) {
+        String agentId = session.getAttribute("agentId").toString();
+        pac.setAgentId(agentId);
 		if (pac.getId() != null && pac.getId() > 0) {
-			service.update(pac);
+		    if("1".equals(agentId)){
+                service.update(pac);
+            }
+			service.updateChildsPacRef(pac);
 		} else {
 			service.insert(pac);
+            service.insertChildsPacRef(pac);
 		}
 		response.setContentType("text/text;charset=UTF-8");
 		PrintWriter out;
@@ -81,8 +139,8 @@ public class PackageController {
 		return mv;
 	}
 
-	@RequestMapping(value = "/pac_delete/{id}")
-	public void delete(@PathVariable("id") Integer id, HttpServletResponse response) {
+	@RequestMapping(value = "/pac_delete")
+	public void delete(Integer id, HttpServletResponse response) {
 		response.setContentType("text/text;charset=UTF-8");
 		PrintWriter out;
 		try {

@@ -7,6 +7,11 @@ public class Packages {
 	 private Double cost ;
 	 private Double renew;
 	 private String remark;
+	 private Double childcost;
+
+	 //额外属性
+	 private String agentId;
+
 	public Integer getId() {
 		return id;
 	}
@@ -43,5 +48,20 @@ public class Packages {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	 
+
+	public Double getChildcost() {
+		return childcost;
+	}
+
+	public void setChildcost(Double childcost) {
+		this.childcost = childcost;
+	}
+
+	public String getAgentId() {
+		return agentId;
+	}
+
+	public void setAgentId(String agentId) {
+		this.agentId = agentId;
+	}
 }
