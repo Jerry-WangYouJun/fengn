@@ -55,9 +55,9 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 			System.out.println(json.get("result"));
 			JSONArray ja = ((JSONArray)json.get("result")).getJSONArray(1);
 			List<UnicomHistory>  list = new ArrayList<>();
-			  for(int j=0;i<ja.size();i++){  
+			  for(int j=0;j<ja.size();j++){  
 				  // 遍历 jsonarray 数组，把每一个对象转成 json 对象  
-				 JSONObject job = ja.getJSONObject(i);  
+				 JSONObject job = ja.getJSONObject(j);  
 				 UnicomHistory history = new UnicomHistory();
 				 history.setIccid(job.getString("ICCID"));
 				 history.setImsi(job.getString("OrderSign"));

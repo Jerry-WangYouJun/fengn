@@ -162,6 +162,8 @@
                                    		 </li>
                                    		  <li><a href="#" onclick="uploadBindData('cmcc')"><i class="br-refresh"></i>更新移动数据</a>
                                    		 </li>
+                                   		 <li><a href="#" onclick="uploadRenewData()"><i class="br-refresh"></i>更新套餐充值</a>
+                                   		 </li>
 	                                </ul>
 	                            </li>
                          </c:if>
@@ -577,6 +579,45 @@
 		</div>
 		<!-- /.modal -->
 	</div>
+	
+	
+	<div class="modal fade" id="renewTime" tabindex="-3" role="dialog"
+		aria-labelledby="uploadModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="width:400px; ">
+			<div class="modal-content">
+				<div class="modal-body">
+					   	<form class="form-signin" role="form" method="POST"
+						 id="mlbForm"
+						action="${pageContext.request.contextPath}/uploadExcel/upload.do">
+						<div class="form-group">
+							<label for="message-text" class="control-label" id="timetext">开始时间:</label>
+							 <div class='input-group date' id='renewTimeStart'  >  
+					                <input type='text' class="form-control" readonly name="createdate"  id="renewTimeStartData"/>  
+					                <span class="input-group-addon" >  
+					                    <span class="glyphicon glyphicon-calendar"></span>  
+					                </span>  
+					            </div>   
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label" id="timetext">结束时间:</label>
+							 <div class='input-group date' id='renewTimeEnd'  >  
+					                <input type='text' class="form-control" readonly name="createdate"  id="renewTimeEndData"/>  
+					                <span class="input-group-addon" >  
+					                    <span class="glyphicon glyphicon-calendar"></span>  
+					                </span>  
+					            </div>   
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" id="btn_renew" class="btn btn-primary" data-dismiss="modal" onclick="renewDataUpdate()">导入数据</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
     </body>
     <script type="text/javascript">
 	
@@ -611,6 +652,23 @@
 		});
 	});
 	
+	function renewDataUpdate(){
+		var s = confirm("确定提交数据，本功能为数据补充操作，如所选时间已经更新过会出现数据重复");
+		if(s){
+			/* $.ajax( {
+				url : "${pageContext.request.contextPath}/unicomUpload/renew" ,
+				type : 'post',
+				data:{ start:$("#renewTimeStartData").val() , end:$("#renewTimeEndData").val() },
+				dataType : 'json',
+				success : function(data) {
+					alert(data.msg);
+				},
+				error : function(transport) {
+					alert("系统有误，请重试或联系管理员");
+				}
+			}); */
+		}
+	}
 
 	function uploadUnicomData() {
 		$("#unicomModal").modal("show");
@@ -658,6 +716,10 @@
 		 $("#mlbModal").modal("show");
 	}
 	
+	function uploadRenewData(){
+		 $("#renewTime").modal("show");
+	}
+	
 	$(document).ready(function() {
 		$('#btn_mlb').click(function() {
 			if($("#createdate").val() == ''){
@@ -684,6 +746,28 @@
 	$(function(){
 			if($('#datetimepicker1')[0] != undefined){
 				$('#datetimepicker1').datetimepicker({  
+					minView: "month",
+					format: 'yyyy-mm-dd',
+				    todayBtn: true,//显示今日按钮
+				    autoclose: true,
+				    language:"zh-CN",
+				    clearBtn: true 
+				});
+			}
+			
+			if($('#renewTimeEnd')[0] != undefined){
+				$('#renewTimeEnd').datetimepicker({  
+					minView: "month",
+					format: 'yyyy-mm-dd',
+				    todayBtn: true,//显示今日按钮
+				    autoclose: true,
+				    language:"zh-CN",
+				    clearBtn: true 
+				});
+			}
+			
+			if($('#renewTimeStart')[0] != undefined){
+				$('#renewTimeStart').datetimepicker({  
 					minView: "month",
 					format: 'yyyy-mm-dd',
 				    todayBtn: true,//显示今日按钮

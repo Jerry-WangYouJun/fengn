@@ -123,7 +123,7 @@ public class UnicomUploadController {
 	@ResponseBody
 	@RequestMapping(value = "/renew", method = { RequestMethod.GET,
 			RequestMethod.POST })
-	public void renew(HttpServletResponse response ,  HttpSession session) throws Exception {
+	public void renew(HttpServletResponse response ,  HttpSession session , String start  , String end) throws Exception {
 		//MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		response.setCharacterEncoding("utf-8");
 		Long startTime = System.currentTimeMillis(); 
@@ -133,7 +133,7 @@ public class UnicomUploadController {
 		String msg = "";
 		System.out.println("开始获取数据" + DateUtils.formatDate("yyyyMMddHHmmss"));
 			dataServices.deleteDataTemp("u_history_temp");
-			msg   = dataServices.insertHistoryTemp("2016-10-30","2018-11-30");
+		msg   = dataServices.insertHistoryTemp(start,end);
 		System.out.println("插入数据表,用时" + (System.currentTimeMillis() - startTime));
 		JSONObject json = new JSONObject();
 		json.put("msg", msg);
