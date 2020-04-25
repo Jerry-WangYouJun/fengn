@@ -11,7 +11,7 @@ public class Rebate  implements Serializable{
 	
 	private String openId;			//用户的openId
 	private String iccId;			//卡号
-	private double amount;			//返利金额
+	private double amount;			//返利金额 (通过sql    售价- 自己的成本价)
 	private int packageId;			//套餐id
 	private int agentId;			//代理商id
 	private int parentAgentId;		//父级代理商id
