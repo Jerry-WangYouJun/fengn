@@ -33,7 +33,7 @@ public class AgentService {
 
 	public int insert(Agent agent ) {
 		 Integer parentId = dao.queryPrentIdByCode(agent.getCode());
-		 agent.setParengId(parentId);
+		 agent.setParentId(parentId);
 		 agent.setCode(dao.getMaxCode(agent.getCode(), parentId));
 		 return  mapper.insert(agent);
 	}
@@ -152,7 +152,7 @@ public class AgentService {
 	private Map<Integer, List<Agent>> getMap(List<Agent> agentList) {
 		mapTree =  new HashMap<>(); 
 		for(Agent agent : agentList){
-			   Integer  parentId = agent.getParengId() ;
+			   Integer  parentId = agent.getParentId() ;
 			   if(mapTree.containsKey(parentId)){
 				   mapTree.get(parentId).add(agent);
 			   }else{

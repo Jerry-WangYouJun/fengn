@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
@@ -45,7 +46,7 @@ public class AgentDao {
 					vo.setType(rs.getString("type"));
 					vo.setCost(rs.getDouble("cost"));
 					vo.setRenew(rs.getDouble("renew"));
-					vo.setParengId(rs.getInt("parentid"));
+					vo.setParentId(rs.getInt("parentid"));
 					vo.setCreater(rs.getString("creater"));
 					vo.setUserNo(rs.getString("userNo"));
 					vo.setGroupId(rs.getInt("groupId"));
@@ -76,7 +77,7 @@ public class AgentDao {
 					vo.setType(rs.getString("type"));
 					vo.setCost(rs.getDouble("cost"));
 					vo.setRenew(rs.getDouble("renew"));
-					vo.setParengId(rs.getInt("parentid"));
+					vo.setParentId(rs.getInt("parentid"));
 					vo.setCreater(rs.getString("creater"));
 					vo.setUserNo(rs.getString("userNo"));
 					vo.setGroupId(rs.getInt("groupId"));
@@ -289,6 +290,30 @@ public class AgentDao {
 			}
 		});
 		return total[0];
+	}
+
+	public Agent queryCodeByIccId(String iccId) {
+		// TODO Auto-generated method stub
+		String sql = "select agent.* from a_agent agent "+
+				   	 " left join card_agent card  on card.agentid = agent.id "+
+				   	 " where card.iccid = '"+iccId+"'";
+		List<Agent> agentList = jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper<Agent>(Agent.class));
+		Agent agent = null;
+		if(null!=agentList&&agentList.size()>0){
+			 agent = agentList.get(0);
+		}
+		return agent;
+	}
+
+	public Agent queryParentIdById(Integer id) {
+		// TODO Auto-generated method stub
+		String sql = " select * from a_agent where id = "+id;
+		List<Agent> agentList = jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper<Agent>(Agent.class));
+		Agent agent = null;
+		if(null!=agentList&&agentList.size()>0){
+			 agent = agentList.get(0);
+		}
+		return agent;
 	}
 	
 	

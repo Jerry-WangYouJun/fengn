@@ -163,6 +163,7 @@ public class AgentController {
 			temp.setName(agent.getName());
 			temp.setGroupId(agent.getGroupId());
 			temp.setTelphone(agent.getTelphone());
+			temp.setRebate(agent.getRebate());
 			service.update(temp);
 		}else{
 			agent.setCreater(session.getAttribute("user").toString());

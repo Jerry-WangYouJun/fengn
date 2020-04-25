@@ -10,15 +10,16 @@ public class WxPayConfig {
 	/**
 	 * 
 	 */
-	public static String appsecret = "a85b9eb571de303f6e2bae33c1c608e9";
-	
+	public static String appsecret = "2c6d540bc1296a22c90be3510f3428f8";
+		
 	/**
 	 * 商户号（mch_id）
 	 */
-	public static String partner = "1448494802";
-	
-	public static String partnerkey = "zhangxinzhao1980zxcvzhangxinzhao";
-	
+	//public static String partner = "1448494802";
+	public static String partner = "1567849821";
+	//1567849821
+	//public static String partnerkey = "zhangxinzhao1980zxcvzhangxinzhao";
+	public static String partnerkey = "7Jz41J4G1T6OuExYm89uTY41GoJ6aj8o";
 	/**
 	 * 交易类型
 	 */

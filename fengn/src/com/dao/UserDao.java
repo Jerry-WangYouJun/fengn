@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
@@ -47,7 +48,7 @@ public class UserDao {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<Agent> queryList(User user, Pagination page) {
 		String sql = "select u.id , u.userno , u.username ,u.pwd , u.roleid , u.agentid , u.agentid "
-				+ " , a.name  ,a.code ,a.groupid ,  p.renew , p.typename ,a.type,p.cost , a.telphone from a_user u , a_agent a "
+				+ " , a.name  ,a.code ,a.groupid ,  p.renew , p.typename ,a.type,p.cost , a.telphone,a.rebate from a_user u , a_agent a "
 				+ " left join t_package p on  p.id = a.type where u.agentid = a.id   " + whereSql(user);
 		String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
          final  List<Agent> list =   new ArrayList<>();
@@ -71,6 +72,7 @@ public class UserDao {
 //					vo.setRenew(rs.getDouble("renew"));
 //					vo.setCost(rs.getDouble("cost"));
 					vo.setTelphone(rs.getString("telphone"));
+					vo.setRebate(rs.getDouble("rebate"));
 					list.add(vo);
 				 return null ;
 			}
@@ -146,4 +148,40 @@ public class UserDao {
 		}
 		return sql;
 	}
+
+	public User queryUserByIccId(String iccId) {
+		// TODO Auto-generated method stub
+		String sql = "select user.* from a_user user  "+
+					 "left join a_agent agent on agent.id = user.agentid "+
+					 "left join card_agent card on agent.id = card.agentid "+
+					 "where card.iccid ="+iccId+"";
+		User user = jdbcTemplate.queryForObject(sql, User.class);
+		return user;
+	}
+
+	public List<User> getRebatePerson(List<String> idList) {
+		// TODO Auto-generated method stub
+		
+		String ids = StringUtils.strip(idList.toString(),"[]");
+		List <User> list = new ArrayList<User>();
+		String sql = "select user.* from a_user user "+
+					 " left join a_agent agent on agent.id = user.agentid"+
+					 " where agent.id in ("+ids+")";
+		
+		list = jdbcTemplate.query(sql,new Object[]{},new BeanPropertyRowMapper<User>(User.class));
+		 return list;
+	}
+	
+	public User queryUserByAgentId(int agentId)
+	{
+		String sql = "select * from a_user user where user.agentid = "+agentId;
+		User user = null;
+		List <User> list = new ArrayList<User>();  
+		list = jdbcTemplate.query(sql, new Object[]{},new BeanPropertyRowMapper<User>(User.class));		
+		if(null!=list&&list.size()>0){
+			 user = list.get(0);
+		}
+		return user;
+	}
+	
 }

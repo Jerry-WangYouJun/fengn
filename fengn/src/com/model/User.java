@@ -13,8 +13,31 @@ public class User {
 	  private double renew;
 	  private double cost;
 	  private Integer groupId;
+	  private String openId;
+	  private String wxName;
+	  
+	  private Agent agent;
+	  
+	public Agent getAgent() {
+		return agent;
+	}
+	public void setAgent(Agent agent) {
+		this.agent = agent;
+	}
 	public Integer getId() {
 		return id;
+	}
+	public String getOpenId() {
+		return openId;
+	}
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+	public String getWxName() {
+		return wxName;
+	}
+	public void setWxName(String wxName) {
+		this.wxName = wxName;
 	}
 	public void setId(Integer id) {
 		this.id = id;

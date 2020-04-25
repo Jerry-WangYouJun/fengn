@@ -1,6 +1,7 @@
 package com.pay.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -15,25 +16,34 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.ClientPNames;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.springframework.http.HttpEntity;
 
 import com.common.ResponseURLDataUtil;
 import com.common.StringUtils;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonAnyFormatVisitor;
 import com.pay.config.WxPayConfig;
 import com.pay.dto.WeixinInfoDTO;
 import com.pay.util.http.HttpClientConnectionManager;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
@@ -46,24 +56,38 @@ public class WeixinPayUtil {
 	
 	public static final String SUBMIT_URL ="https://api.mch.weixin.qq.com/pay/unifiedorder";
 
-	public static DefaultHttpClient httpclient;
+//	public static DefaultHttpClient httpclient;
 
+//	public static CloseableHttpClient  httpclient;
+//	static {
+////		httpclient =  HttpClients.createDefault();
+//		httpclient = new DefaultHttpClient();
+//		httpclient = (DefaultHttpClient) HttpClientConnectionManager
+//				.getSSLInstance(httpclient);
+////		httpclient = (CloseableHttpClient) HttpClientConnectionManager
+////		.getSSLInstance(httpclient);
+//	}
+	public static CloseableHttpClient httpclient;
 	static {
-		httpclient = new DefaultHttpClient();
-		httpclient = (DefaultHttpClient) HttpClientConnectionManager
-				.getSSLInstance(httpclient);
+		 httpclient = HttpClients.createDefault();
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	public static String getPayNo(String url, String xmlParam) {
-		DefaultHttpClient client = new DefaultHttpClient();
-		client.getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS,
-				true);
-		HttpPost httpost = HttpClientConnectionManager.getPostMethod(url);
+		/*
+		 * DefaultHttpClient client = new DefaultHttpClient();
+		 * client.getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
+		 */
+		CloseableHttpClient  httpclient = HttpClients.createDefault();
+//		httpclient.getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
+		
+		HttpPost httpost = new HttpPost(url);
+//		HttpPost httpost = HttpClientConnectionManager.getPostMethod(url);
 		String prepay_id = "";
 		try {
 			httpost.setEntity(new StringEntity(xmlParam, "UTF-8"));
 			HttpResponse response = httpclient.execute(httpost);
+//			CloseableHttpResponse response = httpclient.execute(httpost);
 			String jsonStr = EntityUtils
 					.toString(response.getEntity(), "UTF-8");
 			//Map<String, Object> dataMap = new HashMap<String, Object>();
@@ -74,6 +98,7 @@ public class WeixinPayUtil {
 			Map map = doXMLParse(jsonStr);
 			//String return_code = (String) map.get("return_code");
 			prepay_id = (String) map.get("prepay_id");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -160,9 +185,10 @@ public class WeixinPayUtil {
 	 * @return
 	 */
 	public static String getTradeOrder(String url, String xmlParam) {
-		DefaultHttpClient client = new DefaultHttpClient();
-		client.getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS,
-				true);
+//		DefaultHttpClient client = new DefaultHttpClient();
+//		client.getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS,
+//				true);
+		CloseableHttpClient  httpclient = HttpClients.createDefault();
 		HttpPost httpost = HttpClientConnectionManager.getPostMethod(url);
 		String jsonStr = "";
 		try {
@@ -356,82 +382,76 @@ public class WeixinPayUtil {
         return accessToken;
 
  }
-
-	public static void main(String[] args) {
+    /**
+     *	 获取 openId 列表 最多10000个
+     * @return String
+     */
+    public static String getUserOpenIdList()
+    {
+    	String accessToken =null;
+    	String openIds = null;
 		try {
-			getTicket();
-		} catch (Exception e) {
+			accessToken = getAccessToken();
+			//获取token 然后调用 拉取所有openId列表 （最多10000）
+			String url ="https://api.weixin.qq.com/cgi-bin/user/get?access_token="+accessToken+"&next_openid=";
+	    	String jsonString =	ResponseURLDataUtil.getReturnData(url) ;
+			JSONObject jsonObject = JSONObject.fromObject(jsonString);  	
+			
+			JSONArray array = jsonObject.getJSONArray("data");
+			
+			openIds  = jsonObject.getString("data");
+			System.out.println(openIds);
+			System.out.println("jsonArray======="+array );
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	 //etTicket();
-//		String sign = "";
-//		SortedMap<String, String> storeMap = new TreeMap<String, String>();
-//		storeMap.put("trade_type", "NATIVE"); // 交易类型
-//		storeMap.put("spbill_create_ip", "127.0.0.1"); // 本机的Ip
-//		storeMap.put("body", "test"); // 描述
-//		storeMap.put("out_trade_no", "123456"); // 商户 后台的贸易单号
-//		storeMap.put("total_fee", "" + 100); // 金额必须为整数 单位为分
-//		storeMap.put("notify_url", "http://www.pinxuew.com/wechat"); // 支付成功后，回调地址
-//		storeMap.put("appid", "wx5e45586116813f60"); // appid
-//		storeMap.put("mch_id", "1251135401"); // 商户号
-//		storeMap.put("nonce_str", "1add1a30ac87aa2db72f57a2375d8fec"); // 随机数
-//		sign = createSign(storeMap);
-//		WeixinInfoDTO weixinInfoDTO = new WeixinInfoDTO();
-//		weixinInfoDTO.setAppid("wx5e45586116813f60");
-//		weixinInfoDTO.setBody("test");
-//		weixinInfoDTO.setMch_id("1251135401");
-//		weixinInfoDTO.setNonce_str("1add1a30ac87aa2db72f57a2375d8fec");
-//		weixinInfoDTO.setNotify_url("http://www.pinxuew.com/wechat");
-//		weixinInfoDTO.setOut_trade_no("123456");
-//		weixinInfoDTO.setSign(sign);
-//		weixinInfoDTO.setSpbill_create_ip("127.0.0.1");
-//		weixinInfoDTO.setTotal_fee(100);
-//		weixinInfoDTO.setTrade_type("NATIVE");
-//		String codeUrl = generateCodeUrl(weixinInfoDTO);
-//		System.out.println(codeUrl);
-		
-		// String xml="<xml>"+
-		// "<appid>wx5e45586116813f60</appid>"+
-		// "<mch_id>1251135401</mch_id>"+
-		// "<nonce_str>1add1a30ac87aa2db72f57a2375d8fec</nonce_str>"+
-		// "<sign>"+sign+"</sign>"+
-		// "<body>test</body>"+
-		// "<out_trade_no>123456</out_trade_no>"+
-		// "<total_fee>1</total_fee>"+
-		// "<spbill_create_ip>127.0.0.1</spbill_create_ip>"+
-		// "<notify_url>http://www.baidu.com</notify_url>"+
-		// "<trade_type>NATIVE</trade_type>"+
-		// "</xml>";
+		}    	
+		return openIds;
+    }
+    
+    
+    /**
+     * 企业付款
+     * @throws IOException 
+     */
+    public static String enterprisePayment(SSLContext sslcontext,String form) throws IOException
+    {    	
+    	SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext
+                , new String[]{"TLSv1"}    // supportedProtocols ,这里可以按需要设置
+                , null    // supportedCipherSuites
+                , SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+ 
+        CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(sslsf).build();
+        String result_code	= null;
+        CloseableHttpResponse response = null;
 
-//		String xml = "<xml>" + "<appid>wx5e45586116813f60</appid>"
-//				+ "<body>test</body>" + "<mch_id>1251135401</mch_id>"
-//				+ "<nonce_str>1add1a30ac87aa2db72f57a2375d8fec</nonce_str>"
-//				+ "<notify_url>http://www.pinxuew.com/wechat</notify_url>"
-//				+ "<out_trade_no>123456</out_trade_no>"
-//				+ "<spbill_create_ip>127.0.0.1</spbill_create_ip>"
-//				+ "<total_fee>100</total_fee>"
-//				+ "<trade_type>NATIVE</trade_type>"
-//				+ "<sign>EB3C28F5C2BA88F636286F438905ACCD</sign>" + "</xml>";
-//		String resultMsg = getTradeOrder(
-//				"https://api.mch.weixin.qq.com/pay/unifiedorder", xml);
-//		System.out.println(resultMsg);
-		
-//		String sign = "";
-//		SortedMap<String, String> storeMap = new TreeMap<String, String>();
-//		storeMap.put("out_trade_no", "px20150904041703250"); // 商户 后台的贸易单号
-//		storeMap.put("appid", "wx5e45586116813f60"); // appid
-//		storeMap.put("mch_id", "1251135401"); // 商户号
-//		storeMap.put("nonce_str", "1add1a30ac87aa2db72f57a2375d8fec"); // 随机数
-//		sign = createSign(storeMap);
-//		
-//		String xml = "<xml><appid>wx5e45586116813f60</appid><mch_id>1251135401</mch_id>"+
-//					"<nonce_str>1add1a30ac87aa2db72f57a2375d8fec</nonce_str>"+
-//                    "<out_trade_no>px20150904041703250</out_trade_no>"+
-//                    "<sign>"+sign+"</sign></xml>";
-//		String resultMsg = getTradeOrder(
-//				"https://api.mch.weixin.qq.com/pay/orderquery", xml);
-//		System.out.println(resultMsg);
-//		
+        try {
+            StringEntity reqEntity = new StringEntity(form, ContentType.create("text/xml", "UTF-8"));
+ 
+            HttpPost httppost = new HttpPost("https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers");
+ 
+            httppost.setEntity(reqEntity);
+ 
+            response = client.execute(httppost);
 
-}
+            String jsonStr = EntityUtils.toString(response.getEntity(), "UTF-8");
+            Map map = doXMLParse(jsonStr);
+    		result_code = (String)map.get("result_code");
+            if (jsonStr.indexOf("FAIL") != -1) {
+            	String err_code = (String)map.get("err_code");
+            	String err_code_des = 	(String)map.get("err_code_des");	
+    			return "error_code===="+err_code+"----err_code_des====="+err_code_des;
+    		}   		
+        } catch (Exception e) {
+        	e.printStackTrace();
+        } 
+        finally {
+        	 response.close();
+        }        
+        return result_code	;
+    }      
+	public static void main(String[] args) {
+		
+
+	}
 }

@@ -1,29 +1,49 @@
 package com.pay.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.util.DateUtil;
+import org.apache.http.ssl.SSLContexts;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.common.StringUtils;
 import com.model.History;
 import com.model.InfoVo;
+import com.model.User;
 import com.pay.config.WxPayConfig;
 import com.pay.util.CommonUtil;
 import com.pay.util.OrderUtils;
@@ -32,6 +52,7 @@ import com.pay.util.Sha1Util;
 import com.pay.util.SignUtil;
 import com.pay.util.WeixinPayUtil;
 import com.service.CardInfoService;
+import com.service.UserService;
 
 import net.sf.json.JSONObject;
 
@@ -48,6 +69,9 @@ public class WeixinPayController {
 	
 	@Autowired
 	CardInfoService service ; 
+	@Autowired
+	UserService userService;
+	
 	private static String baseUrl = "http://www.pay-sf.com";
 	Map<String,String>  excuteResultMap = new HashMap<>();
 	
@@ -329,6 +353,20 @@ public class WeixinPayController {
                     				service.insertHistory(history);
                     				service.updateCardStatus(iccid);
                     			}
+                    			
+                    			////////返利  企业付款 20200424 start 
+                    			
+                    			double total_fee = (double)resultMap.get("total_fee");
+                    			double amountAll = total_fee - WxPayConfig.money;
+                    			//通过iccid 号码获取所有关联的返利人员
+                    			
+                    			List<User> userList = this.getRebatePerson(iccid);
+                    			for (User user : userList) {
+                    				//根据返利比例计算 返利钱数
+                    				double amount = (((amountAll)*user.getAgent().getRebate())/100);	
+									this.enterprisePayment(request, response, user.getOpenId(), amount, "返利");
+								}
+                    			///////返利 企业付款 20200424 end
                     		}catch(Exception e){
                     			e.printStackTrace();
                     		}
@@ -397,6 +435,423 @@ public class WeixinPayController {
 		}
 		String url = "http://www.pay-sf.com/card/querySingle?iccid=" +  iccid ;
 		response.sendRedirect(url);
+		return null;
+	}
+	
+	/**
+	 * 企业付款功能 
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 * @throws UnknownHostException 
+	 */
+	@RequestMapping("/enterprisePayment")
+	@ResponseBody
+	public String enterprisePayment1(HttpServletRequest request, HttpServletResponse response, Model model) throws UnknownHostException
+	{
+		//商户订单号  随机生成 32位 数字+字母		
+		String partner_trade_no = UUID.randomUUID().toString().replaceAll("-","");		
+		System.out.println("in enterprisePayment,partner_trade_no:" + partner_trade_no);
+		
+		//传入 返利金额
+		String amountStr = request.getParameter("amount");
+
+		int total_fee = BigDecimal.valueOf(Double.parseDouble(amountStr) * 100).setScale(0, BigDecimal.ROUND_UP).intValue();
+		
+		String openId= "oQTPQwVrWxwcU079m-87Vuh5sjSk";
+		
+		//获取 收款用户的 用户openid
+		//String openId =getOpenId(code);
+		//申请商户号的appid或商户号绑定的appid
+//		String mch_id = "1448494802";
+				
+		//随机数 
+		String nonce_str = UUID.randomUUID().toString().replaceAll("-", "");
+		
+		//企业付款备注	 
+		String desc = "返利";	
+		
+		SortedMap<String, String> packageParams = new TreeMap<String, String>();
+		packageParams.put("mch_appid", WxPayConfig.appid);
+		packageParams.put("mchid", WxPayConfig.partner);
+		packageParams.put("nonce_str", nonce_str);
+		packageParams.put("partner_trade_no", partner_trade_no);
+		packageParams.put("openid", openId);
+		packageParams.put("check_name", "NO_CHECK");
+		packageParams.put("amount", String.valueOf(total_fee));
+		packageParams.put("desc", desc);
+		packageParams.put("spbill_create_ip", String.valueOf(InetAddress.getLocalHost().getHostAddress()));
+		
+		RequestHandler reqHandler = new RequestHandler(request, response);
+		reqHandler.init(WxPayConfig.appid, WxPayConfig.appsecret, WxPayConfig.partnerkey);
+		
+		String sign = reqHandler.createSign(packageParams);
+		System.out.println("sign:"+sign+"========packageParams===="+packageParams.toString());
+		String xml="<xml>"+
+						"<mch_appid>"+WxPayConfig.appid+"</mch_appid>"+
+						"<mchid>"+WxPayConfig.partner+"</mchid>"+
+						"<nonce_str>"+nonce_str+"</nonce_str>"+					
+						"<partner_trade_no>"+partner_trade_no+"</partner_trade_no>"+
+						"<openid>"+openId+"</openid>"+
+						"<check_name>NO_CHECK</check_name>"+				
+						"<amount>"+String.valueOf(total_fee)+"</amount>"+
+						"<desc>"+desc+"</desc>"+
+						"<spbill_create_ip>"+String.valueOf(InetAddress.getLocalHost().getHostAddress())+"</spbill_create_ip>"+
+						"<sign>"+sign+"</sign>"+
+				"</xml>";
+		System.out.println("xml："+xml);
+		//企业付款请求 url 
+		String requestUrl= "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+		
+		
+		KeyStore keyStore = null;
+        Resource resource = new ClassPathResource("apiclient_cert.p12");
+        String Path = "";
+
+        try {
+            Path = resource.getFile().getPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            keyStore = KeyStore.getInstance("PKCS12");
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
+        InputStream instream = null;
+
+        try {
+            instream = new FileInputStream(new File(Path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try{
+            keyStore.load(instream, WxPayConfig.partner.toCharArray());
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                instream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        SSLContext sslcontext = null;
+
+        try {
+            sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore,  WxPayConfig.partner.toCharArray()).build();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        }
+        
+		String result="";
+		try {
+			result = WeixinPayUtil.enterprisePayment(sslcontext, xml);	
+			System.out.println("result:" + result);
+			return result;
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * 获取 应该返利的人员list 
+	 * @param iccid
+	 */
+	public List<User> getRebatePerson(String iccId)
+	{
+		List<User> userList = new ArrayList<User>();	
+		userList = userService.getRebatePerson(iccId);
+		return userList;
+	}
+	
+	@RequestMapping("/testPerson")
+	@ResponseBody
+	public List<User> getRebatePerson1(HttpServletRequest request, HttpServletResponse response, Model model)
+	{
+		String iccId = request.getParameter("iccId");
+		List<User> userList = new ArrayList<User>();	
+		userList = userService.getRebatePerson(iccId);
+		return userList;
+	}
+	/**
+	 * 通过wx接口获取 大量openId 
+	 * @return
+	 */
+	@RequestMapping("/getAllUserOpenId")
+	@ResponseBody
+	public String getAllUserOpenId()
+	{
+		try {
+			//获取所有人的openIdList 最多10000个
+			String openIdList = WeixinPayUtil.getUserOpenIdList();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	/**
+	 *  企业付款 
+	 * @param request
+	 * @param response
+	 * @param openId   付款到哪个用户的openId
+	 * @param amount   金额	
+	 * @param desc     备注
+	 * @return
+	 * @throws UnknownHostException
+	 */
+	public String enterprisePayment(HttpServletRequest request, HttpServletResponse response,String openId,Double amount,String desc) throws UnknownHostException
+	{
+		//商户订单号  随机生成 32位 数字+字母		
+		String partner_trade_no = UUID.randomUUID().toString().replaceAll("-","");		
+		System.out.println("in enterprisePayment,partner_trade_no:" + partner_trade_no);
+		
+		//将传入的金额转换成上传的格式
+		int total_fee = BigDecimal.valueOf(amount * 100).setScale(0, BigDecimal.ROUND_UP).intValue();			
+		//随机数 
+		String nonce_str = UUID.randomUUID().toString().replaceAll("-", "");
+		
+		//企业付款备注	 		
+		SortedMap<String, String> packageParams = new TreeMap<String, String>();
+		packageParams.put("mch_appid", WxPayConfig.appid);
+		packageParams.put("mchid", WxPayConfig.partner);
+		packageParams.put("nonce_str", nonce_str);
+		packageParams.put("partner_trade_no", partner_trade_no);
+		packageParams.put("openid", openId);
+		packageParams.put("check_name", "NO_CHECK");
+		packageParams.put("amount", String.valueOf(total_fee));
+		packageParams.put("desc", desc);
+		packageParams.put("spbill_create_ip", String.valueOf(InetAddress.getLocalHost().getHostAddress()));
+		
+		RequestHandler reqHandler = new RequestHandler(request,response);
+		reqHandler.init(WxPayConfig.appid, WxPayConfig.appsecret, WxPayConfig.partnerkey);
+		
+		String sign = reqHandler.createSign(packageParams);
+		
+		String xml="<xml>"+
+						"<mch_appid>"+WxPayConfig.appid+"</mch_appid>"+
+						"<mchid>"+WxPayConfig.partner+"</mchid>"+
+						"<nonce_str>"+nonce_str+"</nonce_str>"+					
+						"<partner_trade_no>"+partner_trade_no+"</partner_trade_no>"+
+						"<openid>"+openId+"</openid>"+
+						"<check_name>NO_CHECK</check_name>"+				
+						"<amount>"+String.valueOf(total_fee)+"</amount>"+
+						"<desc>"+desc+"</desc>"+
+						"<spbill_create_ip>"+String.valueOf(InetAddress.getLocalHost().getHostAddress())+"</spbill_create_ip>"+
+						"<sign>"+sign+"</sign>"+
+				"</xml>";
+		System.out.println("xml："+xml);
+		//上传证书 
+		KeyStore keyStore = null;
+        Resource resource = new ClassPathResource("apiclient_cert.p12");
+        String Path = "";
+
+        try {
+            Path = resource.getFile().getPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            keyStore = KeyStore.getInstance("PKCS12");
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
+        InputStream instream = null;
+
+        try {
+            instream = new FileInputStream(new File(Path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try{
+            keyStore.load(instream, WxPayConfig.partner.toCharArray());
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                instream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        SSLContext sslcontext = null;
+
+        try {
+            sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore,  WxPayConfig.partner.toCharArray()).build();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        }
+        
+		String result="";
+		try {
+			result = WeixinPayUtil.enterprisePayment(sslcontext, xml);	
+			System.out.println("result:" + result);
+			return result;
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	
+	@RequestMapping("/toPayTest")
+	@ResponseBody
+	public String toPayTest(HttpServletRequest request, HttpServletResponse response, Model model){
+		try {
+			String orderId = request.getParameter("orderId");
+			System.out.println("in toPay,orderId:" + orderId);
+			
+			String totalFeeStr = request.getParameter("totalFee");
+			Float totalFee = 0.0f;
+			
+			if(StringUtils.isNotEmpty(totalFeeStr)){
+				totalFee = new Float(totalFeeStr);
+			}
+			//TODO 测试用代码 totalFee = 0.01f ;
+			//网页授权后获取传递的参数
+			//String userId = request.getParameter("userId"); 	
+			String code = request.getParameter("code");
+			System.out.println("code:"+code);
+			if(code == null){
+				  return null ;
+			}
+			//获取统一下单需要的openid
+			String openId =getOpenId(code);
+			
+			
+			//获取openId后调用统一支付接口https://api.mch.weixin.qq.com/pay/unifiedorder
+			//随机数 
+			//String nonce_str = "1add1a30ac87aa2db72f57a2375d8fec";
+			String nonce_str = UUID.randomUUID().toString().replaceAll("-", "");
+			//商品描述
+			String body = orderId;
+			//商户订单号
+			String out_trade_no = orderId;
+			//订单生成的机器 IP
+			String spbill_create_ip = request.getRemoteAddr();
+			//总金额
+			//TODO
+			Integer total_fee = Math.round(totalFee*100);
+			//Integer total_fee = 1;
+			
+			//商户号
+			//String mch_id = partner;
+			//子商户号  非必输
+			//String sub_mch_id="";
+			//设备号   非必输
+			//String device_info="";
+			//附加数据
+			//String attach = userId;
+			//总金额以分为单位，不带小数点
+			//int total_fee = intMoney;
+			//订 单 生 成 时 间   非必输
+			//String time_start ="";
+			//订单失效时间      非必输
+			//String time_expire = "";
+			//商品标记   非必输
+			//String goods_tag = "";
+			//非必输
+			//String product_id = "";
+					
+			//这里notify_url是 支付完成后微信发给该链接信息，可以判断会员是否支付成功，改变订单状态等。
+			String notify_url = baseUrl + "/wx/notifyUrl";
+			
+			SortedMap<String, String> packageParams = new TreeMap<String, String>();
+			packageParams.put("appid", WxPayConfig.appid);
+			packageParams.put("mch_id", WxPayConfig.partner);
+			packageParams.put("nonce_str", nonce_str);
+			packageParams.put("body", body);
+			packageParams.put("out_trade_no", out_trade_no);
+			packageParams.put("total_fee", total_fee+"");
+			packageParams.put("spbill_create_ip", spbill_create_ip);
+			packageParams.put("notify_url", notify_url);
+			packageParams.put("trade_type", WxPayConfig.trade_type);  
+			packageParams.put("openid", openId);  
+
+			RequestHandler reqHandler = new RequestHandler(request, response);
+			reqHandler.init(WxPayConfig.appid, WxPayConfig.appsecret, WxPayConfig.partnerkey);
+			
+			String sign = reqHandler.createSign(packageParams);
+			System.out.println("sign:"+sign);
+			String xml="<xml>"+
+					"<appid>"+WxPayConfig.appid+"</appid>"+
+					"<mch_id>"+WxPayConfig.partner+"</mch_id>"+
+					"<nonce_str>"+nonce_str+"</nonce_str>"+
+					"<sign>"+sign+"</sign>"+
+					"<body><![CDATA["+body+"]]></body>"+
+					"<out_trade_no>"+out_trade_no+"</out_trade_no>"+
+					"<total_fee>"+total_fee+""+"</total_fee>"+
+					"<spbill_create_ip>"+spbill_create_ip+"</spbill_create_ip>"+
+					"<notify_url>"+notify_url+"</notify_url>"+
+					"<trade_type>"+WxPayConfig.trade_type+"</trade_type>"+
+					"<openid>"+openId+"</openid>"+
+					"</xml>";
+			System.out.println("xml："+xml);
+			
+			String createOrderURL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+			String prepay_id="";
+			try {
+				prepay_id = WeixinPayUtil.getPayNo(createOrderURL, xml);
+				System.out.println("prepay_id:" + prepay_id);
+				if(prepay_id.equals("")){
+					request.setAttribute("ErrorMsg", "统一支付接口获取预支付订单出错");
+					response.sendRedirect("error.jsp");
+				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			SortedMap<String, String> finalpackage = new TreeMap<String, String>();
+			String timestamp = Sha1Util.getTimeStamp();
+			String packages = "prepay_id="+prepay_id;
+			finalpackage.put("appId", WxPayConfig.appid);
+			finalpackage.put("timeStamp", timestamp);
+			finalpackage.put("nonceStr", nonce_str);
+			finalpackage.put("package", packages);
+			finalpackage.put("signType", WxPayConfig.signType);
+			String finalsign = reqHandler.createSign(finalpackage);
+			System.out.println("/jsapi?appid="+WxPayConfig.appid+"&timeStamp="+timestamp+"&nonceStr="+nonce_str+"&package="+packages+"&sign="+finalsign);
+			
+			model.addAttribute("appid", WxPayConfig.appid);
+			model.addAttribute("timeStamp", timestamp);
+			model.addAttribute("nonceStr", nonce_str);
+			model.addAttribute("packageValue", packages);
+			model.addAttribute("sign", finalsign);
+			
+			model.addAttribute("bizOrderId", orderId);
+			model.addAttribute("orderId", orderId);
+			model.addAttribute("payPrice", total_fee);
+			model.addAttribute("iccid", orderId.substring(2, orderId.length()- 8));
+			return "/jsapi";
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 }

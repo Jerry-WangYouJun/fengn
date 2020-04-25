@@ -10,12 +10,13 @@
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="creater" jdbcType="VARCHAR" property="creater" />
     <result column="creatdate" jdbcType="VARCHAR" property="createdate" />
-    <result column="parentId" jdbcType="INTEGER" property="parengId" />
+    <result column="parentId" jdbcType="INTEGER" property="parentId" />
     <result column="groupId" jdbcType="INTEGER" property="groupId" />
     <result column="telphone" jdbcType="VARCHAR" property="telphone" />
+    <result column="rebate" jdbcType="DECIMAL" property="rebate" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, code, name, cost, renew, type, creater, creatdate, parentId, groupId,telphone
+    id, code, name, cost, renew, type, creater, creatdate, parentId, groupId,telphone,rebate
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -34,11 +35,11 @@
     insert into a_agent ( code, name, 
       cost, renew, type, 
       creater, creatdate, parentId, 
-      groupId , telphone)
+      groupId , telphone,rebate)
     values ( #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{cost,jdbcType=DECIMAL}, #{renew,jdbcType=DECIMAL}, #{type,jdbcType=VARCHAR}, 
-      #{creater,jdbcType=VARCHAR}, #{createdate,jdbcType=VARCHAR}, #{parengId,jdbcType=INTEGER}, 
-      #{groupId,jdbcType=INTEGER},#{telphone,jdbcType=VARCHAR})
+      #{creater,jdbcType=VARCHAR}, #{createdate,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, 
+      #{groupId,jdbcType=INTEGER},#{telphone,jdbcType=VARCHAR},#{rebate,jdbcType=DECIMAL})
        
   </insert>
   <insert id="insertSelective" parameterType="com.model.Agent">
@@ -68,12 +69,12 @@
       <if test="createdate != null">
         creatdate,
       </if>
-      <if test="parengId != null">
+      <if test="parentId != null">
         parentId,
       </if>
       <if test="groupId != null">
         groupId,
-      </if>
+      </if>      
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -100,8 +101,8 @@
       <if test="createdate != null">
         #{createdate,jdbcType=VARCHAR},
       </if>
-      <if test="parengId != null">
-        #{parengId,jdbcType=INTEGER},
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
       </if>
       <if test="groupId != null">
         #{groupId,jdbcType=INTEGER},
@@ -132,8 +133,8 @@
       <if test="createdate= null">
         creatdate = #{createdate,jdbcType=VARCHAR},
       </if>
-      <if test="parengId != null">
-        parentId = #{parengId,jdbcType=INTEGER},
+      <if test="parentId != null">
+        parentId = #{parentId,jdbcType=INTEGER},
       </if>
       <if test="groupId != null">
         groupId = #{groupId,jdbcType=INTEGER},
@@ -150,9 +151,10 @@
       type = #{type,jdbcType=VARCHAR},
       creater = #{creater,jdbcType=VARCHAR},
       creatdate = #{createdate,jdbcType=VARCHAR},
-      parentId = #{parengId,jdbcType=INTEGER},
+      parentId = #{parentId,jdbcType=INTEGER},
       groupId = #{groupId,jdbcType=INTEGER},
-      telphone=#{telphone,jdbcType=VARCHAR}
+      telphone=#{telphone,jdbcType=VARCHAR},
+      rebate = #{rebate,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -1,5 +1,6 @@
 package com.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,31 @@ public class UserService {
 	public void delete(Integer id) {
 		dao.delete(id);
 	}
-	 	 
 	
+	public List<User> getRebatePerson(String iccId)
+	{
+		Agent temp = agentDao.queryCodeByIccId(iccId);
+		User user = dao.queryUserByAgentId(temp.getId());
+		user.setAgent(temp);		
+		List<User> userList = new ArrayList<User>();
+		userList.add(user);
+		
+		if(temp.getParentId()!=1)
+		{
+			while(true)
+			{
+				temp = agentDao.queryParentIdById(temp.getParentId());
+				User tempUser = new User();
+				user = dao.queryUserByAgentId(temp.getId());
+				user.setAgent(temp);
+				userList.add(user);
+				if(temp.getParentId() == 1)
+				{
+					break;
+				}
+			}
+		}
+//		userList = dao.getRebatePerson(idList);	
+		return userList;
+	}
 }	 

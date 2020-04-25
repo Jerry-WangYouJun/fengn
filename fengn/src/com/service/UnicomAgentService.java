@@ -79,7 +79,7 @@ public class UnicomAgentService {
 	private Map<Integer, List<Agent>> getMap(List<Agent> agentList) {
 		mapTree =  new HashMap<>(); 
 		for(Agent agent : agentList){
-			   Integer  parentId = agent.getParengId() ;
+			   Integer  parentId = agent.getParentId() ;
 			   if(mapTree.containsKey(parentId)){
 				   mapTree.get(parentId).add(agent);
 			   }else{

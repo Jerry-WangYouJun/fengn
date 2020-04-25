@@ -65,6 +65,10 @@
 							<label for="message-text" class="control-label">客服电话:</label> 
 								<input type="text" class="form-control" name="telphone" id="telphone">
 						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label">返利比例:</label> 
+								<input type="text" class="form-control" name="rebate" id="rebate">
+						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
@@ -86,7 +90,7 @@
 			deleteDataAll("agent");
 		}
 		$(function(){
-			    $('#infoTable').bootstrapTable({  
+			    $('#infoTable').bootstrapTable({
 			        url : '${basePath}/agent/user_query', // 请求后台的URL（*）            
 			        method : 'get', // 请求方式（*）  
 			        toolbar : '#toolbar', // 工具按钮用哪个容器  
@@ -125,13 +129,11 @@
 							}
 			        }},{  
 			            field : 'telphone',   title : '客服电话',  align: 'center',   valign: 'middle'  
+			        },{
+			        	field : 'rebate'  ,   title:'返利比例(%)',    align: 'center',   valign: 'middle'  
 			        }],  
 			        silent : true, // 刷新事件必须设置  
 			    });  
-		});
-		
-		
+		});		
 	</script>
-	
-		
 </html>

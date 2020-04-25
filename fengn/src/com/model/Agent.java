@@ -16,10 +16,19 @@ public class Agent implements Serializable{
 	  private String creater ; 
 	  private String createdate ;
 	  private String iccid;
-	  private Integer parengId ;
+	  private Integer parentId ;
 	  private String userNo;
 	  private Integer groupId;
 	  private String telphone;
+	  //20200423添加 返利  百分数 整数 （计算时需要/100）
+	  private double rebate;
+	  
+	public double getRebate() {
+		return rebate;
+	}
+	public void setRebate(double rebate) {
+		this.rebate = rebate;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -74,11 +83,12 @@ public class Agent implements Serializable{
 	public void setIccid(String iccid) {
 		this.iccid = iccid;
 	}
-	public Integer getParengId() {
-		return parengId;
+
+	public Integer getParentId() {
+		return parentId;
 	}
-	public void setParengId(Integer parengId) {
-		this.parengId = parengId;
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
 	}
 	public String getUserNo() {
 		return userNo;

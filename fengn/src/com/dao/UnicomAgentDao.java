@@ -37,7 +37,7 @@ public class UnicomAgentDao {
 					vo.setType(rs.getString("type"));
 					vo.setCost(rs.getDouble("cost"));
 					vo.setRenew(rs.getDouble("renew"));
-					vo.setParengId(rs.getInt("parentid"));
+					vo.setParentId(rs.getInt("parentid"));
 					vo.setCreater(rs.getString("creater"));
 					vo.setUserNo(rs.getString("userNo"));
 					list.add(vo);
