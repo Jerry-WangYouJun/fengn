@@ -38,62 +38,79 @@ public class TreeController {
 	@Autowired
 	CardAgentService cardAgentService;
 
-	@RequestMapping("/card")
-	public void getTreeData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+	@RequestMapping("/{group}/card")
+	public void getTreeData(@PathVariable("group") String groupType, HttpSession session, HttpServletResponse response, HttpServletRequest request ) {
 			TreeNode treeNode = new TreeNode();
 			treeNode.setText("丰宁/永思SIM卡管理");
-			getTreeDataBytype(session, response, request, "card", treeNode);
+			getTreeDataBytype(session, response, request, "card",groupType , treeNode);
 	}
 	
-	@RequestMapping("/unicom_card")
-	public void getUnicomTreeData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+	@RequestMapping("/{group}/unicom_card")
+	public void getUnicomTreeData(@PathVariable("group") String groupType,HttpSession session, HttpServletResponse response, HttpServletRequest request) {
 			TreeNode treeNode = new TreeNode();
 			treeNode.setText("联通SIM卡管理");
-			getTreeDataBytype(session, response, request, "unicom_card", treeNode);
+			getTreeDataBytype(session, response, request, "unicom_card",groupType , treeNode);
 	}
-	@RequestMapping("/cmcc_card")
-	public void getCmccTreeData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+	@RequestMapping("/{group}/cmcc_card")
+	public void getCmccTreeData(@PathVariable("group") String groupType,HttpSession session, HttpServletResponse response, HttpServletRequest request) {
 			TreeNode treeNode = new TreeNode();
 			treeNode.setText("移动SIM卡管理");
-			getTreeDataBytype(session, response, request, "cmcc_card", treeNode);
-	}
-
-	@RequestMapping("/kickback")
-	public void getKickbackData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
-		TreeNode treeNode = new TreeNode();
-		treeNode.setText("丰宁/永思返佣管理");
-		getTreeDataBytype(session, response, request, "kickback", treeNode);
+			getTreeDataBytype(session, response, request, "cmcc_card",groupType , treeNode);
 	}
 	
-	@RequestMapping("/unicom_kickback")
-	public void getUnicomKickbackData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
-		TreeNode treeNode = new TreeNode();
-		treeNode.setText("联通返佣管理");
-		getTreeDataBytype(session, response, request, "unicom_kickback", treeNode);
-	}
-	@RequestMapping("/cmcc_kickback")
-	public void getCmccKickbackData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
-		TreeNode treeNode = new TreeNode();
-		treeNode.setText("移动返佣管理");
-		getTreeDataBytype(session, response, request, "cmcc_kickback", treeNode);
+	@RequestMapping("/{group}/{pageName}")
+	public void getCmoitTreeData(@PathVariable("group") String groupType,@PathVariable("pageName") String pageName , HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+			TreeNode treeNode = new TreeNode();
+			switch (pageName) {
+			case "cmoit_card":
+				treeNode.setText("移动SIM卡管理");
+				break;
+			case "cmoit_kickback":
+				treeNode.setText("移动S返佣管理");
+				break;
+			default:
+				treeNode.setText("显示错误！");
+				break;
+			}
+			getTreeDataBytype(session, response, request, pageName,groupType , treeNode);
 	}
 
-	@RequestMapping("/all_kickback")
-	public void getAllKickbackData(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+	@RequestMapping("/{group}/kickback")
+	public void getKickbackData(@PathVariable("group") String groupType,HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+		TreeNode treeNode = new TreeNode();
+		treeNode.setText("丰宁/永思返佣管理");
+		getTreeDataBytype(session, response, request, "kickback",groupType , treeNode);
+	}
+	
+	@RequestMapping("/{group}/unicom_kickback")
+	public void getUnicomKickbackData(@PathVariable("group") String groupType,HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+		TreeNode treeNode = new TreeNode();
+		treeNode.setText("联通返佣管理");
+		getTreeDataBytype(session, response, request, "unicom_kickback",groupType , treeNode);
+	}
+	@RequestMapping("/{group}/cmcc_kickback")
+	public void getCmccKickbackData(@PathVariable("group") String groupType,HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+		TreeNode treeNode = new TreeNode();
+		treeNode.setText("移动返佣管理");
+		getTreeDataBytype(session, response, request, "cmcc_kickback",groupType , treeNode);
+	}
+
+	@RequestMapping("/{group}/all_kickback")
+	public void getAllKickbackData(@PathVariable("group") String groupType,HttpSession session, HttpServletResponse response, HttpServletRequest request) {
 		TreeNode treeNode = new TreeNode();
 		treeNode.setText("返佣管理");
-		getTreeDataBytype(session, response, request, "all_kickback", treeNode);
+		getTreeDataBytype(session, response, request, "all_kickback",groupType , treeNode);
 	}
 
 	public void getTreeDataBytype(HttpSession session, HttpServletResponse response, HttpServletRequest request 
-			, String urlType , TreeNode treeNode) {
+			, String urlType ,String groupType , TreeNode treeNode) {
 		try {
 			List<TreeNode> list = new ArrayList<>();
 			list.add(treeNode);
 			// 子节点
 			List<TreeNode> listChild = new ArrayList<>();
 			Integer agentid = Integer.valueOf(session.getAttribute("agentId").toString());
-			listChild = service.getTreeData(agentid, urlType , request);
+			listChild = service.getTreeData(agentid, urlType , groupType ,  request);
 			treeNode.setChildren(listChild);
 			JSONArray json = JSONArray.fromObject(treeNode);
 			response.setCharacterEncoding("utf-8");

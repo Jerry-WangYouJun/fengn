@@ -47,13 +47,13 @@ public class AgentService {
 		dao.delete(id);
 	}
 
-	public List<TreeNode> getTreeData(Integer agentid  , String urlType, HttpServletRequest request) {
+	public List<TreeNode> getTreeData(Integer agentid  , String urlType , String  groupType, HttpServletRequest request) {
 		 List<Agent> agentList = dao.queryTreeList(urlType);
 		 mapTree  = getMap(agentList);
-		 return getNodeList(agentList , agentid , urlType , request);
+		 return getNodeList(agentList , agentid , urlType , groupType ,  request);
 	}
 
-	private List<TreeNode> getNodeList(List<Agent> agentList ,Integer agentId , String urlType, HttpServletRequest request) {
+	private List<TreeNode> getNodeList(List<Agent> agentList ,Integer agentId , String urlType, String  groupType, HttpServletRequest request) {
 		List<TreeNode> nodeList = new ArrayList<>();
 		for(Agent agent : agentList){
 			  if(agentId.equals(agent.getId())){
@@ -77,7 +77,13 @@ public class AgentService {
 					text = "联通返佣-"+ agent.getName() ;
 					break;
 				case "cmcc_kickback":
-					text = "联通返佣-"+ agent.getName() ;
+					text = "移动返佣-"+ agent.getName() ;
+					break;
+				case "cmoit_card":
+					text = "移动卡-"+ agent.getName() ;
+					break;
+				case "cmoit_kickback":
+					text = "移动返佣-"+ agent.getName() ;
 					break;
 				case "all_kickback":
 				  	text = "返佣管理-"+ agent.getName() ;
@@ -87,13 +93,13 @@ public class AgentService {
 				}
 				  node.setText(text);
 				  node.setMenu(agent.getName());
-				  node.getAttributes().setPriUrl(request.getContextPath() +  "/pages/" + urlType + "_list.jsp" ); 
+				  node.getAttributes().setPriUrl(request.getContextPath() +  "/" + groupType + "/" + urlType + "_list.jsp" ); 
 				  node.getAttributes().setAgentId(agent.getId());
 				  node.getAttributes().setUrlType(urlType);
 				  List<Agent> firstListTemp = new ArrayList<>();
 				  firstListTemp =mapTree.get(agentId);
 				  if(firstListTemp !=null && firstListTemp.size() > 0){
-					  node.setChildren(agentTreeData(firstListTemp , urlType , request));
+					  node.setChildren(agentTreeData(firstListTemp , urlType , groupType, request));
 				  }
 				  nodeList.add(node);
 			  }
@@ -101,7 +107,7 @@ public class AgentService {
 		return nodeList;
 	}
 	
-	private  List<TreeNode>  agentTreeData(List<Agent> listTemp  , String urlType , HttpServletRequest request){
+	private  List<TreeNode>  agentTreeData(List<Agent> listTemp  , String urlType , String  groupType , HttpServletRequest request){
 			List<TreeNode> nodeList = new ArrayList<>();
 			 for(Agent agent : listTemp){
 				 TreeNode tn = new TreeNode();
@@ -129,6 +135,12 @@ public class AgentService {
 						case "all_kickback":
 						  text = "返佣管理-"+ agent.getName() ;
 						  break;
+						case "cmoit_card":
+							text = "移动卡-"+ agent.getName() ;
+							break;
+						case "cmoit_kickback":
+							text = "移动返佣-"+ agent.getName() ;
+							break;
 					default:
 						break;
 					}
@@ -138,11 +150,11 @@ public class AgentService {
 					if("kickback".equals(urlType)) {
 						timeType = "?timeType=0";
 					}
-					tn.getAttributes().setPriUrl(request.getContextPath() +  "/pages/" + urlType + "_list.jsp" ); 
+					tn.getAttributes().setPriUrl(request.getContextPath() +  "/" + groupType + "/" + urlType + "_list.jsp" ); 
 					tn.getAttributes().setAgentId(agent.getId());
 					tn.getAttributes().setUrlType(urlType);
 					if(mapTree.containsKey(agent.getId())){
-						tn.setChildren(agentTreeData(mapTree.get(agent.getId()), urlType ,request) );
+						tn.setChildren(agentTreeData(mapTree.get(agent.getId()), urlType , groupType, request) );
 					}
 					nodeList.add(tn);
 			 }
