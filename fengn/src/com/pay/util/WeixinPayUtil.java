@@ -422,7 +422,7 @@ public class WeixinPayUtil {
                 , SSLConnectionSocketFactory.getDefaultHostnameVerifier());
  
         CloseableHttpClient client = HttpClients.custom().setSSLSocketFactory(sslsf).build();
-        String result_code	= null;
+        String payment_no	= null;
         CloseableHttpResponse response = null;
 
         try {
@@ -436,7 +436,7 @@ public class WeixinPayUtil {
 
             String jsonStr = EntityUtils.toString(response.getEntity(), "UTF-8");
             Map map = doXMLParse(jsonStr);
-    		result_code = (String)map.get("result_code");
+            payment_no = (String)map.get("payment_no");
             if (jsonStr.indexOf("FAIL") != -1) {
             	String err_code = (String)map.get("err_code");
             	String err_code_des = 	(String)map.get("err_code_des");	
@@ -448,7 +448,7 @@ public class WeixinPayUtil {
         finally {
         	 response.close();
         }        
-        return result_code	;
+        return payment_no	;
     }      
 	public static void main(String[] args) {
 		

@@ -295,7 +295,7 @@ public class AgentDao {
 	public Agent queryCodeByIccId(String iccId) {
 		// TODO Auto-generated method stub
 		String sql = "select agent.* from a_agent agent "+
-				   	 " left join card_agent card  on card.agentid = agent.id "+
+				   	 " left join cmcc_card_agent card  on card.agentid = agent.id "+
 				   	 " where card.iccid = '"+iccId+"'";
 		List<Agent> agentList = jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper<Agent>(Agent.class));
 		Agent agent = null;

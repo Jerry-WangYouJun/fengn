@@ -10,6 +10,7 @@ import com.dao.AgentDao;
 import com.dao.UserDao;
 import com.model.Agent;
 import com.model.Pagination;
+import com.model.Rebate;
 import com.model.User;
 
 @Service

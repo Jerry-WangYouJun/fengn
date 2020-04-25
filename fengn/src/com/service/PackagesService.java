@@ -1,5 +1,6 @@
 package com.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import com.dao.PackageDao;
 import com.dao.PackageMapper;
 import com.model.Packages;
 import com.model.Pagination;
+import com.model.Rebate;
 
 @Service
 public class PackagesService {
@@ -55,5 +57,28 @@ public class PackagesService {
 
 	public List<Packages> getPacListByAgentId(String agentId) {
 		return dao.getPacListByAgentId(agentId);
+	}
+	
+	public List<Rebate> getRebatePersonList(String iccId) {
+		// TODO Auto-generated method stub
+		List<Rebate> rebateList = new ArrayList<Rebate>();
+		//通过iccid 查询 cmcc_card_agent 表 获取 代理商id 与  套餐id 
+		Rebate rebatePerson = dao.queryByIccId(iccId);		
+		rebateList.add(rebatePerson);
+		
+		if(rebatePerson.getParentAgentId() != 1)
+		{
+			
+			while(true)
+			{
+				rebatePerson = dao.queryByAgentIdAndPacId(rebatePerson);
+				rebateList.add(rebatePerson);
+				if(rebatePerson.getParentAgentId()==1)
+				{
+					break;
+				}
+			}
+		}	
+		return rebateList;
 	}
 }

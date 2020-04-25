@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.common.Dialect;
 import com.model.Packages;
 import com.model.Pagination;
+import com.model.Rebate;
 
 
 @Repository
@@ -141,5 +142,68 @@ public class PackageDao {
 			}
 		});
 		return list;
+	}
+	
+	public Rebate queryByIccId(String iccId) {
+		// TODO Auto-generated method stub
+		StringBuffer sb = new StringBuffer();
+		sb.append("select t_package_ref.*,a_user.openId,cmcc_card_agent.iccid,(t_package_ref.pacrenew - t_package_ref.paccost) as amount from cmcc_card_agent ");
+		sb.append(" left join t_package_ref on cmcc_card_agent.pacid = t_package_ref.pacid ");
+		sb.append(" left join a_user  on a_user.agentid = cmcc_card_agent.agentid ");
+		sb.append(" where  t_package_ref.agentid = cmcc_card_agent.agentid ");
+		sb.append("and iccid =? ");
+		String sql =sb.toString();
+		System.out.println("sql========"+sql); 
+		Rebate rebate = jdbcTemplate.queryForObject(sql, new RowMapper<Rebate>() {
+			@Override
+			public Rebate mapRow(ResultSet rs, int rowNum) throws SQLException {
+				// TODO Auto-generated method stub
+				Rebate rebate = new Rebate();
+				rebate.setAgentId(rs.getInt("agentid"));
+				rebate.setAmount(rs.getDouble("amount"));
+				rebate.setIccId(rs.getString("iccId"));
+				rebate.setParentAgentId(rs.getInt("parentagentId"));
+				rebate.setOpenId(rs.getString("openId"));
+				rebate.setPackageId(rs.getInt("pacid"));
+				rebate.setPaccost(rs.getDouble("paccost"));
+				rebate.setPacchildcost(rs.getDouble("pacchildcost"));
+				rebate.setPacrenew(rs.getDouble("pacrenew"));				
+				return rebate;
+			}			
+		},iccId);
+		return rebate;
+	}
+
+
+
+
+
+	public Rebate queryByAgentIdAndPacId(Rebate rebatePerson) {
+		// TODO Auto-generated method stub
+		StringBuffer sb = new StringBuffer();
+		sb.append("select t_package_ref.*,a_user.openId,(t_package_ref.pacrenew - t_package_ref.paccost) as amount from t_package_ref ");
+		sb.append(" left join a_user  on a_user.agentid = t_package_ref.agentid ");
+		sb.append(" where  a_user.agentid ="+rebatePerson.getParentAgentId());
+		sb.append(" and pacid ="+rebatePerson.getPackageId());
+		String sql = sb.toString();
+		
+		Rebate rebate = jdbcTemplate.queryForObject(sql, new RowMapper<Rebate>() {
+			@Override
+			public Rebate mapRow(ResultSet rs, int rowNum) throws SQLException {
+				// TODO Auto-generated method stub
+				Rebate rebate = new Rebate();
+				rebate.setAgentId(rs.getInt("agentid"));
+				rebate.setAmount(rs.getDouble("amount"));
+				rebate.setIccId(rebatePerson.getIccId());
+				rebate.setParentAgentId(rs.getInt("parentagentId"));
+				rebate.setOpenId(rs.getString("openId"));
+				rebate.setPackageId(rs.getInt("pacid"));
+				rebate.setPaccost(rs.getDouble("paccost"));
+				rebate.setPacchildcost(rs.getDouble("pacchildcost"));
+				rebate.setPacrenew(rs.getDouble("pacrenew"));				
+				return rebate;
+			}			
+		});
+		return rebate;
 	}
 }

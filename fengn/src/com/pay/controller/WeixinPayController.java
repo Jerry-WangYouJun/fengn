@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.common.StringUtils;
 import com.model.History;
 import com.model.InfoVo;
+import com.model.Rebate;
 import com.model.User;
 import com.pay.config.WxPayConfig;
 import com.pay.util.CommonUtil;
@@ -51,7 +52,9 @@ import com.pay.util.RequestHandler;
 import com.pay.util.Sha1Util;
 import com.pay.util.SignUtil;
 import com.pay.util.WeixinPayUtil;
+import com.service.CardAgentService;
 import com.service.CardInfoService;
+import com.service.PackagesService;
 import com.service.UserService;
 
 import net.sf.json.JSONObject;
@@ -71,6 +74,8 @@ public class WeixinPayController {
 	CardInfoService service ; 
 	@Autowired
 	UserService userService;
+	@Autowired
+	PackagesService packagesService;
 	
 	private static String baseUrl = "http://www.pay-sf.com";
 	Map<String,String>  excuteResultMap = new HashMap<>();
@@ -355,17 +360,18 @@ public class WeixinPayController {
                     			}
                     			
                     			////////返利  企业付款 20200424 start 
-                    			
-                    			double total_fee = (double)resultMap.get("total_fee");
-                    			double amountAll = total_fee - WxPayConfig.money;
+
                     			//通过iccid 号码获取所有关联的返利人员
-                    			
-                    			List<User> userList = this.getRebatePerson(iccid);
-                    			for (User user : userList) {
-                    				//根据返利比例计算 返利钱数
-                    				double amount = (((amountAll)*user.getAgent().getRebate())/100);	
-									this.enterprisePayment(request, response, user.getOpenId(), amount, "返利");
-								}
+
+                    			List<Rebate> rebateList = this.getRebatePersonList(iccid);
+                    			if(rebateList.size()!=0 || rebateList != null)
+                    			{
+                    				for (Rebate rebate : rebateList) {
+                        				//根据返利比例计算 返利钱数                      				
+    									this.enterprisePayment(request, response, rebate, "返利");
+    									
+    								}
+                    			}
                     			///////返利 企业付款 20200424 end
                     		}catch(Exception e){
                     			e.printStackTrace();
@@ -439,7 +445,7 @@ public class WeixinPayController {
 	}
 	
 	/**
-	 * 企业付款功能 
+	 * 企业付款功能  （测试用 固定写死openId 需要传入 金额 amount）
 	 * @param request
 	 * @param response
 	 * @param model
@@ -567,7 +573,7 @@ public class WeixinPayController {
 	}
 	
 	/**
-	 * 获取 应该返利的人员list 
+	 * 获取 应该返利的人员list （废弃）
 	 * @param iccid
 	 */
 	public List<User> getRebatePerson(String iccId)
@@ -577,6 +583,13 @@ public class WeixinPayController {
 		return userList;
 	}
 	
+	/**
+	 * 测试用 （废弃）
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/testPerson")
 	@ResponseBody
 	public List<User> getRebatePerson1(HttpServletRequest request, HttpServletResponse response, Model model)
@@ -586,6 +599,21 @@ public class WeixinPayController {
 		userList = userService.getRebatePerson(iccId);
 		return userList;
 	}
+	
+	/**
+	 *  获取返利人员所有必要数据 
+	 *  rebate 为单独添加模型
+	 * @param iccId
+	 * @return
+	 */
+//	@RequestMapping("/testRebatePerson")
+//	@ResponseBody
+	public List<Rebate> getRebatePersonList(String iccId)
+	{
+		return packagesService.getRebatePersonList(iccId);
+	}
+	
+	
 	/**
 	 * 通过wx接口获取 大量openId 
 	 * @return
@@ -607,23 +635,22 @@ public class WeixinPayController {
 	
 	
 	/**
-	 *  企业付款 
+	 *  企业付款   （内部调用）
 	 * @param request
 	 * @param response
-	 * @param openId   付款到哪个用户的openId
-	 * @param amount   金额	
+	 * @param Rebate   返利对象
 	 * @param desc     备注
 	 * @return
 	 * @throws UnknownHostException
 	 */
-	public String enterprisePayment(HttpServletRequest request, HttpServletResponse response,String openId,Double amount,String desc) throws UnknownHostException
+	public String enterprisePayment(HttpServletRequest request, HttpServletResponse response,Rebate rebate,String desc) throws UnknownHostException
 	{
 		//商户订单号  随机生成 32位 数字+字母		
 		String partner_trade_no = UUID.randomUUID().toString().replaceAll("-","");		
 		System.out.println("in enterprisePayment,partner_trade_no:" + partner_trade_no);
 		
 		//将传入的金额转换成上传的格式
-		int total_fee = BigDecimal.valueOf(amount * 100).setScale(0, BigDecimal.ROUND_UP).intValue();			
+		int total_fee = BigDecimal.valueOf(rebate.getAmount() * 100).setScale(0, BigDecimal.ROUND_UP).intValue();			
 		//随机数 
 		String nonce_str = UUID.randomUUID().toString().replaceAll("-", "");
 		
@@ -633,7 +660,7 @@ public class WeixinPayController {
 		packageParams.put("mchid", WxPayConfig.partner);
 		packageParams.put("nonce_str", nonce_str);
 		packageParams.put("partner_trade_no", partner_trade_no);
-		packageParams.put("openid", openId);
+		packageParams.put("openid", rebate.getOpenId());
 		packageParams.put("check_name", "NO_CHECK");
 		packageParams.put("amount", String.valueOf(total_fee));
 		packageParams.put("desc", desc);
@@ -649,7 +676,7 @@ public class WeixinPayController {
 						"<mchid>"+WxPayConfig.partner+"</mchid>"+
 						"<nonce_str>"+nonce_str+"</nonce_str>"+					
 						"<partner_trade_no>"+partner_trade_no+"</partner_trade_no>"+
-						"<openid>"+openId+"</openid>"+
+						"<openid>"+rebate.getOpenId()+"</openid>"+
 						"<check_name>NO_CHECK</check_name>"+				
 						"<amount>"+String.valueOf(total_fee)+"</amount>"+
 						"<desc>"+desc+"</desc>"+
@@ -708,11 +735,25 @@ public class WeixinPayController {
             e.printStackTrace();
         }
         
-		String result="";
+		String payment_no="";
 		try {
-			result = WeixinPayUtil.enterprisePayment(sslcontext, xml);	
-			System.out.println("result:" + result);
-			return result;
+			payment_no = WeixinPayUtil.enterprisePayment(sslcontext, xml);	
+			System.out.println("payment_no=========" + payment_no);
+			
+			/////////将企业付款记录 存入数据库  start
+				
+				History  history = new History();
+				history.setOrderNo(payment_no);					//微信支付返回的微信付款单号
+				history.setIccid(rebate.getIccId());			//支付的iccId
+				history.setMoney(rebate.getAmount());			//支付的钱数
+				history.setUpdateDate(DateUtil.formatDate(new Date(), "yyyy-MM-dd"));	//时间
+				history.setPackageId(rebate.getPackageId());	//套餐的id 
+				service.insertHistory(history);	
+				
+			////////将企业付款记录 存入数据库 end 
+			
+			
+			return payment_no;
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -720,7 +761,13 @@ public class WeixinPayController {
 	}
 	
 	
-	
+	/**
+	 * 测试用 可以删除
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/toPayTest")
 	@ResponseBody
 	public String toPayTest(HttpServletRequest request, HttpServletResponse response, Model model){

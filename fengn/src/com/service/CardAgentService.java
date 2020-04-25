@@ -10,16 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.common.Dialect;
+import com.dao.AgentDao;
+import com.dao.CardAgentDao;
 import com.dao.DataMoveDao;
+import com.dao.UserDao;
 import com.model.InfoVo;
 import com.model.Pagination;
 import com.model.QueryData;
+import com.model.Rebate;
 
 
 @Service
 public class CardAgentService {
 		 @Autowired
 		 DataMoveDao dao ;
+		 @Autowired
+		 CardAgentDao cardAgentDao;
+		 
+		 
 		 public List<InfoVo> queryCardInfo(Integer agentid , Pagination page, QueryData qo ){
 			 String sql = "select c.* , ag.name  from card_agent a , cmtp c , a_agent ag  "
 				 		+ "where a.iccid = c.ICCID  and ag.id=a.agentid " 
@@ -129,4 +137,6 @@ public class CardAgentService {
 			 dao.update(sql);
 			
 		}
+
+
 }

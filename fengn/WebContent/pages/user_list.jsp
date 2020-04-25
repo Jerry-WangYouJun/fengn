@@ -65,10 +65,10 @@
 							<label for="message-text" class="control-label">客服电话:</label> 
 								<input type="text" class="form-control" name="telphone" id="telphone">
 						</div>
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label for="message-text" class="control-label">返利比例:</label> 
 								<input type="text" class="form-control" name="rebate" id="rebate">
-						</div>
+						</div> -->
 					</form>
 				</div>
 				<div class="modal-footer">
@@ -129,9 +129,9 @@
 							}
 			        }},{  
 			            field : 'telphone',   title : '客服电话',  align: 'center',   valign: 'middle'  
-			        },{
+			        },/* {
 			        	field : 'rebate'  ,   title:'返利比例(%)',    align: 'center',   valign: 'middle'  
-			        }],  
+			        } */],  
 			        silent : true, // 刷新事件必须设置  
 			    });  
 		});		
