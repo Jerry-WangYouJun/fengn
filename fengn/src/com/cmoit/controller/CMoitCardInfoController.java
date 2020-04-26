@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cmoit.model.CmoitCard;
 import com.cmoit.service.CMoitCardAgentService;
+import com.common.CMOIT_API_Util;
 import com.common.ContextString;
 import com.common.ResponseURLDataUtil;
 import com.dao.MlbCmccCardMapper;
@@ -58,7 +59,12 @@ public class CMoitCardInfoController {
 				QueryData qo = new QueryData();
 				qo.setSimNum(iccid);
 				 List<CmoitCard> list = ccaService.queryCardInfo(1, new Pagination(), qo , "cmoit");
-				 mv.addObject("cmoitInfo", list.get(0));
+				 CmoitCard card =  new CmoitCard();
+				 if(list != null && list.size() > 0 ){
+					 card	= list.get(0);
+				 }
+				 CMOIT_API_Util.queryCmoitDataInfo(card);
+				 mv.addObject("cmoitInfo", card);
 		    	String tel = ccaService.queryTelByICCID(iccid , "cmoit");
 		    	mv.addObject("tel", tel);
 			} catch (Exception e) {
@@ -80,6 +86,7 @@ public class CMoitCardInfoController {
 		    			 Map map = new HashMap();
 	    				 map.put("simIds",cardInfo.getSimid() );
 	    				 JSONObject json = ResponseURLDataUtil.getMLBData(ResponseURLDataUtil.getToken(),ContextString.URL_UNICOM_BIND , map);
+	    				// json = CMOIT_API_Util.getCardInfoByMsisdn();
 	    				 List<MlbUnicomCard> list =updateService.getResultUnicomFromMlb(json);
 	    				 if(list != null){
 	    					 unicomDao.updateBatch(list);
