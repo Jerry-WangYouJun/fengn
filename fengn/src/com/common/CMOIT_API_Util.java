@@ -86,11 +86,9 @@ public class CMOIT_API_Util {
 		if("0".equals(gprsJson.get("status"))){
 			JSONArray  resultArrs = (JSONArray)gprsJson.get("result");
 			JSONObject result = resultArrs.getJSONObject(0);
-			System.out.println(result.get("total_gprs"));
-			card.setGprssum((result.getDouble("used")*1024) + "");
-			if(card.getId() == null ){
-				  card.setGprsused(result.getString("used"));
-			}
+			System.out.println(result.get("gprsTotal"));
+			card.setGprssum((result.getDouble("gprsTotal")) + "");
+			card.setGprsused(1000+"");
 		}else{
 			System.out.println(gprsJson.toString());
 			
