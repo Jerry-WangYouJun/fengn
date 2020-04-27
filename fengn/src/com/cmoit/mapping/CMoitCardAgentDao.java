@@ -68,6 +68,7 @@ public class CMoitCardAgentDao {
 				vo.setMsisdn(rs.getString("msisdn"));
 				vo.setName(rs.getString("name"));
 				vo.setOpentime(rs.getString("opentime"));
+				vo.setPacid(rs.getInt("pacid"));
 				vo.setUpdatetime(rs.getString("updatetime"));
 				vo.setUserstatus(rs.getString("userstatus"));
 				list.add(vo);

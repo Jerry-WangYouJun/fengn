@@ -148,8 +148,8 @@ public class CmoitAgentDao {
 
 	public void updateCardAgent(String iccids, String agentid, String table, String pacId) {
 		String sql = "update "+table +"_card_agent set  agentid = " +
-				agentid + ",pacid='"+pacId+"'  where msid in ("
-				+ " select msisdn from "+table+"_card  where id in (" + iccids  + "  0 ) )" ;
+				agentid + ",pacid='"+pacId+"'  where iccid in ("
+				+ " select iccid from "+table+"_card  where id in (" + iccids  + "  0 ) )" ;
 		jdbcTemplate.update(sql);
 	}
 }

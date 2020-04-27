@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <c:set var="basePath" value="${pageContext.request.contextPath}"
 	scope="request"></c:set>
@@ -177,7 +178,7 @@
 							style="color: rgb(170, 170, 170);">离线</span>
 					</div>
 				</div>
-				<div class="leftFlowTxt row">
+				<%-- <div class="leftFlowTxt row">
 							<span class="surplusFlowContent col-md-12" ><sub
 								style="bottom: .1em; font-size: 35%; padding-right: 10px;">通话包月|使用量</sub></span>
 				</div>
@@ -194,14 +195,16 @@
 							<span class="surplusFlowContent col-md-6" ><span>
 													${cmoitInfo.msgsum}|${cmoitInfo.msgused}条
 										</span></span>
-				</div>
+				</div> --%>
 				<div class="leftFlowTxt row">
 							<span class="surplusFlowContent col-md-6" ><sub
 								style="bottom: .1em; font-size: 55%; padding-right: 10px;">套餐总量|使用量</sub></span>
 				</div>
 				<div class="leftFlowTxt row">
 							<span class="surplusFlowContent col-md-6" ><span>
-													${cmoitInfo.gprssum}|${cmoitInfo.gprsused}M
+													${cmoitInfo.gprssum}|
+													<fmt:formatNumber value="${cmoitInfo.gprsused / 1024}" pattern="###.##"/>
+													M
 										</span></span>
 				</div>
 				<div class="flowState"></div>
@@ -223,12 +226,12 @@
 								style="display: none;">
 								<ul class="packageList">
 									<li><span class="pull-right">[<i class="packageNum">1</i>笔]
-									</span><span>${cmccCard.packagename} ${unicomCard.packagename}</span></li>
+									</span><span></span></li>
 								</ul>
 							</div>
 							<div class="content-slide" id="nowPackageList"
 								style="overflow: auto;">
-								<p>${cmccCard.packagename} ${unicomCard.packagename}</p>
+								<p>${cmoitInfo.discrip} ${unicomCard.packagename}</p>
 								<p></p>
 							</div>
 						</div>
@@ -289,11 +292,7 @@
 		})
 		
 		function  toRenewalList(obj){
-			if('${info.flag}' == '1'){
-	    	  	  alert("此号码不支持充值，请换卡或联系管理员！");
-	    	  	  return false;
-	   		  }
-		    	if('${info.ICCID }' == ''){
+		    	if('${cmoitInfo.iccid }' == ''){
 		    		  alert('无效的iccid，请点击【切换】按钮获得iccid');
 		    		  return false ;
 		    	}

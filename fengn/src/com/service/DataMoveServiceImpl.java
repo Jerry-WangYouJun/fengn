@@ -6,6 +6,7 @@ package com.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -147,11 +148,12 @@ public class DataMoveServiceImpl implements DataMoveService {
 	}
 
 	@Override
-	public void insertAgentCard() {
+	public void insertAgentCard(List<List<Object>> listob) {
 		try {
-			String insertNewDataSql = "select  iccid from cmtp_temp where  iccid not in (select iccid from cmtp ) " ;
-			System.out.println(insertNewDataSql);
-			List<String>  list =  dataMoveDao.queryIccidList(insertNewDataSql);
+			List<String>  list = new ArrayList<>();
+			for (int i = 0; i < listob.size(); i++) {
+				list.add(listob.get(i).get(8).toString());
+			}
 			dataMoveDao.insertAgentCard(list);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -178,5 +180,11 @@ public class DataMoveServiceImpl implements DataMoveService {
 				file.getOriginalFilename());
 		in.close();
 		return listob ;
+	}
+
+	@Override
+	public void insertDataToCmoitCart(List<List<Object>> listob) {
+		dataMoveDao.insertDataTemp(listob , "");
+		
 	}
 }

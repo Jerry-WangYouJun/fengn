@@ -26,9 +26,11 @@ public interface DataMoveService {
 
 	public int queryDataSize(String dateBegin, String dateEnd, String status  , String iccid );
 
-	public void insertAgentCard();
+	public void insertAgentCard(List<List<Object>> listob);
 
 	public List<List<Object>> getDataList(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception;
+
+	public void insertDataToCmoitCart(List<List<Object>> listob);
 
 	
 	

@@ -164,9 +164,8 @@ public class DataMoveDao {
 	}
 
 	public int insertDataTemp(List<List<Object>> listob, String apiCode) {
-		String insertsqlTemp = "INSERT INTO cmtp_temp ( " + columuns + ") "
-				+ "VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ? ,'" + apiCode
-				+ "' , 10 , ? )";
+		String insertsqlTemp = "INSERT INTO cmoit_card ( msisdn ,iccid,imsi,opentime,activetime ) "
+				+ "VALUES (?,?, ?, ?, ? )";
 		objectList = listob;
 		// batchUpdate可以高效进行批量插入操作
 		try {
@@ -177,43 +176,21 @@ public class DataMoveDao {
 								try {
 									// 并根据数据类型对Statement 中的占位符进行赋值
 									List<Object> valueList = objectList.get(i);
-									if (valueList.size() > 11) {
 										ps.setString(
 												1,
 												String.valueOf(valueList.get(0))
 														.trim());
 										ps.setString(2, String
-												.valueOf(valueList.get(1)).trim());
+												.valueOf(valueList.get(8)).trim());
 										ps.setString(3, String
-												.valueOf(valueList.get(2)).trim());
+												.valueOf(valueList.get(9)).trim());
 										ps.setString(4, String
 												.valueOf(valueList.get(3)).trim());
 										ps.setString(5, String
 												.valueOf(valueList.get(4)));
-										ps.setString(6, String
-												.valueOf(valueList.get(5)));
-										ps.setString(7, String
-												.valueOf(valueList.get(6)));
-										ps.setString(8, String
-												.valueOf(valueList.get(7)));
-										ps.setString(9, String
-												.valueOf(valueList.get(8)));
-										ps.setString(10, String
-												.valueOf(valueList.get(9)));
-										ps.setString(11, String
-												.valueOf(valueList.get(10)));
-										ps.setString(12, String
-												.valueOf(valueList.get(11)));
-										ps.setString(13, String
-												.valueOf(valueList.get(13)));
-									}
-									// ps.setString(13,
-									// String.valueOf(valueList.get(12)));
-									// ps.setString(13,format.format(new
-									// Date(System.currentTimeMillis())));
 								} catch (Exception e) {
 									e.printStackTrace();
-									System.out.println("出错的" + i);
+									System.out.println("出错的" + i + e.getMessage());
 								}
 							}
 
@@ -227,9 +204,7 @@ public class DataMoveDao {
 					+ "<br>");
 			e.printStackTrace();
 		}
-		// }
 		return objectList.size();
-
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -422,8 +397,8 @@ public class DataMoveDao {
 	}
 
 	public void insertAgentCard(List<String> list) {
-		String insertsqlTemp = "INSERT INTO card_agent (  iccid , agentid   ) "
-				+ "VALUES (?, 1 )";
+		String insertsqlTemp = "INSERT INTO cmoit_card_agent (  iccid , agentid ,pacid  ) "
+				+ "VALUES (?, 1  , 4 )";
 		iccidList = list;
 		if (iccidList != null && iccidList.size() > 0) {
 			jdbcTemplate.batchUpdate(insertsqlTemp,

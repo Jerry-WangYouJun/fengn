@@ -36,6 +36,8 @@ public class CmoitCard {
     private String name ;
     
     private String discrip ;
+    
+    private Integer pacid ;
 
     public Integer getId() {
         return id;
@@ -179,6 +181,14 @@ public class CmoitCard {
 
 	public void setDiscrip(String discrip) {
 		this.discrip = discrip;
+	}
+
+	public Integer getPacid() {
+		return pacid;
+	}
+
+	public void setPacid(Integer pacid) {
+		this.pacid = pacid;
 	}
     
 }

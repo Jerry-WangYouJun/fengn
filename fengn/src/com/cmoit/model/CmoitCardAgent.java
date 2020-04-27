@@ -3,7 +3,7 @@ package com.cmoit.model;
 public class CmoitCardAgent {
     private Integer id;
 
-    private String msid;
+    private String iccid;
 
     private Integer agentid;
 
@@ -17,15 +17,15 @@ public class CmoitCardAgent {
         this.id = id;
     }
 
-    public String getMsid() {
-        return msid;
-    }
+    public String getIccid() {
+		return iccid;
+	}
 
-    public void setMsid(String msid) {
-        this.msid = msid == null ? null : msid.trim();
-    }
+	public void setIccid(String iccid) {
+		this.iccid = iccid;
+	}
 
-    public Integer getAgentid() {
+	public Integer getAgentid() {
         return agentid;
     }
 

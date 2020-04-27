@@ -11,5 +11,7 @@ public interface PackageMapper {
 	public void delete( Integer id );
 	
 	public void update(Packages pac);
+	
+	public Packages selectByPrimaryKey(Integer id);
 
 }

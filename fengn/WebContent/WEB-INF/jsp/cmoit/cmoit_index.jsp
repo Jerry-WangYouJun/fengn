@@ -150,14 +150,8 @@
 	                      	  <li class="dropdown">
 	                                <a href="#" style="padding: 12px" data-toggle="dropdown"><i class="im-paste">&nbsp;导入/更新</i></a>
 	                                <ul class="dropdown-menu right" role="menu">
-	                                    <li><a href="#" onclick="uploadMlbData()"><i class="im-upload2"></i> 麦联宝导入</a>
+	                                    <li><a href="#" onclick="uploadMlbData()"><i class="im-upload2"></i> 导入</a>
 	                                    </li>
-	                                     <li><a href="#" onclick="uploadBindData('unicom')"><i class="br-refresh"></i>更新联通数据</a>
-                                   		 </li>
-                                   		  <li><a href="#" onclick="uploadBindData('cmcc')"><i class="br-refresh"></i>更新移动数据</a>
-                                   		 </li>
-                                   		 <li><a href="#" onclick="uploadRenewData()"><i class="br-refresh"></i>更新套餐充值</a>
-                                   		 </li>
 	                                </ul>
 	                            </li>
                          </c:if>
@@ -376,21 +370,13 @@
 						 id="mlbForm"
 						action="${pageContext.request.contextPath}/uploadExcel/upload.do">
 						<div class="form-group">
-							<label for="message-text" class="control-label" id="timetext">出库时间:</label>
+							<label for="message-text" class="control-label" id="timetext">上传文件:</label>
 							 <div class='input-group date' id='datetimepicker1'  >  
-					                <input type='text' class="form-control" readonly name="createdate"  id="createdate"/>  
+					                <input type='file' class="form-control" readonly name="upfile"  id="upfile"/>  
 					                <span class="input-group-addon" >  
 					                    <span class="glyphicon glyphicon-calendar"></span>  
 					                </span>  
 					            </div>   
-						</div>
-						<div class="form-group">
-						   <label for="message-text" class="control-label">选择卡类型:</label>
-						    <select name="apiCode" id = "apiCode" class="form-control" >
-						      <option value="1">移动</option>
-						      <option value="2">联通</option>
-						      <option value="3">电信</option>
-						    </select>
 						</div>
 					</form>
 				</div>
@@ -404,44 +390,6 @@
 		<!-- /.modal -->
 	</div>
 	
-	
-	<div class="modal fade" id="renewTime" tabindex="-3" role="dialog"
-		aria-labelledby="uploadModalLabel" aria-hidden="true">
-		<div class="modal-dialog" style="width:400px; ">
-			<div class="modal-content">
-				<div class="modal-body">
-					   	<form class="form-signin" role="form" method="POST"
-						 id="mlbForm"
-						action="${pageContext.request.contextPath}/uploadExcel/upload.do">
-						<div class="form-group">
-							<label for="message-text" class="control-label" id="timetext">开始时间:</label>
-							 <div class='input-group date' id='renewTimeStart'  >  
-					                <input type='text' class="form-control" readonly name="createdate"  id="renewTimeStartData"/>  
-					                <span class="input-group-addon" >  
-					                    <span class="glyphicon glyphicon-calendar"></span>  
-					                </span>  
-					            </div>   
-						</div>
-						<div class="form-group">
-							<label for="message-text" class="control-label" id="timetext">结束时间:</label>
-							 <div class='input-group date' id='renewTimeEnd'  >  
-					                <input type='text' class="form-control" readonly name="createdate"  id="renewTimeEndData"/>  
-					                <span class="input-group-addon" >  
-					                    <span class="glyphicon glyphicon-calendar"></span>  
-					                </span>  
-					            </div>   
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" id="btn_renew" class="btn btn-primary" data-dismiss="modal" onclick="renewDataUpdate()">导入数据</button>
-				</div>
-			</div>
-			<!-- /.modal-content -->
-		</div>
-		<!-- /.modal -->
-	</div>
     </body>
     <script type="text/javascript">
 	
@@ -451,14 +399,10 @@
 	
 	//ajax 方式上传文件操作
 	$(document).ready(function() {
-		$('#btn_api').click(function() {
-			if($("#apiCode").val() == "0"){
-				  alert("请选择数据接口");
-				  return false ;
-			}
+		$('#btn_mlb').click(function() {
 			//if (checkData()) {
-				$('#form1').ajaxSubmit({
-					url : '${pageContext.request.contextPath}/uploadExcel/ajaxUpload.do',
+				$('#mlbForm').ajaxSubmit({
+					url : '${pageContext.request.contextPath}/cmoit/info/ajaxUpload',
 					dataType : 'text',
 					success : resutlMsg,
 					error : errorMsg
@@ -476,23 +420,6 @@
 		});
 	});
 	
-	function renewDataUpdate(){
-		var s = confirm("确定提交数据，本功能为数据补充操作，如所选时间已经更新过会出现数据重复");
-		if(s){
-			/* $.ajax( {
-				url : "${pageContext.request.contextPath}/unicomUpload/renew" ,
-				type : 'post',
-				data:{ start:$("#renewTimeStartData").val() , end:$("#renewTimeEndData").val() },
-				dataType : 'json',
-				success : function(data) {
-					alert(data.msg);
-				},
-				error : function(transport) {
-					alert("系统有误，请重试或联系管理员");
-				}
-			}); */
-		}
-	}
 
 	function uploadUnicomData() {
 		$("#unicomModal").modal("show");
@@ -535,71 +462,10 @@
 	});
 	});
 	
-	
 	function uploadMlbData(){
 		 $("#mlbModal").modal("show");
 	}
 	
-	function uploadRenewData(){
-		 $("#renewTime").modal("show");
-	}
 	
-	$(document).ready(function() {
-		$('#btn_mlb').click(function() {
-			if($("#createdate").val() == ''){
-				 alert("请添加出库时间");
-				 return false;
-			}
-			$('#mlbForm').ajaxSubmit({
-				url : '${pageContext.request.contextPath}/unicomUpload/uploadExcelUnicom',
-				dataType : 'text',
-				success : resutlMsg,
-				error : errorMsg
-			});
-			function resutlMsg(msg) {
-				alert(msg);
-				parent.$('#dlg-frame').dialog('close');
-				$("#upfile").val("");
-			}
-			function errorMsg() {
-				alert("导入excel出错！");
-			}
-	});
-	});
-	
-	$(function(){
-			if($('#datetimepicker1')[0] != undefined){
-				$('#datetimepicker1').datetimepicker({  
-					minView: "month",
-					format: 'yyyy-mm-dd',
-				    todayBtn: true,//显示今日按钮
-				    autoclose: true,
-				    language:"zh-CN",
-				    clearBtn: true 
-				});
-			}
-			
-			if($('#renewTimeEnd')[0] != undefined){
-				$('#renewTimeEnd').datetimepicker({  
-					minView: "month",
-					format: 'yyyy-mm-dd',
-				    todayBtn: true,//显示今日按钮
-				    autoclose: true,
-				    language:"zh-CN",
-				    clearBtn: true 
-				});
-			}
-			
-			if($('#renewTimeStart')[0] != undefined){
-				$('#renewTimeStart').datetimepicker({  
-					minView: "month",
-					format: 'yyyy-mm-dd',
-				    todayBtn: true,//显示今日按钮
-				    autoclose: true,
-				    language:"zh-CN",
-				    clearBtn: true 
-				});
-			}
-		});
 </script>
 </html>

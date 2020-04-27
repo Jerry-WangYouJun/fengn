@@ -47,7 +47,7 @@ public class CmoitInfoService {
 	
 	public String queryTelByICCID(String iccid, String table) throws Exception {
 		String sql = "select a.telphone from "+table+"_card  c, "+ table+"_card_agent cca, a_agent a "
-				+ " where c.msisdn = cca.msid and  cca.agentid=a.id  and  c.msisdn= '" + iccid + "'";
+				+ " where c.iccid = cca.iccid and  cca.agentid=a.id  and  c.iccid= '" + iccid + "'";
 		return  dao.queryTelphone(sql);
 	}
 	

@@ -99,7 +99,7 @@
 							</div>
 						  <br>
 						  <input type="text" class="form-control" id="simNum"
-								 placeholder="请输入MSID号">
+								 placeholder="请输入ICCID号">
 						  <input type="text" class="form-control" id="agentName"
 								 placeholder="请输入代理商名称">
 						  <select class="form-control "  id="pacId"  name="pacId" style="display: inline">

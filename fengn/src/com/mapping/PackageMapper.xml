@@ -42,4 +42,11 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    	  id , typename ,discrip ,cost , renew , childcost ,remark
+    from t_package
+    where id = #{id,jdbcType=INTEGER}
+  </select>
 </mapper>

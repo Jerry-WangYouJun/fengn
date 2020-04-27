@@ -1,35 +1,33 @@
 package com.cmoit.controller;
 
-import java.util.HashMap;
+import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmoit.model.CmoitCard;
 import com.cmoit.service.CMoitCardAgentService;
 import com.common.CMOIT_API_Util;
-import com.common.ContextString;
-import com.common.ResponseURLDataUtil;
-import com.dao.MlbCmccCardMapper;
+import com.common.DateUtils;
 import com.dao.MlbUnicomCardMapper;
+import com.dao.PackageMapper;
 import com.model.InfoVo;
-import com.model.MlbUnicomCard;
+import com.model.Packages;
 import com.model.Pagination;
 import com.model.QueryData;
-import com.model.UnicomInfoVo;
-import com.pay.util.JsSignUtil;
 import com.service.CardInfoService;
-import com.service.UnicomUploadService;
-
-import net.sf.json.JSONObject;
+import com.service.DataMoveService;
 
 
 @Controller
@@ -42,10 +40,11 @@ public class CMoitCardInfoController {
 	    CMoitCardAgentService  ccaService;
 	    
 	    @Autowired
-	    UnicomUploadService  updateService;
+	    PackageMapper  pacDao;
 	    
 	    @Autowired
-	    MlbCmccCardMapper cmccDao ; 
+		@Qualifier("dataMoveService")
+		private DataMoveService moveDataServices;
 	    
 	    
 	    
@@ -76,52 +75,6 @@ public class CMoitCardInfoController {
 	    	
 	    }
 	    
-	    @RequestMapping("/u")
-	    public ModelAndView getUnicomCardInfo(String iccid){
-	    	ModelAndView mv = new ModelAndView("cmoit/cardInfo");
-			try {
-				MlbUnicomCard  cardInfo = unicomDao.selectByIccid(iccid);
-		    	if(cardInfo!=null ){
-		    		 if(StringUtils.isEmpty(cardInfo.getSim())){
-		    			 Map map = new HashMap();
-	    				 map.put("simIds",cardInfo.getSimid() );
-	    				 JSONObject json = ResponseURLDataUtil.getMLBData(ResponseURLDataUtil.getToken(),ContextString.URL_UNICOM_BIND , map);
-	    				// json = CMOIT_API_Util.getCardInfoByMsisdn();
-	    				 List<MlbUnicomCard> list =updateService.getResultUnicomFromMlb(json);
-	    				 if(list != null){
-	    					 unicomDao.updateBatch(list);
-	    					 if(list.size() == 1){
-	    						 MlbUnicomCard muc = list.get(0);
-	    						 cardInfo.setSim(muc.getSim());
-	    						 cardInfo.setOutWarehouseDate(muc.getOutWarehouseDate());
-	    						 cardInfo.setFlowlefttime(muc.getFlowlefttime());
-	    						 cardInfo.setImsi(muc.getImsi());
-	    						 cardInfo.setLastactivetime(muc.getLastactivetime());
-	    						 mv.addObject("unicomCard", cardInfo);
-	    					 }else{
-	    						 UnicomInfoVo   wrongInfo = new UnicomInfoVo();
-	    						 wrongInfo.setGprsRest("卡号重复，请联系管理员确认");
-	    						 mv.addObject("info", wrongInfo);
-	    					 }
-	    				 }
-		    		 }else{
-		    			 mv.addObject("unicomCard", cardInfo);
-		    		 }
-		    	}else{
-		    		UnicomInfoVo   wrongInfo = new UnicomInfoVo();
-		    		wrongInfo.setGprsRest("卡号不存在，请联系管理员确认");
-		    		mv.addObject("info", wrongInfo);
-		    	}
-		    	String tel = service.queryTelByICCID(iccid , "unicom");
-		    	mv.addObject("tel", tel);
-			} catch (Exception e) {
-				InfoVo   wrongInfo = new InfoVo();
-				wrongInfo.setUserStatus("系统错误，请联系管理员:" + e.getMessage());
-				mv.addObject("info", wrongInfo);
-			}
-	    	return mv ;
-	    	
-	    }
 	    
 	    @RequestMapping("/search")
 	    public ModelAndView searchHistory(String iccid){
@@ -146,23 +99,43 @@ public class CMoitCardInfoController {
 	    	
 	    }
 	    
-	    @RequestMapping("/searchInit")
-	    public ModelAndView getSearchInit(){
-	    	ModelAndView mv = new ModelAndView("search");
-	    	Map<String, String> ret = JsSignUtil.sign("http://www.pay-sf.com/card/searchInit");
-	    	mv.addObject("ret", ret);
-	    	return mv ;
-	    }
-	    
-	    
 	    @RequestMapping("/xinfu_wechat_pay")
 	    public ModelAndView getPay(@RequestParam("iccid") String iccid , HttpServletRequest request){
 	    	if(iccid==null){
 	    		iccid = request.getParameter("iccid");
 	    	}
+	    	QueryData qo = new QueryData();
+			qo.setSimNum(iccid);
+			 List<CmoitCard> list = ccaService.queryCardInfo(1, new Pagination(), qo , "cmoit");
+			 CmoitCard card =  list.get(0);
+			 Packages  pac = pacDao.selectByPrimaryKey(card.getPacid());
 	    	ModelAndView mv = new ModelAndView("xfpay");
 	    	mv.addObject("iccid", iccid);
+	    	mv.addObject("pac",pac);
 	    	return mv;
 	    }
+	    
+	    
+	    @ResponseBody
+		@RequestMapping(value = "ajaxUpload", method = { RequestMethod.GET,
+				RequestMethod.POST })
+		public void ajaxUploadExcel(HttpServletRequest request,
+				HttpServletResponse response , String apiCode) throws Exception {
+			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+			response.setCharacterEncoding("utf-8");
+			PrintWriter out =  response.getWriter();
+			System.out.println("导入表数据开始：" + DateUtils.formatDate("MM-dd:HH-mm-ss"));
+			List<List<Object>> listob = moveDataServices.getDataList(multipartRequest, response);
+			System.out.println();
+			moveDataServices.insertDataToCmoitCart(listob);
+			System.out.println("插入代理商卡数据开始：" + System.currentTimeMillis());
+			moveDataServices.insertAgentCard(listob);
+			System.out.println("插入新数据开始：" + System.currentTimeMillis());
+//			int insertNum = moveDataServices.dataMoveSql2Oracle(apiCode);
+//			System.out.println("执行结束            ：" + System.currentTimeMillis());
+			out.print("新增数据" + listob.size()  + "条");
+			out.flush();
+			out.close();
+		}
 	    
 }

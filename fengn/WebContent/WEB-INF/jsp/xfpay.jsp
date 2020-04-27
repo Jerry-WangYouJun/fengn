@@ -17,8 +17,8 @@
 <div class="container-fluid">
 			<div role="tabpanel" class="tab-pane active" style="margin-top: 10px;">
 				<div class="taocan">
-					<h3>120M 12个月（每个月10M）</h3>
-					<p>每月10M全国流量，流量月底清零，流量超出停机，可随时累加套餐包。</p>
+					<h3>${pac.typename }</h3>
+					<p> ${pac.discrip}</p>
 				</div>
 			</div>
 
@@ -30,7 +30,7 @@
 		</div>
 	 <script type="text/javascript">
 	    function doWeixinPay(){
-	    		window.location.href="${basePath}/wx/userAuth?totalFee="+ 18 + "&iccid=${iccid}";
+	    		window.location.href="${basePath}/wx/userAuth?totalFee="+ ${pac.renew} + "&iccid=${iccid}";
 	    }
 	 </script>
 

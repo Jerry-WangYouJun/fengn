@@ -62,7 +62,7 @@ public class CMoitCardAgentService {
 		 }
 		 
 		 public List<CmoitCard> queryCardInfo(Integer agentid , Pagination page, QueryData qo  , String table ){
-			 String sql =  "select c.* , ag.name , p.discrip ";
+			 String sql =  "select c.* , ag.name , p.discrip , p.id pacid ";
 				sql = getSql(agentid,qo , table , sql);
 			 String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
 					return dao.queryCmccDataList(finalSql);
@@ -77,7 +77,7 @@ public class CMoitCardAgentService {
 		 
 		 private String getSql(Integer agentid ,  QueryData qo  , String table , String sql  ) {
 			  sql  += "  from "+table+"_card_agent a , "+table+"_card c , a_agent ag , t_package p  "
-				 		+ "where a.msid = c.msisdn   and ag.id=a.agentid and p.id=a.pacid " ;
+				 		+ "where a.iccid = c.iccid   and ag.id=a.agentid and p.id=a.pacid " ;
 			 String simstate = qo.getSimstate();
 			 
 			if(simstate != null) {
@@ -114,7 +114,7 @@ public class CMoitCardAgentService {
 				 sql += "and ag.name like '%"+qo.getAgentName().trim()+"%' ";
 			 }
 			 if(StringUtils.isNotEmpty(qo.getSimNum())){
-				 sql += "and c.msisdn='"+qo.getSimNum().trim()+"' ";
+				 sql += "and c.iccid='"+qo.getSimNum().trim()+"' ";
 			 }
 			 if(StringUtils.isNotEmpty(qo.getActiveStartTime())){
 					sql += "and c.openDate>='"+qo.getActiveStartTime().trim()+"' ";
@@ -125,10 +125,10 @@ public class CMoitCardAgentService {
 			sql +="and ag.code like  CONCAT((select code from a_agent where id = "
 				+ agentid + "),'%' ) ";
 			if(StringUtils.isNotEmpty(qo.getIccidStart())){
-				 sql += " and c.msiddn >= '" + qo.getIccidStart() + "' " ;
+				 sql += " and c.iccid >= '" + qo.getIccidStart() + "' " ;
 			}
 			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
-				 sql += " and  c.msiddn <= '" + qo.getIccidEnd() + "' " ;
+				 sql += " and  c.iccid <= '" + qo.getIccidEnd() + "' " ;
 			}
 			return sql ;
 		 }
@@ -238,7 +238,7 @@ public class CMoitCardAgentService {
 			String sql = "select z.iccid, z.money, z.packageType, z.update_date, z.pacid,r.paccost,z.money - IFNULL(r.paccost, z.cost) kickback  from (";
 			sql += "select h.iccid , h.money , p.discrip  packageType , h.update_date ,  a.pacid, u.cost "
 					+ "from u_history h , "+table+"_card_agent a , "+table+"_card c , a_agent u  , t_package p  "
-					+ " where h.iccid = c.msisdn and c.msisdn = a.msid  and a.pacid = p.id  "
+					+ " where h.iccid = c.iccid and c.iccid = a.iccid  and a.pacid = p.id  "
 					+ " and  u.id = a.agentid  and  u.id = " + id  ;
 			if(StringUtils.isNotEmpty(qo.getDateStart())){
 				 sql += " and h.update_date >= '" + qo.getDateStart() + "'" ;
@@ -267,7 +267,7 @@ public class CMoitCardAgentService {
 			 sql += "select z.iccid, z.money, z.packageType, z.update_date, z.pacid,z.money - IFNULL(r.paccost, z.cost) kickback from (";
 			 sql += "select h.iccid , h.money , h.packageType , h.update_date ,  a.pacid, u.cost "
 					 + "from u_history h , "+table+"_card_agent a , "+table+"_card c , a_agent u , t_package p   "
-					 + " where h.iccid = c.msisdn and c.msisdn = a.msid  and a.pacid = p.id   "
+					 + " where h.iccid = c.iccid and c.iccid = a.iccid  and a.pacid = p.id   "
 					 + " and  u.id = a.agentid  and  u.id = " + agentid  ;
 				if(StringUtils.isNotEmpty(qo.getDateStart())){
 					 sql += " and h.update_date >= '" + qo.getDateStart() + "'" ;
@@ -288,7 +288,7 @@ public class CMoitCardAgentService {
 
 		public String queryTelByICCID(String iccid, String table) throws Exception {
 		String sql = "select a.telphone from "+table+"_card  c, "+ table+"_card_agent cca, a_agent a "
-				+ " where c.msisdn = cca.msid and  cca.agentid=a.id  and  c.msisdn= '" + iccid + "'";
+				+ " where c.iccid = cca.iccid and  cca.agentid=a.id  and  c.iccid= '" + iccid + "'";
 		return  dao.queryTelphone(sql);
 	}
 }
