@@ -1,5 +1,6 @@
 package com.pay.controller;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -30,6 +31,8 @@ import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.http.ssl.SSLContexts;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +40,15 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.common.StringUtils;
 import com.model.History;
 import com.model.InfoVo;
+import com.model.Packages;
 import com.model.Rebate;
 import com.model.User;
 import com.pay.config.WxPayConfig;
@@ -51,13 +57,11 @@ import com.pay.util.OrderUtils;
 import com.pay.util.RequestHandler;
 import com.pay.util.Sha1Util;
 import com.pay.util.SignUtil;
+import com.pay.util.WXAuthUtil;
 import com.pay.util.WeixinPayUtil;
-import com.service.CardAgentService;
 import com.service.CardInfoService;
 import com.service.PackagesService;
 import com.service.UserService;
-
-import net.sf.json.JSONObject;
 
 /**
  * 微信支付Controller
@@ -77,7 +81,7 @@ public class WeixinPayController {
 	@Autowired
 	PackagesService packagesService;
 	
-	private static String baseUrl = "http://www.pay-sf.com";
+	private static String baseUrl = "http://iot.iot10.cn";
 	Map<String,String>  excuteResultMap = new HashMap<>();
 	
 	/**
@@ -117,12 +121,13 @@ public class WeixinPayController {
 			String iccid = request.getParameter("iccid");
 			String orderId = OrderUtils.genOrderNo(iccid);
 			String totalFee = request.getParameter("totalFee");
+			String pacid = request.getParameter("pacid");
 			//String totalFee = "0.01";
 			System.out.println("in userAuth,orderId:" + orderId);
 			
 			//授权后要跳转的链接
 			String backUri = baseUrl + "/wx/toPay";
-			backUri = backUri + "?orderId=" + orderId+"&totalFee="+totalFee;
+			backUri = backUri + "?pacid=" + pacid + "&orderId=" + orderId+"&totalFee="+totalFee;
 			//URLEncoder.encode 后可以在backUri 的url里面获取传递的所有参数
 			backUri = URLEncoder.encode(backUri);
 			//scope 参数视各自需求而定，这里用scope=snsapi_base 不弹出授权页面直接授权目的只获取统一支付接口的openid
@@ -145,12 +150,13 @@ public class WeixinPayController {
 			String orderId = request.getParameter("orderId");
 			System.out.println("in toPay,orderId:" + orderId);
 			
-			String totalFeeStr = request.getParameter("totalFee");
-			Float totalFee = 0.0f;
-			
-			if(StringUtils.isNotEmpty(totalFeeStr)){
-				totalFee = new Float(totalFeeStr);
-			}
+			Rebate  rebate = packagesService.getRebateByIccid(orderId.substring(2, orderId.length()- 8));
+			Packages pac = packagesService.selectPackagesById(rebate.getPackageId());
+			pac.setRenew(rebate.getPacrenew());
+			Double totalFee = rebate.getPacrenew();
+//			if(StringUtils.isNotEmpty(totalFeeStr)){
+//				totalFee = new Float(totalFeeStr);
+//			}
 			//TODO 测试用代码 totalFee = 0.01f ;
 			//网页授权后获取传递的参数
 			//String userId = request.getParameter("userId"); 	
@@ -175,7 +181,7 @@ public class WeixinPayController {
 			String spbill_create_ip = request.getRemoteAddr();
 			//总金额
 			//TODO
-			Integer total_fee = Math.round(totalFee*100);
+			Long total_fee = Math.round(totalFee*100);
 			//Integer total_fee = 1;
 			
 			//商户号
@@ -265,6 +271,7 @@ public class WeixinPayController {
 			model.addAttribute("orderId", orderId);
 			model.addAttribute("payPrice", total_fee);
 			model.addAttribute("iccid", orderId.substring(2, orderId.length()- 8));
+			model.addAttribute("pac", pac);
 			return "/jsapi";
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
@@ -332,16 +339,26 @@ public class WeixinPayController {
 					System.out.println("weixin receive check Sign sucess");
                     try{
                     	//获得返回结果
+                    	String out_trade_no = (String)resultMap.get("out_trade_no");
+                    	System.out.println("weixin pay sucess,out_trade_no:"+out_trade_no);
                     	String return_code = (String)resultMap.get("return_code");
-                    
+						String resXml = "<xml>" + 
+            		 				 "<return_code><![CDATA[SUCCESS]]></return_code>" + 
+            		 				 "<return_msg><![CDATA[OK]]></return_msg>" + 
+            		 				 "</xml>";
+		            		 try {
+		                         // 通过response 回复微信
+		                         BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
+		                         out.write(resXml.getBytes());
+		                         out.flush();
+		                         out.close();
+		                     } catch (IOException e) {
+		                         e.printStackTrace();
+		                     }  
                     	if("SUCCESS".equals(return_code)){
-                    		String out_trade_no = (String)resultMap.get("out_trade_no");
-                    		System.out.println("weixin pay sucess,out_trade_no:"+out_trade_no);
                     		//处理支付成功以后的逻辑，这里是写入相关信息到文本文件里面，如果有订单的处理订单
                     		try{
                     			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh24:mm:ss");
-                    			String content = out_trade_no+"        "+sdf.format(new Date());
-                    			String fileUrl = System.getProperty("user.dir") + File.separator+"WebContent" + File.separator + "data" + File.separator + "order.txt";
                     			//TxtUtil.writeToTxt(content, fileUrl);
                     			InfoVo info = new InfoVo();
                     			String iccid =out_trade_no.substring(2, out_trade_no.length()- 8) ;
@@ -358,21 +375,23 @@ public class WeixinPayController {
                     				service.insertHistory(history);
                     				service.updateCardStatus(iccid);
                     			}
-                    			
                     			////////返利  企业付款 20200424 start 
-
+                    			
                     			//通过iccid 号码获取所有关联的返利人员
-
+                    			
                     			List<Rebate> rebateList = this.getRebatePersonList(iccid);
                     			if(rebateList.size()!=0 || rebateList != null)
                     			{
+                    				int u = 1 ;
                     				for (Rebate rebate : rebateList) {
-                        				//根据返利比例计算 返利钱数                      				
-    									this.enterprisePayment(request, response, rebate, "返利");
-    									
-    								}
+                    					System.out.println("返利第" + u +"次");
+                    					//根据返利比例计算 返利钱数                      				
+                    					this.enterprisePayment(request, response, rebate, "返利");
+                    					u++;
+                    				}
                     			}
                     			///////返利 企业付款 20200424 end
+                    			
                     		}catch(Exception e){
                     			e.printStackTrace();
                     		}
@@ -439,7 +458,7 @@ public class WeixinPayController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String url = "http://www.pay-sf.com/card/querySingle?iccid=" +  iccid ;
+		String url = "http://iot.iot10.cn/cmoit/info/c?iccid=" +  iccid ;
 		response.sendRedirect(url);
 		return null;
 	}
@@ -760,145 +779,38 @@ public class WeixinPayController {
 		return null;
 	}
 	
+	@RequestMapping("/init")
+	public String act(HttpServletRequest request, HttpServletResponse response,String userid){
+		//授权后要跳转的链接
+		//邀约传web   活动传act   文章传article
+		String backUri = baseUrl + "/wx/checkact/"+userid  ;
+		//URLEncoder.encode 后可以在backUri 的url里面获取传递的所有参数
+		backUri = URLEncoder.encode(backUri);
+		//scope 参数视各自需求而定，这里用scope=snsapi_base 不弹出授权页面直接授权目的只获取统一支付接口的openid
+		String url = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
+				"appid=" + WxPayConfig.appid +
+				"&redirect_uri=" +
+				 backUri+
+				"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
+		System.out.println("url:" + url);
+		return "redirect:"+url;
+	}
 	
-	/**
-	 * 测试用 可以删除
-	 * @param request
-	 * @param response
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping("/toPayTest")
-	@ResponseBody
-	public String toPayTest(HttpServletRequest request, HttpServletResponse response, Model model){
-		try {
-			String orderId = request.getParameter("orderId");
-			System.out.println("in toPay,orderId:" + orderId);
-			
-			String totalFeeStr = request.getParameter("totalFee");
-			Float totalFee = 0.0f;
-			
-			if(StringUtils.isNotEmpty(totalFeeStr)){
-				totalFee = new Float(totalFeeStr);
-			}
-			//TODO 测试用代码 totalFee = 0.01f ;
-			//网页授权后获取传递的参数
-			//String userId = request.getParameter("userId"); 	
-			String code = request.getParameter("code");
-			System.out.println("code:"+code);
-			if(code == null){
-				  return null ;
-			}
-			//获取统一下单需要的openid
-			String openId =getOpenId(code);
-			
-			
-			//获取openId后调用统一支付接口https://api.mch.weixin.qq.com/pay/unifiedorder
-			//随机数 
-			//String nonce_str = "1add1a30ac87aa2db72f57a2375d8fec";
-			String nonce_str = UUID.randomUUID().toString().replaceAll("-", "");
-			//商品描述
-			String body = orderId;
-			//商户订单号
-			String out_trade_no = orderId;
-			//订单生成的机器 IP
-			String spbill_create_ip = request.getRemoteAddr();
-			//总金额
-			//TODO
-			Integer total_fee = Math.round(totalFee*100);
-			//Integer total_fee = 1;
-			
-			//商户号
-			//String mch_id = partner;
-			//子商户号  非必输
-			//String sub_mch_id="";
-			//设备号   非必输
-			//String device_info="";
-			//附加数据
-			//String attach = userId;
-			//总金额以分为单位，不带小数点
-			//int total_fee = intMoney;
-			//订 单 生 成 时 间   非必输
-			//String time_start ="";
-			//订单失效时间      非必输
-			//String time_expire = "";
-			//商品标记   非必输
-			//String goods_tag = "";
-			//非必输
-			//String product_id = "";
-					
-			//这里notify_url是 支付完成后微信发给该链接信息，可以判断会员是否支付成功，改变订单状态等。
-			String notify_url = baseUrl + "/wx/notifyUrl";
-			
-			SortedMap<String, String> packageParams = new TreeMap<String, String>();
-			packageParams.put("appid", WxPayConfig.appid);
-			packageParams.put("mch_id", WxPayConfig.partner);
-			packageParams.put("nonce_str", nonce_str);
-			packageParams.put("body", body);
-			packageParams.put("out_trade_no", out_trade_no);
-			packageParams.put("total_fee", total_fee+"");
-			packageParams.put("spbill_create_ip", spbill_create_ip);
-			packageParams.put("notify_url", notify_url);
-			packageParams.put("trade_type", WxPayConfig.trade_type);  
-			packageParams.put("openid", openId);  
-
-			RequestHandler reqHandler = new RequestHandler(request, response);
-			reqHandler.init(WxPayConfig.appid, WxPayConfig.appsecret, WxPayConfig.partnerkey);
-			
-			String sign = reqHandler.createSign(packageParams);
-			System.out.println("sign:"+sign);
-			String xml="<xml>"+
-					"<appid>"+WxPayConfig.appid+"</appid>"+
-					"<mch_id>"+WxPayConfig.partner+"</mch_id>"+
-					"<nonce_str>"+nonce_str+"</nonce_str>"+
-					"<sign>"+sign+"</sign>"+
-					"<body><![CDATA["+body+"]]></body>"+
-					"<out_trade_no>"+out_trade_no+"</out_trade_no>"+
-					"<total_fee>"+total_fee+""+"</total_fee>"+
-					"<spbill_create_ip>"+spbill_create_ip+"</spbill_create_ip>"+
-					"<notify_url>"+notify_url+"</notify_url>"+
-					"<trade_type>"+WxPayConfig.trade_type+"</trade_type>"+
-					"<openid>"+openId+"</openid>"+
-					"</xml>";
-			System.out.println("xml："+xml);
-			
-			String createOrderURL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-			String prepay_id="";
-			try {
-				prepay_id = WeixinPayUtil.getPayNo(createOrderURL, xml);
-				System.out.println("prepay_id:" + prepay_id);
-				if(prepay_id.equals("")){
-					request.setAttribute("ErrorMsg", "统一支付接口获取预支付订单出错");
-					response.sendRedirect("error.jsp");
-				}
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-			SortedMap<String, String> finalpackage = new TreeMap<String, String>();
-			String timestamp = Sha1Util.getTimeStamp();
-			String packages = "prepay_id="+prepay_id;
-			finalpackage.put("appId", WxPayConfig.appid);
-			finalpackage.put("timeStamp", timestamp);
-			finalpackage.put("nonceStr", nonce_str);
-			finalpackage.put("package", packages);
-			finalpackage.put("signType", WxPayConfig.signType);
-			String finalsign = reqHandler.createSign(finalpackage);
-			System.out.println("/jsapi?appid="+WxPayConfig.appid+"&timeStamp="+timestamp+"&nonceStr="+nonce_str+"&package="+packages+"&sign="+finalsign);
-			
-			model.addAttribute("appid", WxPayConfig.appid);
-			model.addAttribute("timeStamp", timestamp);
-			model.addAttribute("nonceStr", nonce_str);
-			model.addAttribute("packageValue", packages);
-			model.addAttribute("sign", finalsign);
-			
-			model.addAttribute("bizOrderId", orderId);
-			model.addAttribute("orderId", orderId);
-			model.addAttribute("payPrice", total_fee);
-			model.addAttribute("iccid", orderId.substring(2, orderId.length()- 8));
-			return "/jsapi";
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
-		return null;
+	@RequestMapping("/checkact/{userid}")
+	public  String getUserInfo(HttpServletRequest request, HttpServletResponse response , @PathVariable("userid") Integer userid ) throws IOException{
+		ModelAndView mv = new ModelAndView();
+		String code =request.getParameter("code");
+		String user = request.getParameter("userid");
+	      //第二步：通过code换取网页授权access_token
+	         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="+WxPayConfig.appid
+	                + "&secret="+WxPayConfig.appsecret
+	                + "&code="+code
+	                + "&grant_type=authorization_code";
+	        System.out.println("url:"+url);
+	        JSONObject jsonObject = WXAuthUtil.doGetJson(url);
+	        System.out.println(jsonObject);
+	        String openid = jsonObject.getString("openid");
+	        userService.updateOpenID(userid, openid);
+	        return "cmoit/success";
 	}
 }

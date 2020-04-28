@@ -120,6 +120,7 @@ public class WeixinPayUtil {
 		}
 
 		Map m = new HashMap();
+		strxml = new String(strxml.getBytes("GBK"),"UTF-8");
 		InputStream in = String2Inputstream(strxml);
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = builder.build(in);

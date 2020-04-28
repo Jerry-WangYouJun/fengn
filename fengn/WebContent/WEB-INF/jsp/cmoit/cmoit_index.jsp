@@ -219,6 +219,9 @@
                         <ul class="nav sub" id="cmoit_kickback">
                         </ul>
                     </li>
+                     <li><a href="#" class="st-bag" onclick='addTab("packageMa","${pageContext.request.contextPath}/cmoit/init.jsp","维护套餐")'>
+                               		 绑定返佣微信号</a>
+                     </li>
                 </ul>
             </div>
             <!-- End .sidebar-inner -->

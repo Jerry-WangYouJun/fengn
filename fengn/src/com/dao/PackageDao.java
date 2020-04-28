@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.model.User;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -147,10 +148,10 @@ public class PackageDao {
 	public Rebate queryByIccId(String iccId) {
 		// TODO Auto-generated method stub
 		StringBuffer sb = new StringBuffer();
-		sb.append("select t_package_ref.*,a_user.openId,cmcc_card_agent.iccid,(t_package_ref.pacrenew - t_package_ref.paccost) as amount from cmcc_card_agent ");
-		sb.append(" left join t_package_ref on cmcc_card_agent.pacid = t_package_ref.pacid ");
-		sb.append(" left join a_user  on a_user.agentid = cmcc_card_agent.agentid ");
-		sb.append(" where  t_package_ref.agentid = cmcc_card_agent.agentid ");
+		sb.append("select t_package_ref.*,a_user.openId,cmoit_card_agent.iccid,(t_package_ref.pacrenew - t_package_ref.paccost) as amount from cmoit_card_agent ");
+		sb.append(" left join t_package_ref on cmoit_card_agent.pacid = t_package_ref.pacid ");
+		sb.append(" left join a_user  on a_user.agentid = cmoit_card_agent.agentid ");
+		sb.append(" where  t_package_ref.agentid = cmoit_card_agent.agentid ");
 		sb.append("and iccid =? ");
 		String sql =sb.toString();
 		System.out.println("sql========"+sql); 
@@ -206,4 +207,7 @@ public class PackageDao {
 		});
 		return rebate;
 	}
+
+
+
 }

@@ -41,6 +41,10 @@ public class PackagesService {
 	public int queryCardTotal(Packages pac) {
 		return dao.queryTotal(pac);
 	}
+	
+	public Packages selectPackagesById(Integer pacid){
+		return  pacDao.selectByPrimaryKey(pacid);
+	}
 
 
 	public void insertPacRef(String pacids, String agentid, String parentAgentId) {
@@ -57,6 +61,10 @@ public class PackagesService {
 
 	public List<Packages> getPacListByAgentId(String agentId) {
 		return dao.getPacListByAgentId(agentId);
+	}
+	
+	public Rebate getRebateByIccid(String iccid){
+		return dao.queryByIccId(iccid);
 	}
 	
 	public List<Rebate> getRebatePersonList(String iccId) {

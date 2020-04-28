@@ -119,6 +119,13 @@ public class UserDao {
         });
 	}
 	
+	public void updateOpenID(Integer userid , String openid) {
+		 jdbcTemplate.update(  
+	                "update a_user set  openid = ?  where id = ?",   
+	                new Object[]{openid,userid},   
+	                new int[]{java.sql.Types.VARCHAR , java.sql.Types.INTEGER});  
+	}
+	
 	public void delete(Integer id) {
 		 jdbcTemplate.update(  
 	                "delete from a_user where agentid = ?",   

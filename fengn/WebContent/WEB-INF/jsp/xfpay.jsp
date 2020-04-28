@@ -30,7 +30,7 @@
 		</div>
 	 <script type="text/javascript">
 	    function doWeixinPay(){
-	    		window.location.href="${basePath}/wx/userAuth?totalFee="+ ${pac.renew} + "&iccid=${iccid}";
+	    		window.location.href="${basePath}/wx/userAuth?totalFee=${pac.renew}&iccid=${iccid}&pacid=${pac.id}";
 	    }
 	 </script>
 

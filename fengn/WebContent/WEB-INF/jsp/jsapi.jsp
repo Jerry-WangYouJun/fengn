@@ -57,9 +57,9 @@ System.out.println("in jsapi.jsp");
 			</div>
 			<div role="tabpanel" class="tab-pane active" style="margin-top: 10px;">
 				<div class="container">
-					<h3>120M 12个月（每个月10M）</h3>
-					<p>每月10M全国流量，流量月底清零，流量超出停机，可随时累加套餐包。</p>
-					<h3 style="float: left;">支付金额：￥18</h3>
+					<h3> ${pac.typename }</h3>
+					<p> ${pac.discrip }</p>
+					<h3 style="float: left;">支付金额：￥${pac.renew }</h3>
 				</div>
 			</div>
 

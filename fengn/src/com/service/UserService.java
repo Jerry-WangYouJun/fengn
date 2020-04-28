@@ -43,6 +43,10 @@ public class UserService {
 		
 	}
 
+	public void updateOpenID(Integer userID , String openid) {
+		dao.updateOpenID(userID , openid);
+		
+	}
 	public void delete(Integer id) {
 		dao.delete(id);
 	}

@@ -31,6 +31,7 @@ public class CMoitUserController {
 			session.setAttribute("agentId", user.getAgentId());
 			session.setAttribute("roleid", user.getRoleId());
 			session.setAttribute("groupId", user.getGroupId());
+			session.setAttribute("userid",  user.getId());
 //			if(ContextString.ROLE_ADMIN.equals(user.getRoleId())
 //					|| ContextString.ROLE_AGENT.equals(user.getRoleId())) {
 //				
