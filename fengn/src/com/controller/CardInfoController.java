@@ -70,7 +70,7 @@ public class CardInfoController {
 	    @RequestMapping("/searchInit")
 	    public ModelAndView getSearchInit(){
 	    	ModelAndView mv = new ModelAndView("search");
-	    	Map<String, String> ret = JsSignUtil.sign("http://www.pay-sf.com/card/searchInit");
+	    	Map<String, String> ret = JsSignUtil.sign("http://iot.iot10.cn/card/searchInit");
 	    	mv.addObject("ret", ret);
 	    	return mv ;
 	    }

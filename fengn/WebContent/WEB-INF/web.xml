@@ -5,7 +5,7 @@
 	id="WebApp_ID" version="3.0">
 	<display-name>fengn</display-name>
 	<welcome-file-list>
-		<welcome-file>/WEB-INF/jsp/index.jsp</welcome-file>
+		<welcome-file>/WEB-INF/jsp/cmoit/login.jsp</welcome-file>
 		<welcome-file>/WEB-INF/jsp/hello.jsp</welcome-file>
 	</welcome-file-list>
 	<context-param>

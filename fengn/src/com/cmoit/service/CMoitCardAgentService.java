@@ -114,7 +114,7 @@ public class CMoitCardAgentService {
 				 sql += "and ag.name like '%"+qo.getAgentName().trim()+"%' ";
 			 }
 			 if(StringUtils.isNotEmpty(qo.getSimNum())){
-				 sql += "and c.iccid='"+qo.getSimNum().trim()+"' ";
+				 sql += "and c.msisdn='"+qo.getSimNum().trim()+"' ";
 			 }
 			 if(StringUtils.isNotEmpty(qo.getActiveStartTime())){
 					sql += "and c.openDate>='"+qo.getActiveStartTime().trim()+"' ";
@@ -134,112 +134,13 @@ public class CMoitCardAgentService {
 		 }
 
 
-	public List<Map<String,String>> queryAllKickbackInfo(Integer id , QueryData qo ,  Pagination page , int timeType , String table) {
-		List<Map<String,String>>  list = new ArrayList<>();
-		String[] tableList = table.split(",");
-		String sql = "select z.iccid, z.money, z.packageType, z.update_date, z.pacid,r.paccost,z.money - IFNULL(r.paccost, z.cost) kickback from (";
-		sql += "select * from (";
-		for(int i=0;i<tableList.length;i++){
-			sql += "select h.iccid , h.money , h.packageType , h.update_date , a.pacid, u.cost "
-					+ "from u_history h , "+tableList[i]+"_card_agent a , mlb_"+tableList[i]+"_card c , a_agent u "
-					+ " left join t_package p on p.id=u.type "
-					+ " where h.iccid = c.guid and c.guid = a.iccid "
-					+ " and  u.id = a.agentid  and  u.id = " + id  ;
-			if(StringUtils.isNotEmpty(qo.getDateStart())){
-				sql += " and h.update_date >= '" + qo.getDateStart() + "'" ;
-			}
-			if(StringUtils.isNotEmpty(qo.getDateEnd())){
-				sql += " and  h.update_date <= '" + qo.getDateEnd() + "'" ;
-			}
-			if(timeType == 7 ) {
-				sql += " and  DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(h.update_date)";
-			}else if(timeType == 30) {
-				sql += " and DATE_FORMAT( h.update_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )";
-			}else if(timeType == 60) {
-				sql +=" and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( h.update_date, '%Y%m' ) ) =1";
-			}
-			if(StringUtils.isNotEmpty(qo.getIccidStart())){
-				sql += " and c.guid >= '" + qo.getIccidStart() + "' " ;
-			}
-			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
-				sql += " and  c.guid <= '" + qo.getIccidEnd() + "' " ;
-			}
-			if(StringUtils.isNotEmpty(qo.getActiveStartTime())){
-				sql += "  and h.update_date>= '" + qo.getActiveStartTime() + "' " ;
-			}
-			if(StringUtils.isNotEmpty(qo.getActiveEndTime())){
-				sql += "  and h.update_date<= '" + qo.getActiveEndTime() + "' " ;
-			}
-			if(StringUtils.isNotEmpty(qo.getPackageId())){
-				sql += "  and A.pacid = '" + qo.getPackageId() + "' " ;
-			}
-			if(tableList.length > (i+1)){
-				sql+=" union all ";
-			}
-		}
-		sql += " ) m ) z LEFT JOIN t_package p ON p.id = z.pacid left join t_package_ref r on p.id=r.pacid where r.agentid='"+id+"' order by z.update_date  desc ";
-		String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
-		list = dao.queryKickbackList(finalSql);
-		return  list;
-	}
-
-	public Map<String , Double > queryAllKickbackTotal(Integer agentid ,  QueryData qo  , int timeType,String table){
-		String[] tableList = table.split(",");
-		String sql = "select z.iccid, z.money, z.packageType, z.update_date, z.pacid,r.paccost,z.money - IFNULL(r.paccost, z.cost) kickback from (";
-		sql = "select count(*) total,sum(x.kickback) sumKick from (";
-		sql += "select z.iccid, z.money, z.packageType, z.update_date, z.pacid,z.money - IFNULL(r.paccost, z.cost) kickback from (";
-		sql += "select * from (";
-		for(int i=0;i<tableList.length;i++){
-			sql += "select h.iccid , h.money , h.packageType , h.update_date ,  a.pacid, u.cost "
-					+ "from u_history h , "+tableList[i]+"_card_agent a , mlb_"+tableList[i]+"_card c , a_agent u "
-//					+ " left join t_package p on p.id=u.type "
-					+ " where h.iccid = c.guid and c.guid = a.iccid "
-					+ " and  u.id = a.agentid  and  u.id = " + agentid  ;
-			if(StringUtils.isNotEmpty(qo.getDateStart())){
-				sql += " and h.update_date >= '" + qo.getDateStart() + "'" ;
-			}
-			if(StringUtils.isNotEmpty(qo.getDateEnd())){
-				sql += " and  h.update_date <= '" + qo.getDateEnd() + "'" ;
-			}
-			if(timeType == 7 ) {
-				sql += " and  DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(h.update_date)";
-			}else if(timeType == 30) {
-				sql += " and DATE_FORMAT( h.update_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )";
-			}else if(timeType == 60) {
-				sql +=" and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( h.update_date, '%Y%m' ) ) =1";
-			}
-			if(StringUtils.isNotEmpty(qo.getIccidStart())){
-				sql += " and c.guid >= '" + qo.getIccidStart() + "' " ;
-			}
-			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
-				sql += " and  c.guid <= '" + qo.getIccidEnd() + "' " ;
-			}
-			if(StringUtils.isNotEmpty(qo.getActiveStartTime())){
-				sql += "  and  h.update_date>= '" + qo.getActiveStartTime() + "' " ;
-			}
-			if(StringUtils.isNotEmpty(qo.getActiveEndTime())){
-				sql += "  and  h.update_date<= '" + qo.getActiveEndTime() + "' " ;
-			}
-			if(StringUtils.isNotEmpty(qo.getPackageId())){
-				sql += "  and  A.pacid = '" + qo.getPackageId() + "' " ;
-			}
-			if(tableList.length > (i+1)){
-				sql+=" union all ";
-			}
-		}
-		sql +=" ) m ) z LEFT JOIN t_package p ON p.id = z.pacid left join t_package_ref r on p.id=r.pacid where r.agentid='"+agentid+"') x";
-
-		return dao.querySumKick(sql);
-	}
-
 
 		public List<Map<String,String>> queryKickbackInfo(Integer id , QueryData qo ,  Pagination page , int timeType , String table) {
 			List<Map<String,String>>  list = new ArrayList<>();
 			String sql = "select z.iccid, z.money, z.packageType, z.update_date, z.pacid,r.paccost,z.money - IFNULL(r.paccost, z.cost) kickback  from (";
-			sql += "select h.iccid , h.money , p.discrip  packageType , h.update_date ,  a.pacid, u.cost "
-					+ "from u_history h , "+table+"_card_agent a , "+table+"_card c , a_agent u  , t_package p  "
-					+ " where h.iccid = c.iccid and c.iccid = a.iccid  and a.pacid = p.id  "
-					+ " and  u.id = a.agentid  and  u.id = " + id  ;
+			sql += "select h.iccid , h.money , h.package_id pacid  , p.discrip  packageType , h.update_date ,  u.cost "
+					+ "from history h ,  a_agent u  , t_package p  "
+					+ " where  h.package_id = p.id  and  u.id = h.agentid  and  u.id = " + id  ;
 			if(StringUtils.isNotEmpty(qo.getDateStart())){
 				 sql += " and h.update_date >= '" + qo.getDateStart() + "'" ;
 			}
@@ -265,10 +166,9 @@ public class CMoitCardAgentService {
 
 			 String sql = "select count(*) total,sum(x.kickback) sumKick from (";
 			 sql += "select z.iccid, z.money, z.packageType, z.update_date, z.pacid,z.money - IFNULL(r.paccost, z.cost) kickback from (";
-			 sql += "select h.iccid , h.money , h.packageType , h.update_date ,  a.pacid, u.cost "
-					 + "from u_history h , "+table+"_card_agent a , "+table+"_card c , a_agent u , t_package p   "
-					 + " where h.iccid = c.iccid and c.iccid = a.iccid  and a.pacid = p.id   "
-					 + " and  u.id = a.agentid  and  u.id = " + agentid  ;
+			 sql += "select h.iccid , h.money , p.discrip  packageType , h.update_date ,  u.cost , h.package_id pacid "
+						+ "from history h ,  a_agent u  , t_package p  "
+						+ " where   h.package_id = p.id  and  u.id = h.agentid  and  u.id = " + agentid  ;
 				if(StringUtils.isNotEmpty(qo.getDateStart())){
 					 sql += " and h.update_date >= '" + qo.getDateStart() + "'" ;
 				}

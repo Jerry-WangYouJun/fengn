@@ -36,35 +36,7 @@ public class CMOIT_API_Util {
 	
 	public static void main(String[] args) {
 		try {
-			
-			String msisdn = "1440385320015";
-//			String url = getCardInfoByMSISDN( msisdn ,  URL_CARD_INFO , EBID_CARD_GPRS_USED  );
-//			JSONObject  cardJson = JSONObject.fromObject(getReturnData(url));
-			
-			
-			String gprsUrl = getURLByMSISDNS(msisdn ,  URL_CARD_PACKAGE_BATCH , EBID_CARD_PACKAGE_BATCH );
-			JSONObject  gprsJson =   JSONObject.fromObject(getReturnData(gprsUrl));
-			if("0".equals(gprsJson.get("status"))){
-				JSONArray  result = (JSONArray)gprsJson.get("result");
-				JSONObject r = result.getJSONObject(0);
-				System.out.println(r.get("total_gprs"));
-			}else{
-				System.out.println(gprsJson.toString());
-				
-			}
-			
-			
-//			String gprsUrl = getURLByMSISDN(msisdn ,  URL_CARD_GPRS_USED , EBID_CARD_GPRS_USED );
-//			JSONObject  gprsJson =   JSONObject.fromObject(getReturnData(gprsUrl));
-//			if("0".equals(gprsJson.get("status"))){
-//				JSONArray  result = (JSONArray)gprsJson.get("result");
-//				JSONObject r = result.getJSONObject(0);
-//				System.out.println(r.get("total_gprs"));
-//			}else{
-//				System.out.println(gprsJson.toString());
-//				
-//			}
-			  
+			getReturnData("http://iot.iot10.cn/mlb/order?iccid=999");			  
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -85,10 +57,10 @@ public class CMOIT_API_Util {
 		JSONObject  gprsJson =   JSONObject.fromObject(getReturnData(gprsUrl));
 		if("0".equals(gprsJson.get("status"))){
 			JSONArray  resultArrs = (JSONArray)gprsJson.get("result");
-			JSONObject result = resultArrs.getJSONObject(0);
-			System.out.println(result.get("gprsTotal"));
-			card.setGprssum((result.getDouble("gprsTotal")) + "");
-			card.setGprsused(1000+"");
+				JSONObject result = resultArrs.getJSONObject(0);
+				System.out.println(result.get("gprsTotal"));
+				card.setGprssum((result.getDouble("gprsTotal")) + "");
+				card.setGprsused(1000+"");
 		}else{
 			System.out.println(gprsJson.toString());
 			

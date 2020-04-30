@@ -366,12 +366,14 @@ public class WeixinPayController {
                     			info.setOrderNo(out_trade_no);
                     			service.queryHistoryList(info);
                     			if(info.getHistory().size() == 0) {
+                    				Rebate rebatePerson = packagesService.getRebateByIccid(iccid);
                     				History  history = new History();
                     				history.setOrderNo(out_trade_no);
                     				history.setIccid(iccid);
-                    				history.setMoney(WxPayConfig.money);
+                    				history.setMoney(rebatePerson.getPacrenew());
                     				history.setUpdateDate(DateUtil.formatDate(new Date(), "yyyy-MM-dd"));
-                    				history.setPackageId(WxPayConfig.packageId);
+                    				history.setPackageId(rebatePerson.getPackageId());
+                    				history.setAgentid(1);
                     				service.insertHistory(history);
                     				service.updateCardStatus(iccid);
                     			}
@@ -463,6 +465,96 @@ public class WeixinPayController {
 		return null;
 	}
 	
+	
+	
+	/**
+	 *  获取返利人员所有必要数据 
+	 *  rebate 为单独添加模型
+	 * @param iccId
+	 * @return
+	 */
+//	@RequestMapping("/testRebatePerson")
+//	@ResponseBody
+	public List<Rebate> getRebatePersonList(String iccId)
+	{
+		return packagesService.getRebatePersonList(iccId);
+	}
+	
+	
+	
+	
+	@RequestMapping("/init")
+	public String act(HttpServletRequest request, HttpServletResponse response,String userid){
+		//授权后要跳转的链接
+		//邀约传web   活动传act   文章传article
+		String backUri = baseUrl + "/wx/checkact/"+userid  ;
+		//URLEncoder.encode 后可以在backUri 的url里面获取传递的所有参数
+		backUri = URLEncoder.encode(backUri);
+		//scope 参数视各自需求而定，这里用scope=snsapi_base 不弹出授权页面直接授权目的只获取统一支付接口的openid
+		String url = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
+				"appid=" + WxPayConfig.appid +
+				"&redirect_uri=" +
+				 backUri+
+				"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
+		System.out.println("url:" + url);
+		return "redirect:"+url;
+	}
+	
+	@RequestMapping("/checkact/{userid}")
+	public  String getUserInfo(HttpServletRequest request, HttpServletResponse response , @PathVariable("userid") Integer userid ) throws IOException{
+		ModelAndView mv = new ModelAndView();
+		String code =request.getParameter("code");
+		String user = request.getParameter("userid");
+	      //第二步：通过code换取网页授权access_token
+	         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="+WxPayConfig.appid
+	                + "&secret="+WxPayConfig.appsecret
+	                + "&code="+code
+	                + "&grant_type=authorization_code";
+	        System.out.println("url:"+url);
+	        JSONObject jsonObject = WXAuthUtil.doGetJson(url);
+	        System.out.println(jsonObject);
+	        String openid = jsonObject.getString("openid");
+	        userService.updateOpenID(userid, openid);
+	        return "cmoit/success";
+	}
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * 获取 应该返利的人员list （废弃）
+	 * @param iccid
+	 */
+	public List<User> getRebatePerson(String iccId)
+	{
+		List<User> userList = new ArrayList<User>();	
+		userList = userService.getRebatePerson(iccId);
+		return userList;
+	}
+
+	/**
+	 * 通过wx接口获取 大量openId 
+	 * @return
+	 */
+	@RequestMapping("/getAllUserOpenId")
+	@ResponseBody
+	public String getAllUserOpenId()
+	{
+		try {
+			//获取所有人的openIdList 最多10000个
+			String openIdList = WeixinPayUtil.getUserOpenIdList();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+
 	/**
 	 * 企业付款功能  （测试用 固定写死openId 需要传入 金额 amount）
 	 * @param request
@@ -592,68 +684,6 @@ public class WeixinPayController {
 	}
 	
 	/**
-	 * 获取 应该返利的人员list （废弃）
-	 * @param iccid
-	 */
-	public List<User> getRebatePerson(String iccId)
-	{
-		List<User> userList = new ArrayList<User>();	
-		userList = userService.getRebatePerson(iccId);
-		return userList;
-	}
-	
-	/**
-	 * 测试用 （废弃）
-	 * @param request
-	 * @param response
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping("/testPerson")
-	@ResponseBody
-	public List<User> getRebatePerson1(HttpServletRequest request, HttpServletResponse response, Model model)
-	{
-		String iccId = request.getParameter("iccId");
-		List<User> userList = new ArrayList<User>();	
-		userList = userService.getRebatePerson(iccId);
-		return userList;
-	}
-	
-	/**
-	 *  获取返利人员所有必要数据 
-	 *  rebate 为单独添加模型
-	 * @param iccId
-	 * @return
-	 */
-//	@RequestMapping("/testRebatePerson")
-//	@ResponseBody
-	public List<Rebate> getRebatePersonList(String iccId)
-	{
-		return packagesService.getRebatePersonList(iccId);
-	}
-	
-	
-	/**
-	 * 通过wx接口获取 大量openId 
-	 * @return
-	 */
-	@RequestMapping("/getAllUserOpenId")
-	@ResponseBody
-	public String getAllUserOpenId()
-	{
-		try {
-			//获取所有人的openIdList 最多10000个
-			String openIdList = WeixinPayUtil.getUserOpenIdList();
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	
-	/**
 	 *  企业付款   （内部调用）
 	 * @param request
 	 * @param response
@@ -762,11 +792,13 @@ public class WeixinPayController {
 			/////////将企业付款记录 存入数据库  start
 				
 				History  history = new History();
+				history.setAgentid(rebate.getAgentId());
 				history.setOrderNo(payment_no);					//微信支付返回的微信付款单号
 				history.setIccid(rebate.getIccId());			//支付的iccId
 				history.setMoney(rebate.getAmount());			//支付的钱数
 				history.setUpdateDate(DateUtil.formatDate(new Date(), "yyyy-MM-dd"));	//时间
 				history.setPackageId(rebate.getPackageId());	//套餐的id 
+				
 				service.insertHistory(history);	
 				
 			////////将企业付款记录 存入数据库 end 
@@ -777,40 +809,5 @@ public class WeixinPayController {
 			e1.printStackTrace();
 		}
 		return null;
-	}
-	
-	@RequestMapping("/init")
-	public String act(HttpServletRequest request, HttpServletResponse response,String userid){
-		//授权后要跳转的链接
-		//邀约传web   活动传act   文章传article
-		String backUri = baseUrl + "/wx/checkact/"+userid  ;
-		//URLEncoder.encode 后可以在backUri 的url里面获取传递的所有参数
-		backUri = URLEncoder.encode(backUri);
-		//scope 参数视各自需求而定，这里用scope=snsapi_base 不弹出授权页面直接授权目的只获取统一支付接口的openid
-		String url = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
-				"appid=" + WxPayConfig.appid +
-				"&redirect_uri=" +
-				 backUri+
-				"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
-		System.out.println("url:" + url);
-		return "redirect:"+url;
-	}
-	
-	@RequestMapping("/checkact/{userid}")
-	public  String getUserInfo(HttpServletRequest request, HttpServletResponse response , @PathVariable("userid") Integer userid ) throws IOException{
-		ModelAndView mv = new ModelAndView();
-		String code =request.getParameter("code");
-		String user = request.getParameter("userid");
-	      //第二步：通过code换取网页授权access_token
-	         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="+WxPayConfig.appid
-	                + "&secret="+WxPayConfig.appsecret
-	                + "&code="+code
-	                + "&grant_type=authorization_code";
-	        System.out.println("url:"+url);
-	        JSONObject jsonObject = WXAuthUtil.doGetJson(url);
-	        System.out.println(jsonObject);
-	        String openid = jsonObject.getString("openid");
-	        userService.updateOpenID(userid, openid);
-	        return "cmoit/success";
 	}
 }

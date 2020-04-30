@@ -47,20 +47,20 @@
 		<div class="container-fluid">
 			<div class="row">
 				<!-- Tab panes -->
-				<form  action = "/card/querySingle" method="post">
+				<form  action = "/cmoit/info/c" method="post">
 					<div class="col-lg-12">
 						<div class="input-group">
 							<input name="iccid"  type="text" class="form-control input"   required>
 							<a class="clear" onclick="cleardiv()"></a>
 							<span class="input-group-btn">
-								<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-camera"></span></button>
+								<button class="btn btn-default"  onclick="scan()" type="button"><span class="glyphicon glyphicon-camera"></span></button>
 							</span>
 						</div>
 						<!-- /input-group -->
 						<button type="submit" class="btn btn-primary btn-lg btn-block" style="border: none;" onclick="window.location.href=''" >查询续费</button>
 						<div class="img-box">
 							<img src="${basePath}/img/img.png"  onclick="scan()" />
-							<h5>点击"扫码"，对着卡的条形码扫一扫</h5>
+							<h5>点击此处，对着卡的条形码扫一扫</h5>
 						</div>
 					</div>
 				</form>

@@ -143,7 +143,7 @@
 		<div class="header-wrap">
 			
 			<div class="lt-part1-simInfo" style="padding-top: 5px;">
-				卡号:<span class="cardNo">${cmoitInfo.msisdn}</span>
+				卡号:<span class="cardNo">${cmoitInfo.msisdn}${info.userStatus }</span>
 				<div class="simInfo">
 					<span class="IMEInum">ICCID号:<i>${cmoitInfo.iccid}</i></span>
 				</div>
@@ -154,8 +154,8 @@
 				style="display: inline-block;">未实名认证</span> <span
 				class="btn-top pointer c-green cardState-normal"
 				style="display: inline-block;">${cmoitInfo.cardstatus}${cmoitInfo.userstatus }</span> <span
-				class="btn-top pointer switchNo pull-right"><i
-				class="icon iconfont"></i>切换</span>
+				class="btn-top pointer switchNo pull-right" onclick="window.location.href='${basePath}/card/searchInit'"><i
+				class="icon iconfont" ></i>切换</span>
 		</div>
 	</div>
 	</header>
@@ -296,7 +296,7 @@
 		    		  alert('无效的iccid，请点击【切换】按钮获得iccid');
 		    		  return false ;
 		    	}
-		    	window.location.href='${basePath}/cmoit/info/xinfu_wechat_pay?iccid=${cmoitInfo.iccid}';
+		    	window.location.href='${basePath}/cmoit/info/xinfu_wechat_pay?iccid=${cmoitInfo.msisdn}';
 			// window.location.href="https://open.m-m10010.com/Html/WechatPay/Action/SimRenewalsPay_new.aspx?"+
 			// 	"simId=${cmccCard.sim}${unicomCard.sim }&iccid=${cmccCard.guid}${unicomCard.guid }&accessname=null&browser=null";
 		}

@@ -361,8 +361,9 @@ public class ResponseURLDataUtil {
 			return jsonObject;
 		}
 		
-		public static void main(String[] args) {
-			updateRenewData(1000 , "2019-01-01" , "2018-01-01");
+		public static void main(String[] args) throws UnsupportedEncodingException {
+		//	updateRenewData(1000 , "2019-01-01" , "2018-01-01");
+			getReturnData("http://iot.iot10.cn/mlb/order?iccid=999");
 		}
 		
 }

@@ -59,16 +59,18 @@ public class CMoitCardInfoController {
 				qo.setSimNum(iccid);
 				 List<CmoitCard> list = ccaService.queryCardInfo(1, new Pagination(), qo , "cmoit");
 				 CmoitCard card =  new CmoitCard();
-				 if(list != null && list.size() > 0 ){
+				 if(list != null && list.size() > 0 && iccid.equals(list.get(0).getMsisdn())){
 					 card	= list.get(0);
+				 }else{
+					 throw new Exception("卡号错误，请重新输入或联系管理员");
 				 }
 				 CMOIT_API_Util.queryCmoitDataInfo(card);
 				 mv.addObject("cmoitInfo", card);
-		    	String tel = ccaService.queryTelByICCID(iccid , "cmoit");
+		    	String tel = ccaService.queryTelByICCID(card.getIccid() , "cmoit");
 		    	mv.addObject("tel", tel);
 			} catch (Exception e) {
 				InfoVo   wrongInfo = new InfoVo();
-				wrongInfo.setUserStatus("系统错误，请联系管理员:" + e.getMessage());
+				wrongInfo.setUserStatus("卡号错误，请重新输入或联系管理员");
 				mv.addObject("info", wrongInfo);
 			}
 	    	return mv ;
@@ -110,7 +112,7 @@ public class CMoitCardInfoController {
 			 CmoitCard card =  list.get(0);
 			 Packages  pac = pacDao.selectByPrimaryKey(card.getPacid());
 	    	ModelAndView mv = new ModelAndView("xfpay");
-	    	mv.addObject("iccid", iccid);
+	    	mv.addObject("iccid", card.getIccid());
 	    	mv.addObject("pac",pac);
 	    	return mv;
 	    }

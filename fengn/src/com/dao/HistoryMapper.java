@@ -14,4 +14,6 @@ public interface HistoryMapper {
 	
 	public void deleteAll();
 
+	public void insert(UnicomHistory history);
+
 }

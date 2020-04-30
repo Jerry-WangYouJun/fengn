@@ -30,10 +30,10 @@
 		        
 		        columns : [ {   checkbox : true } ,
 		                    {field:'iccid',title:'ICCID',align:'center', valign: 'middle'},
-		    				{field:'money',title:'充值金额',align:'center', valign: 'middle'},
+		    				{field:'money',title:'转入金额',align:'center', valign: 'middle'},
 		    				{field:'packageType',title:'套餐类型',align:'center', valign: 'middle'},
-		    				{field:'update_date',title:'充值时间',align:'center', valign: 'middle'},				
-		    				{field:'kickback',title:'返佣',align:'center', valign: 'middle'}
+		    				{field:'update_date',title:'充值时间',align:'center', valign: 'middle'}		
+		    				
 			     ],  
 		        silent : true, // 刷新事件必须设置  
 		    }); 

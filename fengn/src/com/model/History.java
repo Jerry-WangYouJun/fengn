@@ -9,7 +9,7 @@ public class History {
 	 private String premark;
 	 private String iccid ; 
 	 private String orderNo ;
-	 
+	 private int agentid;
 	 
 	public String getIccid() {
 		return iccid;
@@ -59,4 +59,11 @@ public class History {
 	public void setOrderNo(String orderNo) {
 		this.orderNo = orderNo;
 	}
+	public int getAgentid() {
+		return agentid;
+	}
+	public void setAgentid(int agentid) {
+		this.agentid = agentid;
+	}
+	
 }

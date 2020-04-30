@@ -96,6 +96,31 @@
  				}
  			});
  		}
+ 		
+ 		function updatePwd(){
+ 			var pwd = prompt("请输入新密码")
+ 			var pwd2 = prompt("请再次输入密码");
+ 			if(pwd != pwd2 ){
+ 				  alert("两次密码不一致，请重新确认")
+ 				  return false;
+ 			}
+ 			if(pwd == ''){
+ 				 alert("密码不能为空")
+ 				 return false;
+ 			}
+ 			$.ajax( {
+ 				url : "${pageContext.request.contextPath}/cmoit/user/pwd" ,
+ 				type : 'post',
+ 				dataType : 'text',
+ 				data:{pwd:pwd},
+ 				success : function(data) {
+ 					alert(data)
+ 				},
+ 				error : function(transport) {
+ 					$.messager.alert('提示', "系统产生错误,请联系管理员!", "error");
+ 				}
+ 			});
+ 		}
  		$(function(){
  			if("${groupId}"=="1" || "${groupId}"=="3"){
  				//getMenu("card");
@@ -160,12 +185,13 @@
                                 <ul class="dropdown-menu right" role="menu">
                                     <li><a href="${pageContext.request.contextPath}/cmoit/user/loginOut"><i class="im-exit"></i>注销用户</a>
                                     </li>
+                                    <li><a href="####" onclick="updatePwd()">修改密码</a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="dropdown">
                                 <a href="#" data-toggle="dropdown">
                                     <img class="user-avatar" src="${pageContext.request.contextPath}/assets/img/avatars/48.jpg" alt="SuggeElson">${sessionScope.user}</a>
-                                
                             </li>
                         </ul>
                     </nav>

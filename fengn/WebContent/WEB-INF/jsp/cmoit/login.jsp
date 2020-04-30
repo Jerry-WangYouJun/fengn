@@ -24,7 +24,7 @@
   </head>
   <body class="login">
 	<div class="logo">
-		<h2 style="color: white;">物联卡管理系统2222</h2>
+		<h2 style="color: white;">物联卡管理系统</h2>
 	</div>
 
 	<div class="content">
@@ -43,7 +43,7 @@
 				<div class="controls">
 					<div class="input-icon left">
 						<i class="icon-user"></i>
-						<input class="m-wrap placeholder-no-fix boxH" type="text" placeholder="请输入用户名" name="userNo" value="admin"/>
+						<input class="m-wrap placeholder-no-fix boxH" type="text" placeholder="请输入用户名" name="userNo" />
 					</div>
 				</div>
 			</div>
@@ -52,7 +52,7 @@
 				<div class="controls">
 					<div class="input-icon left">
 						<i class="icon-lock"></i>
-						<input class="m-wrap placeholder-no-fix boxH" type="password" placeholder="请输入密码" name="pwd" value="1980zxcv"/>
+						<input class="m-wrap placeholder-no-fix boxH" type="password" placeholder="请输入密码" name="pwd" />
 					</div>
 				</div>
 			</div>
@@ -66,7 +66,7 @@
 
 	<div class="copyright">
 
-		2017 &copy; 物联卡管理系统
+		2020 &copy; 物联卡管理系统
 
 	</div>
 

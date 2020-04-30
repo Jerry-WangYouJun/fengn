@@ -14,6 +14,7 @@ import com.common.WlkAPIUtil;
 import com.dao.DataMoveDao;
 import com.model.History;
 import com.model.InfoVo;
+import com.model.Rebate;
 
 import net.sf.json.JSONObject;
 
@@ -130,8 +131,9 @@ public class CardInfoService {
 	}
 
 	public void insertHistory(History history) {
-		String  insertHistorySql = "insert history (iccid , package_id , money , update_date ,orderNo) values "
-				+ "('" + history.getIccid() + "','" + history.getPackageId() + "','" + history.getMoney() + "','" + history.getUpdateDate() + "','" + history.getOrderNo() + "' )";
+		String  insertHistorySql = "insert history (iccid , package_id , money , update_date ,orderNo ,agentid) values "
+				+ "('" + history.getIccid() + "','" + history.getPackageId() + "','" + history.getMoney() + "','"
+				+ history.getUpdateDate() + "','" + history.getOrderNo() + "','" + history.getAgentid() + "'  )";
 		dao.update(insertHistorySql);
 	}
 
@@ -144,4 +146,5 @@ public class CardInfoService {
 		dao.update(sql);
 		
 	}
+
 }

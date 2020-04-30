@@ -16,6 +16,12 @@
         #{item.imsi},#{item.packageType},#{item.packageDetail} )  
     </foreach>  
   </insert>  
+   <insert id="insert" parameterType="com.model.UnicomHistory" >
+     insert into u_history_temp (iccid ,money,update_date ,remark , imsi , packageType , packageDetail  )  
+    values 
+    (#{iccid},#{money},#{updateDate} , #{remark},
+        #{imsi},#{packageType},#{packageDetail} )  
+  </insert> 
   <insert id="insertData"  useGeneratedKeys="true">  
   		insert into u_history  (  iccid , money ,update_date ,remark , imsi , packageType , packageDetail)  
 	     select distinct  iccid , money ,update_date  ,remark , imsi , packageType , packageDetail from u_history_temp 

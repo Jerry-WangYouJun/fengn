@@ -2,7 +2,6 @@ package com.cmoit.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,25 +9,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.cmoit.model.CmoitCard;
 import com.cmoit.service.CMoitAgentService;
 import com.cmoit.service.CMoitCardAgentService;
 import com.common.CodeUtil;
-import com.model.Agent;
 import com.model.Grid;
 import com.model.Pagination;
 import com.model.QueryData;
-import com.model.UnicomInfoVo;
 import com.service.UserService;
-
-import net.sf.json.JSONObject;
 
 @RequestMapping("/cmoit/card")
 @Controller
@@ -97,21 +93,4 @@ public class CMoitAgentController {
 	    return grid;
 	}
 
-	@ResponseBody
-	@RequestMapping("/all_kickback_query/{agentId}")
-	public Grid   queryAllKickback(@PathVariable("agentId") Integer agentId, HttpServletResponse response,
-									HttpServletRequest request  ,HttpSession session , QueryData qo ) {
-		String pageNo = request.getParameter("pageNumber");
-		String pageSize = request.getParameter("pageSize");
-		//System.out.println(userName);
-		Grid grid = new Grid();
-		Pagination page =  new Pagination(pageNo, pageSize , 100) ;
-		CodeUtil.initPagination(page);
-		List<Map<String,String>>  list = cardAgentService.queryAllKickbackInfo(agentId, qo  , page , qo.getTimeType(),"cmcc,unicom");
-		Map<String , Double > map = cardAgentService.queryAllKickbackTotal(agentId , qo , qo.getTimeType(),"cmcc,unicom");
-		grid.setRows(list);
-		grid.setTotal(map.get("total").longValue());
-		return grid;
-	}
-	
 }
