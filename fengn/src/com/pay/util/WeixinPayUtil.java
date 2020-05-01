@@ -1,7 +1,8 @@
 package com.pay.util;
 
 import java.io.ByteArrayInputStream;
-import java.io.Console;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -22,29 +23,26 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.params.ClientPNames;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-import org.springframework.http.HttpEntity;
 
 import com.common.ResponseURLDataUtil;
 import com.common.StringUtils;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonAnyFormatVisitor;
 import com.pay.config.WxPayConfig;
 import com.pay.dto.WeixinInfoDTO;
 import com.pay.util.http.HttpClientConnectionManager;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import sun.misc.BASE64Encoder;
 
 /**
  * 微信支付工具类
@@ -452,7 +450,25 @@ public class WeixinPayUtil {
         return payment_no	;
     }      
 	public static void main(String[] args) {
-		
+		String path = "D:\\20190428102154.jpg";
+		InputStream in = null;
+		byte[] data = null;
+
+		try {
+			in = new FileInputStream(path);
+			data = new byte[in.available()];
+			in.read();
+			in.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		BASE64Encoder encoder = new BASE64Encoder();
+		String str = encoder.encode(data);
+		System.out.println(str);
 
 	}
 }

@@ -222,4 +222,42 @@ public class PackageDao {
 
 
 
+
+	/**
+	 * 查询麦联宝 
+	 * @param iccId
+	 * @return
+	 */
+	public Rebate queryMlbByIccId(String iccId) {
+		// TODO Auto-generated method stub
+		StringBuffer sb = new StringBuffer();
+		sb.append("select t_package_ref.*,a_user.openId,cmcc_card_agent.iccid,(15-t_package_ref.pacrenew - t_package_ref.paccost) as amount from cmoit_card_agent ");
+		sb.append(" left join t_package_ref on cmoit_card_agent.pacid = t_package_ref.pacid ");
+		sb.append(" left join a_user  on a_user.agentid = cmoit_card_agent.agentid ");
+		sb.append(" where  t_package_ref.agentid = cmoit_card_agent.agentid ");
+		sb.append("and iccid =? ");
+		String sql =sb.toString();
+		System.out.println("sql========"+sql); 
+		Rebate rebate = jdbcTemplate.queryForObject(sql, new RowMapper<Rebate>() {
+			@Override
+			public Rebate mapRow(ResultSet rs, int rowNum) throws SQLException {
+				// TODO Auto-generated method stub
+				Rebate rebate = new Rebate();
+				rebate.setAgentId(rs.getInt("agentid"));
+				rebate.setAmount(rs.getDouble("amount"));
+				rebate.setIccId(rs.getString("iccId"));
+				rebate.setParentAgentId(rs.getInt("parentagentId"));
+				rebate.setOpenId(rs.getString("openId"));
+				rebate.setPackageId(rs.getInt("pacid"));
+				rebate.setPaccost(rs.getDouble("paccost"));
+				rebate.setPacchildcost(rs.getDouble("pacchildcost"));
+				rebate.setPacrenew(rs.getDouble("pacrenew"));				
+				return rebate;
+			}			
+		},iccId);
+		return rebate;
+	}
+
+
+
 }

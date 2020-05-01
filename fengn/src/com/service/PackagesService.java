@@ -94,4 +94,31 @@ public class PackagesService {
 		// TODO Auto-generated method stub
 		return dao.queryByPacIdAndAgentId(pacids,agentid);
 	}
+	/**
+	 * 查询麦联宝返利人员
+	 * @param iccId
+	 * @return
+	 */
+	public List<Rebate> getMlbRebatePersonList(String iccId) {
+		// TODO Auto-generated method stub
+			List<Rebate> rebateList = new ArrayList<Rebate>();
+			//通过iccid 查询 cmcc_card_agent 表 获取 代理商id 与  套餐id 
+			Rebate rebatePerson = dao.queryMlbByIccId(iccId);		
+			rebateList.add(rebatePerson);
+			
+			if(rebatePerson.getParentAgentId() != 1)
+			{
+				
+				while(true)
+				{
+					rebatePerson = dao.queryByAgentIdAndPacId(rebatePerson);
+					rebateList.add(rebatePerson);
+					if(rebatePerson.getParentAgentId()==1)
+					{
+						break;
+					}
+				}
+			}	
+			return rebateList;
+	}
 }
