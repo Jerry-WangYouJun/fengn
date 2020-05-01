@@ -75,21 +75,25 @@ public class MlbBack {
 	            history.setMoney(jsonObject.getDouble("total_fee"));
 	            history.setUpdateDate(jsonObject.getString("pay_time"));
 	            historyDao.insert(history);
-	            
+	                        
 	            //////////////// 企业付款  20200501  新增 
 	            
 	            //获取所有麦联宝返利人员 
-	            List<Rebate> rebateList = this.getMlbRebatePersonList(iccid);
-    			if(rebateList.size()!=0 || rebateList != null)
-    			{
-    				int u = 1 ;
-    				for (Rebate rebate : rebateList) {
-    					System.out.println("返利第" + u +"次");
-    					//根据返利比例计算 返利钱数                      				
-    					this.enterprisePayment(request, response, rebate, "返利");
-    					u++;
-    				}
-    			}
+//	            List<Rebate> rebateList = this.getMlbRebatePersonList(iccid);
+//    			if(rebateList.size()!=0 || rebateList != null)
+//    			{
+//    				int u = 1 ;
+//    				for (Rebate rebate : rebateList) {
+//    					System.out.println("返利第" + u +"次");
+//    					//根据返利比例计算 返利钱数                      				
+//    					this.enterprisePayment(request, response, rebate, "返利");
+//    					u++;
+//    				}
+//    			}
+//	            eles
+//	            {
+//	            	System.out.println("getOrder    rebateList==null  ");
+//	            }
 	            ///////////////
 	        } catch (Exception e) {
 	            e.printStackTrace();

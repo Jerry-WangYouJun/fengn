@@ -18,6 +18,7 @@ public class Rebate  implements Serializable{
 	private double paccost;			//成本价
 	private double pacchildcost;	//子级代理商成本价
 	private double pacrenew;		//售价
+	private String remark;
 	
 	public int getAgentId() {
 		return agentId;
@@ -75,6 +76,12 @@ public class Rebate  implements Serializable{
 	}
 	public void setPackageId(int packageId) {
 		this.packageId = packageId;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	
 	

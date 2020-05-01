@@ -231,7 +231,8 @@ public class PackageDao {
 	public Rebate queryMlbByIccId(String iccId) {
 		// TODO Auto-generated method stub
 		StringBuffer sb = new StringBuffer();
-		sb.append("select t_package_ref.*,a_user.openId,cmcc_card_agent.iccid,(15-t_package_ref.pacrenew - t_package_ref.paccost) as amount from cmoit_card_agent ");
+		sb.append("select t_package_ref.*,a_user.openId,cmcc_card_agent.iccid,cmcc_card_agent.remark, ");
+		sb.append(" (t_package_ref.pacrenew - t_package_ref.paccost) as amount from cmoit_card_agent ");
 		sb.append(" left join t_package_ref on cmoit_card_agent.pacid = t_package_ref.pacid ");
 		sb.append(" left join a_user  on a_user.agentid = cmoit_card_agent.agentid ");
 		sb.append(" where  t_package_ref.agentid = cmoit_card_agent.agentid ");
@@ -251,7 +252,8 @@ public class PackageDao {
 				rebate.setPackageId(rs.getInt("pacid"));
 				rebate.setPaccost(rs.getDouble("paccost"));
 				rebate.setPacchildcost(rs.getDouble("pacchildcost"));
-				rebate.setPacrenew(rs.getDouble("pacrenew"));				
+				rebate.setPacrenew(rs.getDouble("pacrenew"));	
+				rebate.setRemark(rs.getString("remark"));
 				return rebate;
 			}			
 		},iccId);
