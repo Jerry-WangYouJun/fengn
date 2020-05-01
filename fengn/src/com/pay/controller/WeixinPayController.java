@@ -152,6 +152,7 @@ public class WeixinPayController {
 			
 			Rebate  rebate = packagesService.getRebateByIccid(orderId.substring(2, orderId.length()- 8));
 			Packages pac = packagesService.selectPackagesById(rebate.getPackageId());
+			
 			pac.setRenew(rebate.getPacrenew());
 			Double totalFee = rebate.getPacrenew();
 //			if(StringUtils.isNotEmpty(totalFeeStr)){

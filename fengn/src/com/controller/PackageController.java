@@ -79,11 +79,23 @@ public class PackageController {
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out;
 		try {
-			service.insertPacRef(pacids,agentid,parentAgentId );
-			out = response.getWriter();
+			////添加逻辑 先查询代理商下面是否有相同的套餐 
+			
+			int count  = service.queryByPacIdAndAgentId(pacids,agentid);
 			JSONObject json = new JSONObject();
-			json.put("msg", "操作成功");
-			json.put("success", true);
+			System.out.println("pacMove   count =="+count);
+			if(count != 0 )
+			{			
+				json.put("msg", "操作失败，该运营商已经分配相同套餐，请查询后重试。");
+				json.put("success", true);				
+			}
+			else
+			{
+				service.insertPacRef(pacids,agentid,parentAgentId );
+				json.put("msg", "操作成功");
+				json.put("success", true);
+			}
+			out = response.getWriter();			
 			out.println(json);
 			out.flush();
 			out.close();

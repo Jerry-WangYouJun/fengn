@@ -182,7 +182,7 @@ public class PackageDao {
 	public Rebate queryByAgentIdAndPacId(Rebate rebatePerson) {
 		// TODO Auto-generated method stub
 		StringBuffer sb = new StringBuffer();
-		sb.append("select t_package_ref.*,a_user.openId,(t_package_ref.pacrenew - t_package_ref.paccost) as amount from t_package_ref ");
+		sb.append("select t_package_ref.*,a_user.openId,(t_package_ref.pacchildcost - t_package_ref.paccost) as amount from t_package_ref ");
 		sb.append(" left join a_user  on a_user.agentid = t_package_ref.agentid ");
 		sb.append(" where  a_user.agentid ="+rebatePerson.getParentAgentId());
 		sb.append(" and pacid ="+rebatePerson.getPackageId());
@@ -206,6 +206,18 @@ public class PackageDao {
 			}			
 		});
 		return rebate;
+	}
+
+
+
+
+
+	public int queryByPacIdAndAgentId(String pacids, String agentid) {
+		// TODO Auto-generated method stub
+		String sql = "select count(*) from t_package_ref where agentid = '"+agentid+"' and pacid ='"+pacids+"'";
+		System.out.println(sql+"&&&&&&&&&");
+		int count = jdbcTemplate.queryForInt(sql);
+		return count;
 	}
 
 

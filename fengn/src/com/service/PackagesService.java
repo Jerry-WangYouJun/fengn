@@ -89,4 +89,9 @@ public class PackagesService {
 		}	
 		return rebateList;
 	}
+
+	public int queryByPacIdAndAgentId(String pacids, String agentid) {
+		// TODO Auto-generated method stub
+		return dao.queryByPacIdAndAgentId(pacids,agentid);
+	}
 }
