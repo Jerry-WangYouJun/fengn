@@ -105,7 +105,7 @@ public class PackagesService {
 			//通过iccid 查询 cmcc_card_agent 表 获取 代理商id 与  套餐id 
 			Rebate rebatePerson = dao.queryMlbByIccId(iccId);
 			
-			if(rebatePerson.getRemark().equals("麦联宝固定套餐"))
+			if(rebatePerson.getPacTypeName().indexOf("gd")!= -1)
 			{
 				/////固定套餐售价是15 
 				double amount = 15 - rebatePerson.getPaccost();
@@ -123,8 +123,7 @@ public class PackagesService {
 			
 			///////上级代理商返利与原逻辑相同
 			if(rebatePerson.getParentAgentId() != 1)
-			{
-				
+			{				
 				while(true)
 				{
 					rebatePerson = dao.queryByAgentIdAndPacId(rebatePerson);

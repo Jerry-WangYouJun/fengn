@@ -231,11 +231,12 @@ public class PackageDao {
 	public Rebate queryMlbByIccId(String iccId) {
 		// TODO Auto-generated method stub
 		StringBuffer sb = new StringBuffer();
-		sb.append("select t_package_ref.*,a_user.openId,cmcc_card_agent.iccid,cmcc_card_agent.remark, ");
-		sb.append(" (t_package_ref.pacrenew - t_package_ref.paccost) as amount from cmoit_card_agent ");
-		sb.append(" left join t_package_ref on cmoit_card_agent.pacid = t_package_ref.pacid ");
-		sb.append(" left join a_user  on a_user.agentid = cmoit_card_agent.agentid ");
-		sb.append(" where  t_package_ref.agentid = cmoit_card_agent.agentid ");
+		sb.append("select t_package_ref.*,a_user.openId,cmcc_card_agent.iccid,t_package.typename, ");
+		sb.append(" (t_package_ref.pacrenew - t_package_ref.paccost) as amount from cmcc_card_agent ");
+		sb.append(" left join t_package_ref on cmcc_card_agent.pacid = t_package_ref.pacid ");
+		sb.append(" left join a_user  on a_user.agentid = cmcc_card_agent.agentid ");
+		sb.append(" left join t_package on t_package.id = cmcc_card_agent.pacid ");
+		sb.append(" where  t_package_ref.agentid = cmcc_card_agent.agentid ");
 		sb.append("and iccid =? ");
 		String sql =sb.toString();
 		System.out.println("sql========"+sql); 
@@ -253,7 +254,7 @@ public class PackageDao {
 				rebate.setPaccost(rs.getDouble("paccost"));
 				rebate.setPacchildcost(rs.getDouble("pacchildcost"));
 				rebate.setPacrenew(rs.getDouble("pacrenew"));	
-				rebate.setRemark(rs.getString("remark"));
+				rebate.setPacTypeName("typename");			
 				return rebate;
 			}			
 		},iccId);

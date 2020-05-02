@@ -18,7 +18,14 @@ public class Rebate  implements Serializable{
 	private double paccost;			//成本价
 	private double pacchildcost;	//子级代理商成本价
 	private double pacrenew;		//售价
-	private String remark;
+	private String pacTypeName;		//套餐名称		
+	public String getPacTypeName() {
+		return pacTypeName;
+	}
+	public void setPacTypeName(String pacTypeName) {
+		this.pacTypeName = pacTypeName;
+	}
+	private String remark;			//备注
 	
 	public int getAgentId() {
 		return agentId;
