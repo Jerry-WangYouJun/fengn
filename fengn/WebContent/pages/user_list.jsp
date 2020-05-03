@@ -28,6 +28,11 @@
 			            <button id="btn_delete" type="button" class="btn btn-default" onclick="addInfo()">  
 			            	<span class="glyphicon glyphicon-plus" aria-hidden="true" ></span>新增
 			            </button>
+			            <c:if test="${roleid eq '1' }">
+			             <button id="btn_delete" type="button" class="btn btn-default" onclick="initPwd()">  
+			            	重置密码
+			            </button>
+			            </c:if>
 			        </div>  
 				  </div>
 			</div>
@@ -135,5 +140,36 @@
 			        silent : true, // 刷新事件必须设置  
 			    });  
 		});		
+		
+		function initPwd(){
+			var del = confirm("确认重置密码？");
+			if (!del) {
+				return false;
+			}
+			var selectObj = $("#infoTable").bootstrapTable('getSelections')[0];
+			console.info(selectObj);
+			var userNo = selectObj.userNo;
+			if (selectObj.id > 0) {
+				var path = "${basePath}/agent/agent_reset";
+				$.ajax({
+					url : path,
+					type : 'post',
+					data:{'userNo':userNo},
+					dataType : 'json',
+					success : function(data) {
+						if (data.success) {
+							alert( data.msg);
+							$("#infoTable").bootstrapTable("refresh");
+						} else {
+							alert( data.msg);
+						}
+		
+					},
+					error : function(transport) {
+						alert( "系统产生错误,请联系管理员!");
+					}
+				});
+			}
+		}
 	</script>
 </html>

@@ -228,6 +228,24 @@ public class AgentController {
 		}
 	}
 	
+	@RequestMapping(value="/agent_reset")
+	public void agent_initPwd(String userNo , HttpServletResponse response ){
+		PrintWriter out;
+		try {
+			service.reset(userNo);
+			response.setCharacterEncoding("UTF-8"); 
+			out = response.getWriter();
+			JSONObject json = new JSONObject();
+			json.put("msg", "操作成功");
+			json.put("success", true);
+			out.println(json);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@RequestMapping(value="/checkUser")
 	public void checkUser(String userNo, HttpServletResponse response ) {
 		PrintWriter out;

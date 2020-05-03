@@ -182,6 +182,13 @@ public class AgentDao {
 	                new Object[]{id},   
 	                new int[]{java.sql.Types.INTEGER});  
 	}
+	
+	public void resetPwd( String userNo) {
+		 jdbcTemplate.update(  
+	                "update a_user set pwd = '123456' where userno = ?",   
+	                new Object[]{userNo},   
+	                new int[]{java.sql.Types.VARCHAR});  
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Integer queryPrentIdByCode(String code) {

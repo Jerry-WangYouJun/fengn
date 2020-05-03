@@ -196,6 +196,11 @@ public class AgentService {
 	public Agent getById(Integer id) {
 		return mapper.selectByPrimaryKey(id);
 	}
+
+	public void reset(String userNo) {
+		dao.resetPwd( userNo);
+		
+	}
 	
 	 
 }

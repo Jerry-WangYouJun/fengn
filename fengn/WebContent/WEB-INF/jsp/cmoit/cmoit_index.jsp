@@ -104,7 +104,8 @@
  				  alert("两次密码不一致，请重新确认")
  				  return false;
  			}
- 			if(pwd == ''){
+ 		
+ 			if(pwd == '' || pwd == null){
  				 alert("密码不能为空")
  				 return false;
  			}
