@@ -1,12 +1,10 @@
 package com.controller;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -36,12 +34,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dao.HistoryMapper;
 import com.model.History;
-import com.model.MlBBackInfo;
 import com.model.Rebate;
 import com.model.UnicomHistory;
 import com.pay.config.WxPayConfig;
@@ -79,21 +75,21 @@ public class MlbBack {
 	            //////////////// 企业付款  20200501  新增 
 	            
 	            //获取所有麦联宝返利人员 
-//	            List<Rebate> rebateList = this.getMlbRebatePersonList(iccid);
-//    			if(rebateList.size()!=0 || rebateList != null)
-//    			{
-//    				int u = 1 ;
-//    				for (Rebate rebate : rebateList) {
-//    					System.out.println("返利第" + u +"次");
-//    					//根据返利比例计算 返利钱数                      				
-//    					this.enterprisePayment(request, response, rebate, "返利");
-//    					u++;
-//    				}
-//    			}
-//	            eles
-//	            {
-//	            	System.out.println("getOrder    rebateList==null  ");
-//	            }
+	            List<Rebate> rebateList = this.getMlbRebatePersonList(iccid);
+    			if(rebateList.size()!=0 || rebateList != null)
+    			{
+    				int u = 1 ;
+    				for (Rebate rebate : rebateList) {
+    					System.out.println("返利第" + u +"次");
+    					//根据返利比例计算 返利钱数                      				
+    					this.enterprisePayment(request, response, rebate, "麦联宝返利");
+    					u++;
+    				}
+    			}
+    			else
+	            {
+	            	System.out.println("getOrder    rebateList==null  ");
+	            }
 	            ///////////////
 	        } catch (Exception e) {
 	            e.printStackTrace();
