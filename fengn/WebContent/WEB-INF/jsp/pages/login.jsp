@@ -43,7 +43,7 @@
 				<div class="controls">
 					<div class="input-icon left">
 						<i class="icon-user"></i>
-						<input class="m-wrap placeholder-no-fix boxH" type="text" placeholder="请输入用户名" name="userNo" value="admin"/>
+						<input class="m-wrap placeholder-no-fix boxH" type="text" placeholder="请输入用户名" name="userNo" />
 					</div>
 				</div>
 			</div>
@@ -52,7 +52,7 @@
 				<div class="controls">
 					<div class="input-icon left">
 						<i class="icon-lock"></i>
-						<input class="m-wrap placeholder-no-fix boxH" type="password" placeholder="请输入密码" name="pwd" value="1980zxcv"/>
+						<input class="m-wrap placeholder-no-fix boxH" type="password" placeholder="请输入密码" name="pwd" />
 					</div>
 				</div>
 			</div>

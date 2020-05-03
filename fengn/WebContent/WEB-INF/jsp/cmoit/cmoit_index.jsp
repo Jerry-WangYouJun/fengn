@@ -82,9 +82,9 @@
  			  +   node.attributes.priUrl + '\',\'' + node.text +'\' , this)"'
  		}
  		
- 		function getMenu(name){
+ 		function getMenu(type,name){
  			$.ajax( {
- 				url : "${pageContext.request.contextPath}/treeindex/cmoit/" + name,
+ 				url : "${pageContext.request.contextPath}/treeindex/"+type+"/" + name,
  				type : 'post',
  				dataType : 'json',
  				success : function(data) {
@@ -122,13 +122,13 @@
  			});
  		}
  		$(function(){
- 			if("${groupId}"=="1" || "${groupId}"=="3"){
  				//getMenu("card");
  				//getMenu("kickback");
- 				getMenu("cmoit_card");
- 				getMenu("cmoit_kickback");
- 			}
-            getMenu("all_kickback");
+ 				getMenu('cmoit',"cmoit_card");
+ 				getMenu('cmoit',"cmoit_kickback");
+ 				getMenu('pages',"cmcc_card");
+ 				getMenu('pages',"cmcc_kickback");
+           // getMenu(''"all_kickback");
  			
  		});
  		
@@ -175,7 +175,9 @@
 	                      	  <li class="dropdown">
 	                                <a href="#" style="padding: 12px" data-toggle="dropdown"><i class="im-paste">&nbsp;导入/更新</i></a>
 	                                <ul class="dropdown-menu right" role="menu">
-	                                    <li><a href="#" onclick="uploadMlbData()"><i class="im-upload2"></i> 导入</a>
+	                                    <li><a href="#" onclick="uploadMlbData('cmoit')"><i class="im-upload2"></i> 平度移动导入</a>
+	                                    </li>
+	                                     <li><a href="#" onclick="uploadMlbData('cmcc')"><i class="im-upload2"></i> 麦联宝移动导入</a>
 	                                    </li>
 	                                </ul>
 	                            </li>
@@ -231,8 +233,12 @@
                         <ul class="nav sub" id="unicom_card">
 						</ul>
                     </li> -->
-                    <li><a href="#">移动物联卡 <i class="fa-file-text"></i></a>
+                    <li><a href="#">平度移动物联卡 <i class="fa-file-text"></i></a>
                         <ul class="nav sub" id="cmoit_card">
+						</ul>
+                    </li>
+                     <li><a href="#">麦联宝移动物联卡 <i class="fa-file-text"></i></a>
+                        <ul class="nav sub" id="cmcc_card">
 						</ul>
                     </li>
                     <!-- <li>
@@ -241,10 +247,14 @@
                         </ul>
                     </li> -->
                      <li>
-                        <a href="#"> 移动返佣<i class="im-paragraph-justify" ></i></a>
+                        <a href="#"> 平度移动返佣<i class="im-paragraph-justify" ></i></a>
                         <ul class="nav sub" id="cmoit_kickback">
                         </ul>
                     </li>
+                    <li><a href="#">麦联宝移动返佣 <i class="fa-money"></i></a>
+		                        <ul class="nav sub" id="cmcc_kickback">
+								</ul>
+		                    </li>
                      <li><a href="#" class="st-bag" onclick='addTab("packageMa","${pageContext.request.contextPath}/cmoit/init.jsp","维护套餐")'>
                                		 绑定返佣微信号</a>
                      </li>
@@ -398,6 +408,7 @@
 					   	<form class="form-signin" role="form" method="POST"
 						 id="mlbForm"
 						action="${pageContext.request.contextPath}/uploadExcel/upload.do">
+						<input type="hidden" name="apiCode" id="apiCode">
 						<div class="form-group">
 							<label for="message-text" class="control-label" id="timetext">上传文件:</label>
 							 <div class='input-group date' id='datetimepicker1'  >  
@@ -491,7 +502,8 @@
 	});
 	});
 	
-	function uploadMlbData(){
+	function uploadMlbData(type){
+		$("#apiCode").val(type);
 		 $("#mlbModal").modal("show");
 	}
 	

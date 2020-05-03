@@ -164,7 +164,7 @@ public class DataMoveDao {
 	}
 
 	public int insertDataTemp(List<List<Object>> listob, String apiCode) {
-		String insertsqlTemp = "INSERT INTO cmoit_card ( msisdn ,iccid,imsi,opentime,activetime ) "
+		String insertsqlTemp = "INSERT INTO  " + apiCode + "_card ( msisdn ,iccid,imsi,opentime,activetime ) "
 				+ "VALUES (?,?, ?, ?, ? )";
 		objectList = listob;
 		// batchUpdate可以高效进行批量插入操作
@@ -396,9 +396,11 @@ public class DataMoveDao {
 		return list;
 	}
 
-	public void insertAgentCard(List<String> list) {
-		String insertsqlTemp = "INSERT INTO cmoit_card_agent (  iccid , agentid ,pacid  ) "
-				+ "VALUES (?, 1  , 4 )";
+	public void insertAgentCard(List<String> list , String apiCode) {
+		String insertsqlTemp = "INSERT INTO " + apiCode + "_card_agent (  iccid , agentid ,pacid  ) "
+				+ "VALUES (?, 1  , "  
+				+ ("cmcc".equals(apiCode)?"(select id from t_package where typename like '%gd')":"7")
+				+ " )";
 		iccidList = list;
 		if (iccidList != null && iccidList.size() > 0) {
 			jdbcTemplate.batchUpdate(insertsqlTemp,
@@ -466,5 +468,48 @@ public class DataMoveDao {
 				}
 			});
 			return map;
+	}
+
+	public int insertDataMlbFixed(List<List<Object>> listob) {
+		String insertsqlTemp = "INSERT INTO  mlb_cmcc_card ( sim ,guid ,createtime,activetime ) "
+				+ "VALUES (?,?,  ?, ? )";
+		objectList = listob;
+		// batchUpdate可以高效进行批量插入操作
+		try {
+			if (objectList != null && objectList.size() > 0) {
+				jdbcTemplate.batchUpdate(insertsqlTemp,
+						new BatchPreparedStatementSetter() {
+							public void setValues(PreparedStatement ps, int i) {
+								try {
+									// 并根据数据类型对Statement 中的占位符进行赋值
+									List<Object> valueList = objectList.get(i);
+										ps.setString(
+												1,
+												String.valueOf(valueList.get(1))
+														.trim());
+										ps.setString(2, String
+												.valueOf(valueList.get(0)).trim());
+										ps.setString(3, String
+												.valueOf(valueList.get(12)).trim());
+										ps.setString(4, String
+												.valueOf(valueList.get(11)).trim());
+								} catch (Exception e) {
+									e.printStackTrace();
+									System.out.println("出错的" + i + e.getMessage());
+								}
+							}
+
+							public int getBatchSize() {
+								return objectList.size();
+							}
+						});
+			}
+		} catch (Exception e) {
+			mailMessage.append("执行" + INSERTSQL + "时发生错误：" + e.getMessage()
+					+ "<br>");
+			e.printStackTrace();
+		}
+		return objectList.size();
+		
 	}
 }

@@ -122,17 +122,15 @@ public class CMoitCardInfoController {
 		@RequestMapping(value = "ajaxUpload", method = { RequestMethod.GET,
 				RequestMethod.POST })
 		public void ajaxUploadExcel(HttpServletRequest request,
-				HttpServletResponse response , String apiCode) throws Exception {
+				HttpServletResponse response , String apiCode ) throws Exception {
 			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 			response.setCharacterEncoding("utf-8");
 			PrintWriter out =  response.getWriter();
 			System.out.println("导入表数据开始：" + DateUtils.formatDate("MM-dd:HH-mm-ss"));
 			List<List<Object>> listob = moveDataServices.getDataList(multipartRequest, response);
 			System.out.println();
-			moveDataServices.insertDataToCmoitCart(listob);
-			System.out.println("插入代理商卡数据开始：" + System.currentTimeMillis());
-			moveDataServices.insertAgentCard(listob);
-			System.out.println("插入新数据开始：" + System.currentTimeMillis());
+			moveDataServices.uploadData(listob , apiCode);
+			
 //			int insertNum = moveDataServices.dataMoveSql2Oracle(apiCode);
 //			System.out.println("执行结束            ：" + System.currentTimeMillis());
 			out.print("新增数据" + listob.size()  + "条");
