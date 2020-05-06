@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.common.DateUtils;
 import com.dao.HistoryMapper;
 import com.model.History;
 import com.model.Rebate;
@@ -61,6 +62,7 @@ public class MlbBack {
 	 @ResponseBody
 	 @RequestMapping(value = "order", method = {RequestMethod.POST,RequestMethod.GET })
 	 public String  getOrder(HttpServletRequest request, HttpServletResponse response , String data){
+		 System.out.println("获取时间" + DateUtils.getDate12()+ ",data=" +  data);
 		 String param= null; 
 	        try {
 	        	UnicomHistory  history = new UnicomHistory();
@@ -70,7 +72,7 @@ public class MlbBack {
 	            history.setImsi(jsonObject.getString("imsi"));
 	            history.setMoney(jsonObject.getDouble("total_fee"));
 	            history.setUpdateDate(jsonObject.getString("pay_time"));
-	            historyDao.insert(history);
+	            historyDao.insertGdData(history);
 	                        
 	            //////////////// 企业付款  20200501  新增 
 	            

@@ -12,6 +12,8 @@ public interface HistoryMapper {
 
 	public void insertData();
 	
+	public void insertGdData(UnicomHistory history);
+	
 	public void deleteAll();
 
 	public void insert(UnicomHistory history);

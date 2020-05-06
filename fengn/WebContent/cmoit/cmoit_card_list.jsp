@@ -137,9 +137,6 @@
 				<div class="modal-body">
 					    <table id="agentTable"> </table>
 					    <div id="agentToolbar"  class=" form-inline" >
-						<select class="form-control "  id="packageId"  name="packageId" style="display: inline">
-							<option value="">全部套餐</option>
-						</select>
 			            <button id="btn_edit" type="button" class="btn btn-default" onclick="moveCardByAgent()">  
 			                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>分配  
 			            </button>  
@@ -327,7 +324,7 @@
 			$.ajax({
 				url : url,
 				type : 'post',
-				data : {iccids: ids , agentid : id , pacId:pacId,table:"cmoit"},
+				data : {iccids: ids , agentid : id , table:"cmoit"},
 				dataType : 'json',
 				success : function(data) {
 					if (data.success) {
