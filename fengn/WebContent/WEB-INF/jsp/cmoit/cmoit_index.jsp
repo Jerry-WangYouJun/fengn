@@ -250,11 +250,11 @@
                         </ul>
                     </li> -->
                      <li>
-                        <a href="#"> 平度移动返佣<i class="im-paragraph-justify" ></i></a>
+                        <a href="#"> 老平台返佣<i class="im-paragraph-justify" ></i></a>
                         <ul class="nav sub" id="cmoit_kickback">
                         </ul>
                     </li>
-                    <li><a href="#">麦联宝移动返佣 <i class="fa-money"></i></a>
+                    <li><a href="#"> 新平台返佣 <i class="fa-money"></i></a>
 		                        <ul class="nav sub" id="cmcc_kickback">
 								</ul>
 		                    </li>
