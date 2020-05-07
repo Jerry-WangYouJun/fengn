@@ -80,18 +80,6 @@
 								<input type="text" class="form-control" name="discrip">
 						</div>
 						<div class="form-group">
-							<label for="message-text" class="control-label">成本价:</label> <input
-								class="form-control" name="cost"></input>
-						</div>
-						<div class="form-group">
-							<label for="message-text" class="control-label">续费价:</label> 
-								<input type="text" class="form-control" name="renew">
-						</div>
-						<div class="form-group">
-							<label for="message-text" class="control-label">子代理成本价:</label> <input
-								class="form-control" name="childcost"></input>
-						</div>
-						<div class="form-group">
 							<label for="message-text" class="control-label">备注:</label> <input
 								class="form-control" name="remark"></input>
 						</div>

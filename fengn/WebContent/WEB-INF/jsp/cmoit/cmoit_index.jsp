@@ -236,11 +236,11 @@
                         <ul class="nav sub" id="unicom_card">
 						</ul>
                     </li> -->
-                    <li><a href="#">平度移动物联卡 <i class="fa-file-text"></i></a>
+                    <li><a href="#">老平台物联卡 <i class="fa-file-text"></i></a>
                         <ul class="nav sub" id="cmoit_card">
 						</ul>
                     </li>
-                     <li><a href="#">麦联宝移动物联卡 <i class="fa-file-text"></i></a>
+                     <li><a href="#">新平台物联卡 <i class="fa-file-text"></i></a>
                         <ul class="nav sub" id="cmcc_card">
 						</ul>
                     </li>

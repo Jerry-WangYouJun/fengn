@@ -211,7 +211,7 @@
 		var tabName = parent.$("#deviceulid > li.active").attr("id");
 		 var agentId = tabName.split("_")[4];
 	    $('#agentTable').bootstrapTable({  
-	        url : '${basePath}/agent/user_query', // 请求后台的URL（*）            
+	        url : '${basePath}/agent/son_query', // 请求后台的URL（*）            
 	        method : 'get', // 请求方式（*）  
 	        toolbar : '#agentToolbar', // 工具按钮用哪个容器  
 	        cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）  

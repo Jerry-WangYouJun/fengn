@@ -63,10 +63,6 @@ public class PackageDao {
 		if(StringUtils.isNotEmpty(qo.getTypename())){
 			whereSql += " and   p.typename  like  '%" + qo.getTypename() + "%' ";
 		}
-		if(StringUtils.isNotEmpty(qo.getDiscrip())){
-			whereSql += " and   p.discrip  like   '" + qo.getDiscrip() + "-__' ";
-			
-		}
 		if( qo.getId()!=null && qo.getId() > 0){
 			whereSql += " and   p.id =  '" + qo.getId() + "' ";
 		}

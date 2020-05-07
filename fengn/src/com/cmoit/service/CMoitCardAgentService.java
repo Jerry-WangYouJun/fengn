@@ -64,6 +64,7 @@ public class CMoitCardAgentService {
 		 public List<CmoitCard> queryCardInfo(Integer agentid , Pagination page, QueryData qo  , String table ){
 			 String sql =  "select c.* , ag.name , p.discrip , p.id pacid ";
 				sql = getSql(agentid,qo , table , sql);
+				sql+= " and c.iccid != ''   ORDER BY  c.iccid  " ;
 			 String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
 					return dao.queryCmccDataList(finalSql);
 		 }
@@ -72,6 +73,7 @@ public class CMoitCardAgentService {
 		 public int queryCardTotal(Integer agentid ,  QueryData qo, String table  ){
 			 String sql =  "select count(*) total ";
 				sql = getSql(agentid,qo , table , sql);
+				sql+= " and c.iccid != ''  " ;
 			 return dao.queryDataTotal(sql);
 		 }
 		 
@@ -130,6 +132,7 @@ public class CMoitCardAgentService {
 			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
 				 sql += " and  c.iccid <= '" + qo.getIccidEnd() + "' " ;
 			}
+			
 			return sql ;
 		 }
 

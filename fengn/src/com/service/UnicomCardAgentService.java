@@ -133,6 +133,8 @@ public class UnicomCardAgentService {
 			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
 				 sql += " and  c.guid <= '" + qo.getIccidEnd() + "' " ;
 			}
+			
+			sql+= " and c.iccid != ''   ORDER BY  c.iccid  " ;
 			 String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
 			 if("cmcc".equals(table)) {
 					return dao.queryCmccDataList(finalSql);
@@ -210,6 +212,7 @@ public class UnicomCardAgentService {
 			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
 				 sql += " and  c.guid <= '" + qo.getIccidEnd().trim() + "' " ;
 			}
+			sql+= " and c.iccid != ''  ";
 			 return dao.queryDataTotal(sql);
 		 }
 
