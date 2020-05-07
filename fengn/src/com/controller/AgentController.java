@@ -58,6 +58,26 @@ public class AgentController {
 		return grid;
 	}
 	
+	@ResponseBody
+	@RequestMapping("/son_query")
+	public Grid  querySon( HttpServletResponse response, HttpServletRequest request  ,HttpSession session ) {
+		String userName = request.getParameter("userName");
+		String pageNo = request.getParameter("pageNumber");
+		String pageSize = request.getParameter("pageSize");
+	    User user = new User();
+	    user.setUserName(userName);
+	    String agentCode = session.getAttribute("agentcode").toString();
+		user.setSonCode(agentCode);
+		Pagination page =  new Pagination(pageNo, pageSize) ;
+	    CodeUtil.initPagination(page);
+		List<Agent> list = userService.queryList(user , page );
+		int total = userService.queryListCount(user);
+		Grid grid = new Grid();
+		grid.setRows(list);
+		grid.setTotal((long)total);
+		return grid;
+	}
+	
 	@RequestMapping("/card_move")
 	public void moveCard(String iccids , String agentid ,HttpServletResponse response  ){
 		response.setCharacterEncoding("UTF-8");

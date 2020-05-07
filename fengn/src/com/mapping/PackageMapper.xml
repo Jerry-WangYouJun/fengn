@@ -49,4 +49,9 @@
     from t_package
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectAll"  resultMap="BaseResultMap">
+    select 
+    	  id , typename ,discrip ,cost , renew , childcost ,remark
+    from t_package
+  </select>
 </mapper>

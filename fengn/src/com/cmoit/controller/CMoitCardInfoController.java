@@ -122,14 +122,14 @@ public class CMoitCardInfoController {
 		@RequestMapping(value = "ajaxUpload", method = { RequestMethod.GET,
 				RequestMethod.POST })
 		public void ajaxUploadExcel(HttpServletRequest request,
-				HttpServletResponse response , String apiCode ) throws Exception {
+				HttpServletResponse response , String apiCode  , String pacId) throws Exception {
 			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 			response.setCharacterEncoding("utf-8");
 			PrintWriter out =  response.getWriter();
 			System.out.println("导入表数据开始：" + DateUtils.formatDate("MM-dd:HH-mm-ss"));
 			List<List<Object>> listob = moveDataServices.getDataList(multipartRequest, response);
 			System.out.println();
-			moveDataServices.uploadData(listob , apiCode);
+			moveDataServices.uploadData(listob , apiCode , pacId);
 			
 //			int insertNum = moveDataServices.dataMoveSql2Oracle(apiCode);
 //			System.out.println("执行结束            ：" + System.currentTimeMillis());

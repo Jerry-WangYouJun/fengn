@@ -153,6 +153,10 @@ public class UserDao {
 		if(StringUtils.isNotEmpty(user.getAgentCode())){
 			sql += " and   code  like   '" + user.getAgentCode() + "%' ";
 		}
+		if(StringUtils.isNotEmpty(user.getSonCode())){
+			sql += " and (  code  like   '" + user.getSonCode() + "-__' ";
+			sql += " or   code  like   '" + user.getSonCode() + "-___' )";
+		}
 		return sql;
 	}
 

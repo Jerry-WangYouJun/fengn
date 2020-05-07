@@ -129,6 +129,7 @@
  				getMenu('cmoit',"cmoit_kickback");
  				getMenu('pages',"cmcc_card");
  				getMenu('pages',"cmcc_kickback");
+ 				getMyPackageMenu();
            // getMenu(''"all_kickback");
  			
  		});
@@ -152,6 +153,7 @@
  				}
  			});
  		}
+ 		
         </script>
     </head>
 <body>
@@ -274,7 +276,7 @@
                 <div class="outlet">
                 		<div class="row">	  
                 					<ul class="nav nav-tabs" style="margin:0px" role="tablist" id="deviceulid">
-							
+									
 									</ul>
 									<!-- 面板区 -->
 									<div  id ="home" class="tab-content">
@@ -398,7 +400,30 @@
             return tab.length > 0;
         }
 
-      
+         function getMyPackageMenu(){
+  	        var html = "";
+  	        $.ajax({
+  	            url : '${pageContext.request.contextPath}/pac/getPacAll',
+  	            type : 'post',
+  	            data : {},
+  	            dataType : 'json',
+  	            success : function(data) {
+  	                if (data.success) {
+  	                    var dataInfo = data.dataInfo;
+  	                    html += "<option value=''>全部套餐</option>";
+  	                    for(var i = 0;i<dataInfo.length;i++){
+  	                        html+="<option value='"+dataInfo[i].id+"'>"+dataInfo[i].typename+"</option>";
+  	                    }
+  	                    $("#pacId").html(html);
+  	                } else {
+  	                    alert("发生异常，请联系管理员");
+  	                }
+  	            },
+  	            error : function(transport) {
+  	                alert(data.msg);
+  	            }
+  	        });
+  	    }
 	</script>
 	
 	<div class="modal fade" id="mlbModal" tabindex="-2" role="dialog"
@@ -418,6 +443,12 @@
 					                    <span class="glyphicon glyphicon-calendar"></span>  
 					                </span>  
 					            </div>   
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label" >选择套餐:</label>
+							<select class="form-control "  id="pacId"  name="pacId" style="display: inline">
+								<option value="">全部套餐</option>
+							</select>
 						</div>
 					</form>
 				</div>

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.common.CodeUtil;
+import com.dao.PackageMapper;
 import com.model.Grid;
 import com.model.Packages;
 import com.model.Pagination;
@@ -33,6 +34,8 @@ public class PackageController {
 
 	@Autowired
 	PackagesService service;
+	@Autowired
+	PackageMapper pacDao;
 
 	@ResponseBody
 	@RequestMapping("/query")
@@ -73,9 +76,27 @@ public class PackageController {
             e.printStackTrace();
         }
     }
+    
+    @RequestMapping("/getPacAll")
+    public void getPacAll(HttpSession session, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            List<Packages> list = pacDao.selectAll();
+            out = response.getWriter();
+            JSONObject json = new JSONObject();
+            json.put("success", true);
+            json.put("dataInfo", list);
+            out.println(json);
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 	@RequestMapping("/pac_move")
-	public void pacMove(String pacids , String agentid ,String parentAgentId ,HttpServletResponse response) {
+	public void pacMove(String pacids , String agentid ,String parentAgentId ,Double childcost , HttpSession session,HttpServletResponse response) {
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out;
 		try {
@@ -87,11 +108,12 @@ public class PackageController {
 			if(count != 0 )
 			{			
 				json.put("msg", "操作失败，该运营商已经分配相同套餐，请查询后重试。");
-				json.put("success", true);				
+				json.put("success", false);				
 			}
 			else
 			{
-				service.insertPacRef(pacids,agentid,parentAgentId );
+				parentAgentId = session.getAttribute("agentId").toString();
+				service.insertPacRef(pacids,agentid,parentAgentId  , childcost);
 				json.put("msg", "操作成功");
 				json.put("success", true);
 			}

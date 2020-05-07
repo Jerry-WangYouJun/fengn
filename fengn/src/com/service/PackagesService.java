@@ -47,8 +47,8 @@ public class PackagesService {
 	}
 
 
-	public void insertPacRef(String pacids, String agentid, String parentAgentId) {
-		dao.insertPacRef(pacids,agentid,parentAgentId);
+	public void insertPacRef(String pacids, String agentid, String parentAgentId , Double childcost) {
+		dao.insertPacRef(pacids,agentid,parentAgentId , childcost);
 	}
 
 	public void updateChildsPacRef(Packages pac) {

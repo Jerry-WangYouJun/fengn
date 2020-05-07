@@ -26,13 +26,13 @@ public interface DataMoveService {
 
 	public int queryDataSize(String dateBegin, String dateEnd, String status  , String iccid );
 
-	public void insertAgentCard(List<List<Object>> listob , String apiCode);
+	public void insertAgentCard(List<List<Object>> listob , String apiCode , String pacId);
 
 	public List<List<Object>> getDataList(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception;
 
 	public void insertDataToCmoitCart(List<List<Object>> listob);
 
-	public void uploadData(List<List<Object>> listob, String apiCode);
+	public void uploadData(List<List<Object>> listob, String apiCode , String pacId);
 
 	public void insertDataToMlbIFixedCart(List<List<Object>> listob);
 	

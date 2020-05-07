@@ -148,13 +148,25 @@ public class DataMoveServiceImpl implements DataMoveService {
 	}
 
 	@Override
-	public void insertAgentCard(List<List<Object>> listob , String apiCode) {
+	public void insertAgentCard(List<List<Object>> listob , String apiCode  , String pacId) {
 		try {
 			List<String>  list = new ArrayList<>();
 			for (int i = 0; i < listob.size(); i++) {
 				list.add(listob.get(i).get("cmcc".equals(apiCode)?0:8).toString());
 			}
-			dataMoveDao.insertAgentCard(list ,apiCode);
+			dataMoveDao.insertAgentCard(list ,apiCode , pacId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void insertPacageRef(List<List<Object>> listob , String apiCode  , String pacId) {
+		try {
+			List<String>  list = new ArrayList<>();
+			for (int i = 0; i < listob.size(); i++) {
+				list.add(listob.get(i).get("cmcc".equals(apiCode)?0:8).toString());
+			}
+			dataMoveDao.insertPacageRef(list ,apiCode , pacId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -188,16 +200,17 @@ public class DataMoveServiceImpl implements DataMoveService {
 	}
 
 	@Override
-	public void uploadData(List<List<Object>> listob, String apiCode) {
+	public void uploadData(List<List<Object>> listob, String apiCode , String pacId) {
 		if("cmcc".equals(apiCode)) {
-//			insertDataToMlbIFixedCart(listob );
 			System.out.println("插入代理商卡数据开始：" + System.currentTimeMillis());
+			insertDataToMlbIFixedCart(listob );
 		}else {
-			insertDataToCmoitCart(listob );
 			System.out.println("插入代理商卡数据开始：" + System.currentTimeMillis());
+			insertDataToCmoitCart(listob );
 		}
-		insertAgentCard(listob  , apiCode);
 		System.out.println("插入新数据开始：" + System.currentTimeMillis());
+		insertAgentCard(listob  , apiCode , pacId);
+//		insertPacageRef(listob  , apiCode , pacId);
 		
 	}
 

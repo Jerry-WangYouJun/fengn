@@ -8,6 +8,7 @@ public class User {
 	  private Integer agentId ;
 	  private String  agentName;
 	  private String  agentCode;
+	  private String sonCode;
 	  private String roleId ;
 	  private String type ; 
 	  private double renew;
@@ -107,6 +108,12 @@ public class User {
 	}
 	public void setGroupId(Integer groupId) {
 		this.groupId = groupId;
+	}
+	public String getSonCode() {
+		return sonCode;
+	}
+	public void setSonCode(String sonCode) {
+		this.sonCode = sonCode;
 	} 
 	 
 }

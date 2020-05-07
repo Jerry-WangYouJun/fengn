@@ -31,12 +31,18 @@ public class Packages {
 		this.discrip = discrip;
 	}
 	public Double getCost() {
+		if(cost == null) {
+			cost =0.0;
+		}
 		return cost;
 	}
 	public void setCost(Double cost) {
 		this.cost = cost;
 	}
 	public Double getRenew() {
+		if(renew == null) {
+			renew =0.0;
+		}
 		return renew;
 	}
 	public void setRenew(Double renew) {
@@ -50,6 +56,9 @@ public class Packages {
 	}
 
 	public Double getChildcost() {
+		if(childcost == null) {
+			childcost =0.0;
+		}
 		return childcost;
 	}
 

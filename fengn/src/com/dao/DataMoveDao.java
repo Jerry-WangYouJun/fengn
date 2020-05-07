@@ -174,6 +174,7 @@ public class DataMoveDao {
 						new BatchPreparedStatementSetter() {
 							public void setValues(PreparedStatement ps, int i) {
 								try {
+									System.out.println(i);
 									// 并根据数据类型对Statement 中的占位符进行赋值
 									List<Object> valueList = objectList.get(i);
 										ps.setString(
@@ -396,17 +397,16 @@ public class DataMoveDao {
 		return list;
 	}
 
-	public void insertAgentCard(List<String> list , String apiCode) {
+	public void insertAgentCard(List<String> list , String apiCode , String pacId) {
 		String insertsqlTemp = "INSERT INTO " + apiCode + "_card_agent (  iccid , agentid ,pacid  ) "
-				+ "VALUES (?, 1  , "  
-				+ ("cmcc".equals(apiCode)?"(select id from t_package where typename like '%gd')":"7")
-				+ " )";
+				+ "VALUES (?, 1  , " + pacId + " )";
 		iccidList = list;
 		if (iccidList != null && iccidList.size() > 0) {
 			jdbcTemplate.batchUpdate(insertsqlTemp,
 					new BatchPreparedStatementSetter() {
 						public void setValues(PreparedStatement ps, int i) {
 							try {
+								System.out.println("ac"+i);
 								// 并根据数据类型对Statement 中的占位符进行赋值
 								ps.setString(1,
 										String.valueOf(iccidList.get(i)));
@@ -419,6 +419,17 @@ public class DataMoveDao {
 							return iccidList.size();
 						}
 					});
+			System.out.println("插入数据：" + iccidList.size() + "条");
+		}
+
+	}
+	
+	public void insertPacageRef(List<String> list , String apiCode , String pacId) {
+		String insertsqlTemp = "INSERT INTO  t_package_ref (   agentid ,pacid ,paccost ,pacchildcost,pacrenew,parentagentid) "
+				+ "VALUES ( 1  , " + pacId + " , 0  , 0,0,0)";
+		iccidList = list;
+		if (iccidList != null && iccidList.size() > 0) {
+			jdbcTemplate.batchUpdate(insertsqlTemp);
 			System.out.println("插入数据：" + iccidList.size() + "条");
 		}
 

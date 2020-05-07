@@ -177,13 +177,14 @@
                 alert("不能选择自己！");
                 return false;
             }
+            var childcost = prompt("请输入子代理成本价（与子代理的交易价格，只能填数字）")
             //alert(ids); return false;
             if (id > 0) {
                 var url = "${basePath}/pac/pac_move";
                 $.ajax({
                     url : url,
                     type : 'post',
-                    data : {pacids: ids , agentid : id ,parentAgentId:parentAgentId},
+                    data : {pacids: ids , agentid : id ,parentAgentId:parentAgentId,childcost:childcost},
                     dataType : 'json',
                     success : function(data) {
                         if (data.success) {
@@ -207,7 +208,7 @@
             var tabName = parent.$("#deviceulid > li.active").attr("id");
             var agentId = tabName.split("_")[4];
             $('#refTable').bootstrapTable({
-                url : '${basePath}/agent/user_query', // 请求后台的URL（*）
+                url : '${basePath}/agent/son_query', // 请求后台的URL（*）
                 method : 'get', // 请求方式（*）
                 toolbar : '#agentToolbar', // 工具按钮用哪个容器
                 cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）

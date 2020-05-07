@@ -27,7 +27,13 @@ public class PackageDao {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<Packages> queryList(Packages qo, Pagination page ) {
-		String sql = "SELECT * FROM t_package_ref r left join t_package p ON r.pacid=p.id where 1=1  " + whereSQL(qo) ;
+		String sql = "";
+		if("1".equals(qo.getAgentId() )) {
+			qo.setAgentId(null);
+			sql = "SELECT * FROM   t_package where 1=1  " + whereSQL(qo) ;
+		}else {
+			sql = "SELECT * FROM t_package_ref r  join t_package p ON r.pacid=p.id where 1=1  " + whereSQL(qo) ;
+		}
 		String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
          final  List<Packages> list =   new ArrayList<>();
          jdbcTemplate.query(sql, new RowMapper() {
@@ -36,11 +42,11 @@ public class PackageDao {
 					vo.setId(rs.getInt("id"));
 					vo.setTypename(rs.getString("typename"));
 					vo.setDiscrip(rs.getString("discrip"));
-					vo.setCost(rs.getDouble("paccost"));
-					vo.setRenew(rs.getDouble("pacrenew"));
-					vo.setChildcost(rs.getDouble("pacchildcost"));
+					vo.setCost(rs.getDouble("cost"));
+					vo.setRenew(rs.getDouble("renew"));
+					vo.setChildcost(rs.getDouble("childcost"));
 					vo.setRemark(rs.getString("remark"));
-					vo.setAgentId(rs.getString("agentid"));
+					//vo.setAgentId(rs.getString("agentid"));
 					list.add(vo);
 				 return null ;
 			}
@@ -73,7 +79,13 @@ public class PackageDao {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public int queryTotal(Packages qo) {
 		final Integer[] total =  {0} ;
-		String  sql  = "SELECT count(*) total FROM t_package_ref r left join t_package p ON r.pacid=p.id where 1=1 " + whereSQL(qo) ;
+		String sql = "";
+		if("1".equals(qo.getAgentId() )) {
+			qo.setAgentId(null);
+			sql = "SELECT count(*) total FROM   t_package where 1=1  " + whereSQL(qo) ;
+		}else {
+			sql = "SELECT count(*) total FROM t_package_ref r  join t_package p ON r.pacid=p.id where 1=1  " + whereSQL(qo) ;
+		}
 		jdbcTemplate.query(sql, new RowMapper() {
 			public Object mapRow(ResultSet rs, int arg1) throws SQLException {
 				 total[0] = rs.getInt("total");
@@ -84,7 +96,7 @@ public class PackageDao {
 	}
 
 
-	public void insertPacRef(String pacids, String agentid ,String parentAgentId) {
+	public void insertPacRef(String pacids, String agentid ,String parentAgentId , Double childcost) {
 		String sql = "";
 //		if("1".equals(agentid)){
 ////			sql = "insert into t_package_ref(pacid,paccost,agentid,parentagentid) select id,childcost,'" +
@@ -95,8 +107,8 @@ public class PackageDao {
 //			sql = "insert into t_package_ref(pacid,paccost,agentid,parentagentid) select pacid,pacchildcost,'" +
 //					agentid + "' , '"+parentAgentId+"' from t_package_ref where pacid in (" + pacids  + ") and parentagentid='"+parentAgentId+"'" ;
 //		}
-		sql = "insert into t_package_ref(pacid,paccost,agentid,parentagentid) select pacid,pacchildcost,'" +
-				agentid + "' , '"+parentAgentId+"' from t_package_ref where pacid in (" + pacids  + ") and agentid='"+parentAgentId+"'" ;
+		sql = "insert into t_package_ref(pacid,paccost,agentid,parentagentid, pacrenew , pacchildcost ) "
+				+ "values( "+pacids+",  " + childcost + ",'" +agentid + "' , '"+parentAgentId+"'  , 0 , 0  )" ;
 
 		jdbcTemplate.update(sql);
 	}
