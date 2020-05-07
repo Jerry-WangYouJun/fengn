@@ -179,34 +179,11 @@
 	<script type="text/javascript">
 
 
-        function getMyPackage(){
-            var html = "";
-            $.ajax({
-                url : '${basePath}/pac/getPacList',
-                type : 'post',
-                data : {},
-                dataType : 'json',
-                success : function(data) {
-                    if (data.success) {
-                        var dataInfo = data.dataInfo;
-                        for(var i = 0;i<dataInfo.length;i++){
-                            html+="<option value='"+dataInfo[i].id+"'>"+dataInfo[i].typename+"</option>";
-                        }
-                        $("#packageId").html(html);
-                    } else {
-                        alert("发生异常，请联系管理员");
-                    }
-                },
-                error : function(transport) {
-                    alert(data.msg);
-                }
-            });
-        }
 
         function getMyPackageMenu(){
             var html = "";
             $.ajax({
-                url : '${basePath}/pac/getPacList',
+                url : '${basePath}/pac/getPacAll',
                 type : 'post',
                 data : {},
                 dataType : 'json',
@@ -289,7 +266,6 @@
 	        showToggle : false, // 是否显示详细视图和列表视图的切换按钮  
 	        silent : true, // 刷新事件必须设置  
 	    });
-        getMyPackage();
 	});
 	 
 	
