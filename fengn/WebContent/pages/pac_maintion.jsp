@@ -126,8 +126,6 @@
 			            field : 'cost',   title : '成本价',  align: 'center',   valign: 'middle'  
 			        },{  
 			            field : 'renew', title : '续费价',    align: 'center',  valign: 'middle'  
-			        }, {
-                        field : 'childcost', title : '子代理成本价',    align: 'center',  valign: 'middle'
                     }, {
                         field : 'remark',  title : '备注',  align: 'center',   valign: 'middle'
 			        }],  

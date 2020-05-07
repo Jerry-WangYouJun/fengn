@@ -30,9 +30,9 @@ public class PackageDao {
 		String sql = "";
 		if("1".equals(qo.getAgentId() )) {
 			qo.setAgentId(null);
-			sql = "SELECT * FROM   t_package where 1=1  " + whereSQL(qo) ;
+			sql = "SELECT * FROM   t_package where 1=1  " ;
 		}else {
-			sql = "SELECT * FROM t_package_ref r  join t_package p ON r.pacid=p.id where 1=1  " + whereSQL(qo) ;
+			sql = "SELECT id , typename ,discrip , r.paccost cost , r.pacrenew renew ,remark  FROM t_package_ref r  join t_package p ON r.pacid=p.id where 1=1  " + whereSQL(qo) ;
 		}
 		String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
          final  List<Packages> list =   new ArrayList<>();
@@ -44,7 +44,6 @@ public class PackageDao {
 					vo.setDiscrip(rs.getString("discrip"));
 					vo.setCost(rs.getDouble("cost"));
 					vo.setRenew(rs.getDouble("renew"));
-					vo.setChildcost(rs.getDouble("childcost"));
 					vo.setRemark(rs.getString("remark"));
 					//vo.setAgentId(rs.getString("agentid"));
 					list.add(vo);
