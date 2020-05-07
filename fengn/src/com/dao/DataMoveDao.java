@@ -164,7 +164,7 @@ public class DataMoveDao {
 	}
 
 	public int insertDataTemp(List<List<Object>> listob, String apiCode) {
-		String insertsqlTemp = "INSERT INTO  " + apiCode + "_card ( msisdn ,iccid,imsi,opentime,activetime ) "
+		String insertsqlTemp = "INSERT INTO  cmoit_card ( msisdn ,iccid,imsi,opentime,activetime ) "
 				+ "VALUES (?,?, ?, ?, ? )";
 		objectList = listob;
 		// batchUpdate可以高效进行批量插入操作
@@ -174,7 +174,6 @@ public class DataMoveDao {
 						new BatchPreparedStatementSetter() {
 							public void setValues(PreparedStatement ps, int i) {
 								try {
-									System.out.println(i);
 									// 并根据数据类型对Statement 中的占位符进行赋值
 									List<Object> valueList = objectList.get(i);
 										ps.setString(
@@ -406,7 +405,6 @@ public class DataMoveDao {
 					new BatchPreparedStatementSetter() {
 						public void setValues(PreparedStatement ps, int i) {
 							try {
-								System.out.println("ac"+i);
 								// 并根据数据类型对Statement 中的占位符进行赋值
 								ps.setString(1,
 										String.valueOf(iccidList.get(i)));
