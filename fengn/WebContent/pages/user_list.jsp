@@ -50,21 +50,14 @@
 				<div class="modal-body">
 					<form id="dataForm">
 					 <input  class="form-control" name="id" type="hidden"></input>
+					 <input  class="form-control" name="agent" type="hidden" value="3"></input>
 						<div class="form-group">
-							<label for="recipient-name" class="control-label">登录名:</label> <input
+							<label for="recipient-name" class="cosntrol-label">登录名:</label> <input
 								type="text" class="form-control" name="userNo" id="userNo">
 						</div>
 						<div class="form-group">
 							<label for="message-text" class="control-label">代理商名称:</label> 
 								<input type="text" class="form-control" name="name" id="name">
-						</div>
-						<div class="form-group">
-							<label for="message-text" class="control-label">代理商类型:</label>
-							<select class="form-control"  id ="groupId" name="groupId">  
-					           <option value="1">移动</option>
-					           <option value="2">联通</option>
-					           <option value="3">联通，移动</option>  
-					        </select>	
 						</div>
 						<div class="form-group">
 							<label for="message-text" class="control-label">客服电话:</label> 
@@ -123,16 +116,6 @@
 			        },{  
 			            field : 'userNo',   title : '登录账号',  align: 'center',   valign: 'middle'  
 			        },{  
-			            field : 'groupId',   title : '代理商类型',  align: 'center',   valign: 'middle'  ,
-						formatter : function(value, row, index) {
-							if (value == '1') {
-								return "移动";
-							} else if (value == '2') {
-								return "联通";
-							} else if(value =='3' ){
-									return  "移动,联通";
-							}
-			        }},{  
 			            field : 'telphone',   title : '客服电话',  align: 'center',   valign: 'middle'  
 			        },/* {
 			        	field : 'rebate'  ,   title:'返利比例(%)',    align: 'center',   valign: 'middle'  
