@@ -261,7 +261,7 @@ public class PackageDao {
 				rebate.setPaccost(rs.getDouble("paccost"));
 				rebate.setPacchildcost(rs.getDouble("pacchildcost"));
 				rebate.setPacrenew(rs.getDouble("pacrenew"));	
-				rebate.setPacTypeName("typename");			
+				rebate.setPacTypeName(rs.getString("typename"));			
 				return rebate;
 			}			
 		},iccId);
