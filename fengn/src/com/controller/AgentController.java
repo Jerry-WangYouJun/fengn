@@ -181,13 +181,14 @@ public class AgentController {
 		if(agent.getId()!=null && agent.getId() >0){
 			Agent temp = service.getById(agent.getId());
 			temp.setName(agent.getName());
-			temp.setGroupId(agent.getGroupId());
+			temp.setGroupId(3);
 			temp.setTelphone(agent.getTelphone());
 			temp.setRebate(agent.getRebate());
 			service.update(temp);
 		}else{
 			agent.setCreater(session.getAttribute("user").toString());
 			agent.setCode(session.getAttribute("agentcode").toString());
+			agent.setGroupId(3);
 			service.insert(agent );
 			User user = new User();
 			user.setAgentId(agent.getId());
