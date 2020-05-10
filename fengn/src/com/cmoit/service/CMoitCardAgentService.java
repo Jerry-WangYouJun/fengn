@@ -10,8 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.common.Dialect;
+import com.model.MlbCmccCard;
 import com.model.Pagination;
 import com.model.QueryData;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import com.cmoit.mapping.CMoitCardAgentDao;
 import com.cmoit.model.CmoitCard;
 
@@ -190,8 +195,37 @@ public class CMoitCardAgentService {
 		 }
 
 		public String queryTelByICCID(String iccid, String table) throws Exception {
+		 
 		String sql = "select a.telphone from "+table+"_card  c, "+ table+"_card_agent cca, a_agent a "
 				+ " where c.iccid = cca.iccid and  cca.agentid=a.id  and  c.iccid= '" + iccid + "'";
+		if("cmcc".equals(table)) {
+			sql = "select a.telphone from mlb_cmcc_card  c, cmcc_card_agent cca, a_agent a "
+					+ " where c.guid = cca.iccid and  cca.agentid=a.id  and  c.guid= '" + iccid + "'";
+		}
 		return  dao.queryTelphone(sql);
-	}
+		}
+		
+		public String queryPacIdByICCID(String iccid, String table) throws Exception {
+			String sql = "select pacid from "+table+"_card_agent  "
+					+ " where  iccid= '" + iccid + "'";
+			return  dao.queryTelphone(sql);
+			}
+		
+		
+		public CmoitCard getResultCmccFromMlb(JSONObject json) {
+			if("null".equals(json.getString("result"))) {
+				   return  null;
+			  }
+			JSONObject rs = ((JSONObject)json.get("result"));
+				 	CmoitCard vo = new CmoitCard();
+				 	vo.setActivetime(rs.getString("active_time"));
+					vo.setBalance(rs.getString("balance"));
+					vo.setCardstatus(rs.getString("status_desc") );
+					vo.setGprssum(rs.getString("amount_usage") );
+					vo.setGprsused(rs.getString("done_usage") );
+					vo.setIccid(rs.getString("iccid"));
+					vo.setMsisdn(rs.getString("sim"));
+					vo.setOpentime(rs.getString("open_time"));
+			  return vo ;
+		}
 }

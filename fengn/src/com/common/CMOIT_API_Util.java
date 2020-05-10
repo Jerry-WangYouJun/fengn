@@ -1,14 +1,38 @@
 package com.common;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.apache.http.util.TextUtils;
+import org.jsoup.Connection;
+import org.jsoup.Connection.Method;
+import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+import com.cmoit.model.CmoitCard;
+import com.pay.util.MD5Util;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
-import com.cmoit.model.CmoitCard;
 
 public class CMOIT_API_Util {
 	public static String token = "";
@@ -34,13 +58,19 @@ public class CMOIT_API_Util {
 	private static String URL_CARD_PACKAGE_BATCH = "https://api.iot.10086.cn/v2/batchcurrentmonthgprsinfo";
 	private static String EBID_CARD_PACKAGE_BATCH = "0001000024903";
 	
-	public static void main(String[] args) {
-		try {
-			getReturnData("http://iot.iot10.cn/mlb/order?iccid=999");			  
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	static public final String 
+	 URL_CMCC_BIND_NEW ="http://iot.iot1860.com/api/YDSimListFire/Binding";
+	
+		static public final String 
+		URL_CMCC_QUERY_NEW ="http://iot.iot1860.com/api/YDSimListFire/Search";
+//	
+//	public static void main(String[] args) {
+//		try {
+//			getReturnData("http://iot.iot10.cn/mlb/order?iccid=999");			  
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 	
 	
 	
@@ -176,5 +206,83 @@ public class CMOIT_API_Util {
 		     }
 		     return stringBuffer.toString();
 		    }
-		
+		    
+		    
+		    
+		    public static void main(String[] args) throws Exception {
+				//	updateRenewData(1000 , "2019-01-01" , "2018-01-01");
+//					getReturnData("http://iot.iot10.cn/mlb/order?iccid=999");
+//					Map map = new HashMap();
+//					 map.put("batchCardStr", "1440381500241");
+//					 String token = getToken("fnmyyd","8989123");
+//					 System.out.println(token);
+//					 
+//					 JSONObject json = getMLBData(URL_CMCC_QUERY_NEW  ,token ,map);
+//					 System.out.println(json);
+		    	//String  url = "http://open.iot1860.com/open/Help/CheckTerminal";
+		    	//String url ="http://open.iot1860.com/open/cmcc/RenewalsPackageList";
+		    	String url ="http://open.iot1860.com/open/cmcc/TerminalDetail";
+				 long timeStampSec = System.currentTimeMillis()/1000;
+			     String timestamp = String.format("%010d", timeStampSec);
+			     String id = "131416124";
+			     String key ="DF459BBED5D2E9B024B7AC6C5D80DC5B";
+			     String str = id+key+timestamp;
+				 String sign = MD5Util.md5(str);
+				 System.out.println("字符串"+str);
+				 System.out.println("sign:" + sign);
+				 Map map = new HashMap();
+				 map.put("num", "1440381500241");
+				 map.put("num_type", "sim");
+				 map.put("userId", id);
+				 map.put("timestamp",timestamp);
+				 map.put("sign", sign.toUpperCase());
+				// JSONObject  json = JSONObject.fromObject(map);
+		    	doPost(url, "1440381500241");
+		    	//System.out.println("result" + result);
+				}
+		    
+		    
+		    
+		    /**
+			 * @description:使用httpClient对象执行 post 请求
+			 * @param: uri 需要跨域请求的uri , formDataMap  模拟表单需要提交数据 （name - value 形式）
+			 * @author:wu
+			 * @createDate:2018年2月28日 下午4:36:55
+			 */
+			public static JSONObject doPost(String uri, String simid) throws ClientProtocolException, IOException{
+				 long timeStampSec = System.currentTimeMillis()/1000;
+			     String timestamp = String.format("%010d", timeStampSec);
+			     String id = "131416124";
+			     String key ="DF459BBED5D2E9B024B7AC6C5D80DC5B";
+			     String str = id+key+timestamp;
+				 String sign = MD5Util.md5(str);
+				 System.out.println("字符串"+str);
+				 System.out.println("sign:" + sign);
+				 Map map = new HashMap();
+				 map.put("num", simid);
+				 map.put("num_type", "sim");
+				 map.put("userId", id);
+				 map.put("timestamp",timestamp);
+				 map.put("sign", sign.toUpperCase());
+				// 1、创建httpClient 对象
+				CloseableHttpClient httpClient = HttpClients.createDefault();
+				// 2、 创建post 对象
+				HttpPost post =new HttpPost(uri);
+				StringEntity entitys = new StringEntity(JSONObject.fromObject(map).toString(), "UTF-8");
+				entitys.setContentEncoding("UTF-8");
+				entitys.setContentType("application/json");
+				post.setEntity(entitys);
+				// 5、 执行post请求
+				CloseableHttpResponse response = httpClient.execute(post);
+				// 6、 获取响应数据
+				HttpEntity entity = response.getEntity();
+				// 7、 响应数据转换为字符串
+				String data = EntityUtils.toString(entity);
+				// 8、 关闭 httpClient对象、关闭 response
+				response.close();
+				httpClient.close();
+				System.out.println(data);
+				JSONObject  obj = JSONObject.fromObject(data);
+				return obj;
+			}
 }

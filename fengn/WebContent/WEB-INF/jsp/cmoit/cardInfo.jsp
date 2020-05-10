@@ -296,7 +296,11 @@
 		    		  alert('无效的iccid，请点击【切换】按钮获得iccid');
 		    		  return false ;
 		    	}
-		    	window.location.href='${basePath}/cmoit/info/xinfu_wechat_pay?iccid=${cmoitInfo.msisdn}';
+		    	if('${apitype}'=='cmoit'){
+			    	window.location.href='${basePath}/cmoit/info/xinfu_wechat_pay?iccid=${cmoitInfo.msisdn}';
+		    	}else{
+		    		window.location.href='${basePath}/xinfu_wechat_pay?iccid=${cmoitInfo.iccid}';
+		    	}
 			// window.location.href="https://open.m-m10010.com/Html/WechatPay/Action/SimRenewalsPay_new.aspx?"+
 			// 	"simId=${cmccCard.sim}${unicomCard.sim }&iccid=${cmccCard.guid}${unicomCard.guid }&accessname=null&browser=null";
 		}

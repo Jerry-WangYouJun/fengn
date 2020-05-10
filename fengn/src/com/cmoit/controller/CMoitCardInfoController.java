@@ -19,10 +19,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmoit.model.CmoitCard;
 import com.cmoit.service.CMoitCardAgentService;
 import com.common.CMOIT_API_Util;
+import com.common.ContextString;
 import com.common.DateUtils;
+import com.dao.MlbCmccCardMapper;
 import com.dao.MlbUnicomCardMapper;
 import com.dao.PackageMapper;
 import com.model.InfoVo;
+import com.model.MlbCmccCard;
 import com.model.Packages;
 import com.model.Pagination;
 import com.model.QueryData;
@@ -48,9 +51,6 @@ public class CMoitCardInfoController {
 	    
 	    
 	    
-	    @Autowired
-	    MlbUnicomCardMapper unicomDao ;
-	    
 	    @RequestMapping("/c")
 	    public ModelAndView getCmccCardInfo(String iccid){
 	    	ModelAndView mv = new ModelAndView("cmoit/cardInfo");
@@ -61,13 +61,24 @@ public class CMoitCardInfoController {
 				 CmoitCard card =  new CmoitCard();
 				 if(list != null && list.size() > 0 && iccid.equals(list.get(0).getMsisdn())){
 					 card	= list.get(0);
+					 CMOIT_API_Util.queryCmoitDataInfo(card);
+					 mv.addObject("apitype", "cmoit");
+					 String tel = ccaService.queryTelByICCID(card.getIccid() , "cmoit");
+				    	mv.addObject("tel", tel);
 				 }else{
-					 throw new Exception("卡号错误，请重新输入或联系管理员");
+					 card = ccaService.getResultCmccFromMlb(CMOIT_API_Util.doPost(ContextString.URL_NEW_QUERY, iccid));
+					 if(card == null) {
+						 throw new Exception("卡号错误，请重新输入或联系管理员");
+					 }
+					 String pacid = ccaService.queryPacIdByICCID(card.getIccid(), "cmcc");
+					 Packages  pac =pacDao.selectByPrimaryKey(Integer.valueOf(pacid));
+					 card.setDiscrip(pac.getDiscrip());
+					 mv.addObject("apitype", "cmcc");
+					 String tel = ccaService.queryTelByICCID(card.getIccid() , "cmcc");
+				    	mv.addObject("tel", tel);
 				 }
-				 CMOIT_API_Util.queryCmoitDataInfo(card);
 				 mv.addObject("cmoitInfo", card);
-		    	String tel = ccaService.queryTelByICCID(card.getIccid() , "cmoit");
-		    	mv.addObject("tel", tel);
+		    	
 			} catch (Exception e) {
 				InfoVo   wrongInfo = new InfoVo();
 				wrongInfo.setUserStatus("卡号错误，请重新输入或联系管理员");
@@ -102,7 +113,7 @@ public class CMoitCardInfoController {
 	    }
 	    
 	    @RequestMapping("/xinfu_wechat_pay")
-	    public ModelAndView getPay(@RequestParam("iccid") String iccid , HttpServletRequest request){
+	    public ModelAndView getPay(@RequestParam("iccid") String iccid , String apitype, HttpServletRequest request){
 	    	if(iccid==null){
 	    		iccid = request.getParameter("iccid");
 	    	}

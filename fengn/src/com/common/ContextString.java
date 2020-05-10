@@ -23,4 +23,9 @@ public class ContextString {
 	 
 	 static public final String 
 	 URL_RENEW_B = "https://www.m-m10086.com/api/NewReport/WebRenewalsOrder?p=1&timeType=2&serviceState=0&holdid=12896&sdate=2018-10-28+00%3A00%3A00&edate=2018-11-25+00%3A00%3A00&order=&id=&psize=25&payee=&comeFrom=&licenseHoldId=0&renewalsState=&sourceType=&packageType=&batchType=iccid&batchValues=";
+
+	 
+	static public final String  URL_NEW_CHECK = "http://open.iot1860.com/open/Help/CheckTerminal";
+	static public final String  URL_NEW_RENEW ="http://open.iot1860.com/open/cmcc/RenewalsPackageList";
+	static public final String  URL_NEW_QUERY ="http://open.iot1860.com/open/cmcc/TerminalDetail";
 }
