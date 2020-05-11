@@ -200,7 +200,7 @@ public class CMoitCardAgentService {
 				+ " where c.iccid = cca.iccid and  cca.agentid=a.id  and  c.iccid= '" + iccid + "'";
 		if("cmcc".equals(table)) {
 			sql = "select a.telphone from mlb_cmcc_card  c, cmcc_card_agent cca, a_agent a "
-					+ " where c.guid = cca.iccid and  cca.agentid=a.id  and  c.guid= '" + iccid + "'";
+					+ " where c.iccid = cca.iccid and  cca.agentid=a.id  and  c.iccid= '" + iccid + "'";
 		}
 		return  dao.queryTelphone(sql);
 		}

@@ -480,7 +480,7 @@ public class DataMoveDao {
 	}
 
 	public int insertDataMlbFixed(List<List<Object>> listob) {
-		String insertsqlTemp = "INSERT INTO  mlb_cmcc_card ( sim ,guid ,createtime,activetime ) "
+		String insertsqlTemp = "INSERT INTO  mlb_cmcc_card ( sim ,iccid ,createtime,activetime ) "
 				+ "VALUES (?,?,  ?, ? )";
 		objectList = listob;
 		// batchUpdate可以高效进行批量插入操作

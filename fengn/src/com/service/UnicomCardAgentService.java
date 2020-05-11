@@ -98,7 +98,7 @@ public class UnicomCardAgentService {
 					break;
 			}
 			 String sql = "select c.* , ag.name from "+table+"_card_agent a , mlb_"+table+"_card c , a_agent ag "
-				 		+ "where a.iccid = c.guid   and ag.id=a.agentid " ;
+				 		+ "where a.iccid = c.iccid   and ag.id=a.agentid " ;
 			 if(StringUtils.isNotEmpty(qo.getPackageId())){
 				 sql += "and a.pacid='"+qo.getPackageId()+"' ";
 			 }
@@ -128,13 +128,13 @@ public class UnicomCardAgentService {
 			sql +="and ag.code like  CONCAT((select code from a_agent where id = "
 				+ agentid + "),'%' ) ";
 			if(StringUtils.isNotEmpty(qo.getIccidStart())){
-				 sql += " and c.guid >= '" + qo.getIccidStart() + "' " ;
+				 sql += " and c.iccid >= '" + qo.getIccidStart() + "' " ;
 			}
 			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
-				 sql += " and  c.guid <= '" + qo.getIccidEnd() + "' " ;
+				 sql += " and  c.iccid <= '" + qo.getIccidEnd() + "' " ;
 			}
 			
-			sql+= " and c.guid != ''   ORDER BY  c.guid  " ;
+			sql+= " and c.iccid != ''   ORDER BY  c.iccid  " ;
 			 String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
 			 if("cmcc".equals(table)) {
 					return dao.queryCmccDataList(finalSql);
@@ -177,7 +177,7 @@ public class UnicomCardAgentService {
 					 break;
 			 }
 			 String sql = "select count(*) total from "+table+"_card_agent a , mlb_"+table+"_card c , a_agent ag "
-				 		+ "where a.iccid = c.guid  and ag.id=a.agentid  ";
+				 		+ "where a.iccid = c.iccid  and ag.id=a.agentid  ";
 			 if(StringUtils.isNotEmpty(qo.getPackageId())){
 				 sql += "and a.pacid='"+qo.getPackageId()+"' ";
 			 }
@@ -207,12 +207,12 @@ public class UnicomCardAgentService {
 			 sql +="and ag.code like  CONCAT((select code from a_agent where id ="
 				 		+ agentid + "),'%' ) ";;
 			if(StringUtils.isNotEmpty(qo.getIccidStart())){
-				 sql += " and c.guid >= '" + qo.getIccidStart().trim() + "' " ;
+				 sql += " and c.iccid >= '" + qo.getIccidStart().trim() + "' " ;
 			}
 			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
-				 sql += " and  c.guid <= '" + qo.getIccidEnd().trim() + "' " ;
+				 sql += " and  c.iccid <= '" + qo.getIccidEnd().trim() + "' " ;
 			}
-			sql+= " and c.guid != ''  ";
+			sql+= " and c.iccid != ''  ";
 			 return dao.queryDataTotal(sql);
 		 }
 
@@ -226,7 +226,7 @@ public class UnicomCardAgentService {
 			sql += "select h.iccid , h.money , h.packageType , h.update_date , a.pacid, u.cost "
 					+ "from u_history h , "+tableList[i]+"_card_agent a , mlb_"+tableList[i]+"_card c , a_agent u "
 					+ " left join t_package p on p.id=u.type "
-					+ " where h.iccid = c.guid and c.guid = a.iccid "
+					+ " where h.iccid = c.iccid and c.iccid = a.iccid "
 					+ " and  u.id = a.agentid  and  u.id = " + id  ;
 			if(StringUtils.isNotEmpty(qo.getDateStart())){
 				sql += " and h.update_date >= '" + qo.getDateStart() + "'" ;
@@ -242,10 +242,10 @@ public class UnicomCardAgentService {
 				sql +=" and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( h.update_date, '%Y%m' ) ) =1";
 			}
 			if(StringUtils.isNotEmpty(qo.getIccidStart())){
-				sql += " and c.guid >= '" + qo.getIccidStart() + "' " ;
+				sql += " and c.iccid >= '" + qo.getIccidStart() + "' " ;
 			}
 			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
-				sql += " and  c.guid <= '" + qo.getIccidEnd() + "' " ;
+				sql += " and  c.iccid <= '" + qo.getIccidEnd() + "' " ;
 			}
 			if(StringUtils.isNotEmpty(qo.getActiveStartTime())){
 				sql += "  and h.update_date>= '" + qo.getActiveStartTime() + "' " ;
@@ -276,7 +276,7 @@ public class UnicomCardAgentService {
 			sql += "select h.iccid , h.money , h.packageType , h.update_date ,  a.pacid, u.cost "
 					+ "from u_history h , "+tableList[i]+"_card_agent a , mlb_"+tableList[i]+"_card c , a_agent u "
 //					+ " left join t_package p on p.id=u.type "
-					+ " where h.iccid = c.guid and c.guid = a.iccid "
+					+ " where h.iccid = c.iccid and c.iccid = a.iccid "
 					+ " and  u.id = a.agentid  and  u.id = " + agentid  ;
 			if(StringUtils.isNotEmpty(qo.getDateStart())){
 				sql += " and h.update_date >= '" + qo.getDateStart() + "'" ;
@@ -292,10 +292,10 @@ public class UnicomCardAgentService {
 				sql +=" and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( h.update_date, '%Y%m' ) ) =1";
 			}
 			if(StringUtils.isNotEmpty(qo.getIccidStart())){
-				sql += " and c.guid >= '" + qo.getIccidStart() + "' " ;
+				sql += " and c.iccid >= '" + qo.getIccidStart() + "' " ;
 			}
 			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
-				sql += " and  c.guid <= '" + qo.getIccidEnd() + "' " ;
+				sql += " and  c.iccid <= '" + qo.getIccidEnd() + "' " ;
 			}
 			if(StringUtils.isNotEmpty(qo.getActiveStartTime())){
 				sql += "  and  h.update_date>= '" + qo.getActiveStartTime() + "' " ;
@@ -321,7 +321,7 @@ public class UnicomCardAgentService {
 			String sql = "select z.iccid, z.money, z.packageType, z.update_date, z.pacid,r.paccost,z.money - IFNULL(r.paccost, z.cost) kickback from (";
 			sql += "select h.iccid , h.money , h.packageType , h.update_date ,  a.pacid, u.cost "
 					+ "from u_history h , "+table+"_card_agent a , mlb_"+table+"_card c , a_agent u "
-					+ " where h.iccid = c.guid and c.guid = a.iccid "
+					+ " where h.iccid = c.iccid and c.iccid = a.iccid "
 					+ " and  u.id = a.agentid  and  u.id = " + id  ;
 			if(StringUtils.isNotEmpty(qo.getDateStart())){
 				 sql += " and h.update_date >= '" + qo.getDateStart() + "'" ;
@@ -349,13 +349,13 @@ public class UnicomCardAgentService {
 //			 String sql = "select   sum(h.money) - sum(IFNULL(p.cost,u.cost)) sumKick , count(*) total  "
 //					 	+ "from u_history h , "+table+"_card_agent a , mlb_"+table+"_card c , a_agent u "
 //						+ " left join t_package p on p.id=u.type "
-//						+ " where h.iccid = c.guid and c.guid = a.iccid "
+//						+ " where h.iccid = c.iccid and c.iccid = a.iccid "
 //						+ " and  u.id = a.agentid  and  u.id = " + agentid  ;
 			 String sql = "select count(*) total,sum(x.kickback) sumKick from (";
 			 sql += "select z.iccid, z.money, z.packageType, z.update_date, z.pacid,z.money - IFNULL(r.paccost, z.cost) kickback from (";
 			 sql += "select h.iccid , h.money , h.packageType , h.update_date ,  a.pacid, u.cost "
 					 + "from u_history h , "+table+"_card_agent a , mlb_"+table+"_card c , a_agent u "
-					 + " where h.iccid = c.guid and c.guid = a.iccid "
+					 + " where h.iccid = c.iccid and c.iccid = a.iccid "
 					 + " and  u.id = a.agentid  and  u.id = " + agentid  ;
 				if(StringUtils.isNotEmpty(qo.getDateStart())){
 					 sql += " and h.update_date >= '" + qo.getDateStart() + "'" ;

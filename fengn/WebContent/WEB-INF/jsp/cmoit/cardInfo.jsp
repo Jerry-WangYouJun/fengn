@@ -302,7 +302,7 @@
 		    		window.location.href='${basePath}/xinfu_wechat_pay?iccid=${cmoitInfo.iccid}';
 		    	}
 			// window.location.href="https://open.m-m10010.com/Html/WechatPay/Action/SimRenewalsPay_new.aspx?"+
-			// 	"simId=${cmccCard.sim}${unicomCard.sim }&iccid=${cmccCard.guid}${unicomCard.guid }&accessname=null&browser=null";
+			// 	"simId=${cmccCard.sim}${unicomCard.sim }&iccid=${cmccCard.iccid}${unicomCard.iccid }&accessname=null&browser=null";
 		}
 	</script>
 

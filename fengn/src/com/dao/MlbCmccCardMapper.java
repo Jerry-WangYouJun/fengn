@@ -13,7 +13,7 @@ public interface MlbCmccCardMapper {
 
     MlbCmccCard selectByPrimaryKey(Integer id);
     
-    MlbCmccCard selectByIccid(String guid);
+    MlbCmccCard selectByIccid(String iccid);
 
     int updateByPrimaryKeySelective(MlbCmccCard record);
 

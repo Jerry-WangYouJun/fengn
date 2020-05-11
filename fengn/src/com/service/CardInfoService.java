@@ -14,7 +14,6 @@ import com.common.WlkAPIUtil;
 import com.dao.DataMoveDao;
 import com.model.History;
 import com.model.InfoVo;
-import com.model.Rebate;
 
 import net.sf.json.JSONObject;
 
@@ -48,7 +47,7 @@ public class CardInfoService {
 	
 	public String queryTelByICCID(String iccid, String table) throws Exception {
 		String sql = "select a.telphone from mlb_"+table+"_card  c, "+ table+"_card_agent cca, a_agent a "
-				+ " where c.guid = cca.iccid and  cca.agentid=a.id  and  c.guid= '" + iccid + "'";
+				+ " where c.iccid = cca.iccid and  cca.agentid=a.id  and  c.iccid= '" + iccid + "'";
 		return  dao.queryTelphone(sql);
 	}
 	

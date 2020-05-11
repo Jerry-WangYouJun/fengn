@@ -45,27 +45,27 @@ public class UnicomUploadDao {
 
 
 	public int insertAgentCard(String agentId , String table) {
-		String insertsqlTemp = "insert " + table +"_card_agent (iccid , agentid ) select t.guid , '" + agentId+ "'"
+		String insertsqlTemp = "insert " + table +"_card_agent (iccid , agentid ) select t.iccid , '" + agentId+ "'"
 				+ " from  mlb_"+ table +"_card_copy  t  "
-				+ " where  t.guid not in (select iccid  from  " + table+ "_card_agent ) ";
+				+ " where  t.iccid not in (select iccid  from  " + table+ "_card_agent ) ";
 		return jdbcTemplate.update(insertsqlTemp);
 	}
 	
 
     
 	public int insertUnicomData(String table) {
-		String insertsqlTemp = "insert into  mlb_" + table +  "_card  (guid,simid, packageName, "
+		String insertsqlTemp = "insert into  mlb_" + table +  "_card  (iccid,simid, packageName, "
 				+ "  simState, expireTime, oddTime, "
 			    + "  dayUsageData, amountUsageData, totalMonthUsageFlow, sim , "
 			    + "  holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark, "
 			    + "  monthUsageData,flowLeftValue  ,imsi 	)  "
-				+ " select  guid,simid, packageName, "
+				+ " select  iccid,simid, packageName, "
 				+ "  simState, expireTime, oddTime, "
 			    + "  dayUsageData, amountUsageData, totalMonthUsageFlow,sim , "
 			    + "  holdName,lastActiveTime,flowLeftTime,outWarehouseDate,remark ,"
 			    + "  monthUsageData,flowLeftValue  ,imsi 	"
 				+ "  from mlb_"+table+"_card_copy "
-				+ " where guid not in (select guid  from  mlb_"+table+"_card )";
+				+ " where iccid not in (select iccid  from  mlb_"+table+"_card )";
 		return jdbcTemplate.update(insertsqlTemp);
 	}
 	
@@ -76,25 +76,25 @@ public class UnicomUploadDao {
 			+ "u.holdName=uc.holdName ,u.lastActiveTime=uc.lastActiveTime ,u.flowLeftTime=uc.flowLeftTime , "
 			+ "u.remark=uc.remark ,u.monthUsageData=uc.monthUsageData ,u.flowLeftValue=uc.flowLeftValue ,"
 			+ "u.sim = uc.sim ,u.oddTime=uc.oddTime "
-			+ " where u.guid=uc.guid ";
+			+ " where u.iccid=uc.iccid ";
 		int  count = jdbcTemplate.update(updateTemp);
 		return  count;
 	}
 	
 	
 	public int insertCmccData(String table) {
-		String insertsqlTemp = "insert into  mlb_" + table +  "_card  ( guid, simId, " + 
+		String insertsqlTemp = "insert into  mlb_" + table +  "_card  ( iccid, simId, " + 
 				"      sim, packageName, bootState, " + 
 				"      expireTime, oddTime, amountUsageData, " + 
 				"      flowLeftValue, monthUsageData, totalMonthUsageFlow ,	" +
 				"    activeTime,holdName ,packagePeriodSrc ,remark) " +
-				"    select  guid, simId, " + 
+				"    select  iccid, simId, " + 
 				"     sim, packageName, bootState,  " + 
 				"	  expireTime, oddTime, amountUsageData," +
 				"  flowLeftValue, monthUsageData, totalMonthUsageFlow  ," +
 				"  activeTime,holdName ,packagePeriodSrc  ,remark " + 
 				"  from mlb_"+table+"_card_copy " +
-				" where guid not in (select guid  from  mlb_"+table+"_card )";
+				" where iccid not in (select iccid  from  mlb_"+table+"_card )";
 		return jdbcTemplate.update(insertsqlTemp);
 	}
 	
@@ -105,7 +105,7 @@ public class UnicomUploadDao {
 			+ "u.flowLeftValue=uc.flowLeftValue ,u.monthUsageData=uc.monthUsageData ,"
 			+ "u.totalMonthUsageFlow=uc.totalMonthUsageFlow , u.remark=uc.remark ,"
 			+ "u.activeTime=uc.activeTime ,u.holdName=uc.holdName ,u.packagePeriodSrc=uc.packagePeriodSrc "
-			+ "where u.guid=uc.guid ";
+			+ "where u.iccid=uc.iccid ";
 		return jdbcTemplate.update(updateTemp);
 	}
 

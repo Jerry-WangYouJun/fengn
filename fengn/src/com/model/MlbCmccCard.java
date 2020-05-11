@@ -3,7 +3,7 @@ package com.model;
 public class MlbCmccCard {
     private Integer id;
 
-    private String guid;
+    private String iccid;
 
     private String simid;
 
@@ -47,12 +47,12 @@ public class MlbCmccCard {
         this.id = id;
     }
 
-    public String getGuid() {
-        return guid;
+    public String getIccid() {
+        return iccid;
     }
 
-    public void setGuid(String guid) {
-        this.guid = guid == null ? null : guid.trim();
+    public void setIccid(String iccid) {
+        this.iccid = iccid == null ? null : iccid.trim();
     }
 
     public String getSimid() {

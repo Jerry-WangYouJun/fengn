@@ -141,7 +141,7 @@
 				<img src="${basePath }/images/lt-logol.png" class="logol">
 			</div>
 			<div class="lt-part1-simInfo" style="padding-top: 5px;">
-				ICCID:<span class="cardNo">${cmccCard.guid}${unicomCard.guid }</span>
+				ICCID:<span class="cardNo">${cmccCard.iccid}${unicomCard.iccid }</span>
 				<div class="simInfo">
 					<span class="IMEInum">SIM号:<i>${cmccCard.sim}${unicomCard.sim }</i></span>
 				</div>
@@ -283,7 +283,7 @@
 		
 		function  toRenewalList(obj){
 			window.location.href="https://open.m-m10010.com/Html/WechatPay/Action/SimRenewalsPay_new.aspx?"+
-					"simId=${cmccCard.sim}${unicomCard.sim }&iccid=${cmccCard.guid}${unicomCard.guid }&accessname=null&browser=null";
+					"simId=${cmccCard.sim}${unicomCard.sim }&iccid=${cmccCard.iccid}${unicomCard.iccid }&accessname=null&browser=null";
 		}
 	</script>
 

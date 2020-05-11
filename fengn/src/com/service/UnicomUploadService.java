@@ -210,7 +210,7 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 			 muc.setAmountusagedata(job.getDouble("amountUsageData"));
 			 muc.setDayusagedata(job.getDouble("dayUsageData"));
 			 muc.setExpiretime(job.getString("expireTime"));
-			 muc.setGuid(job.getString("guid"));
+			 muc.setIccid(job.getString("iccid"));
 			 muc.setOddtime(job.getString("oddTime"));
 			 muc.setPackagename(job.getString("package"));
 			 muc.setSimstate(job.getString("simState"));
@@ -239,7 +239,7 @@ public class UnicomUploadService extends DataMoveServiceImpl {
 			 muc.setBootstate(job.getString("bootState"));
 			 muc.setExpiretime(job.getString("expireTime"));
 			 muc.setFlowleftvalue(job.getDouble("flowLeftValue"));
-			 muc.setGuid(job.getString("guid"));
+			 muc.setIccid(job.getString("iccid"));
 			 muc.setMonthusagedata(job.getDouble("monthUsageData"));
 			 muc.setOddtime(job.getString("oddTime"));
 			 muc.setPackagename(job.getString("package"));

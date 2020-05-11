@@ -26,7 +26,7 @@ public class UnicomCardAgentDao {
 				UnicomInfoVo vo = new UnicomInfoVo();
 				vo.setId(rs.getString("id"));
 				vo.setSim(rs.getString("sim"));
-				vo.setICCID(rs.getString("guid"));
+				vo.setICCID(rs.getString("iccid"));
 				vo.setCardStatus(rs.getString("simstate"));
 				vo.setGprsUsed(rs.getString("totalmonthusageflow"));
 				vo.setGprsRest(rs.getString("flowLeftValue"));
@@ -57,7 +57,7 @@ public class UnicomCardAgentDao {
 				UnicomInfoVo vo = new UnicomInfoVo();
 				vo.setId(rs.getString("id"));
 				vo.setSim(rs.getString("sim"));
-				vo.setICCID(rs.getString("guid"));
+				vo.setICCID(rs.getString("iccid"));
 				vo.setCardStatus(rs.getString("bootstate"));
 				vo.setGprsUsed(rs.getString("monthusagedata"));
 				vo.setGprsRest(rs.getString("flowleftvalue"));

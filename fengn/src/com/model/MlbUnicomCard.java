@@ -3,7 +3,7 @@ package com.model;
 public class MlbUnicomCard {
     private Integer id;
 
-    private String guid; //iccid
+    private String iccid; //iccid
     
     private String simid;
 
@@ -47,12 +47,12 @@ public class MlbUnicomCard {
         this.id = id;
     }
 
-    public String getGuid() {
-        return guid;
+    public String getIccid() {
+        return iccid;
     }
 
-    public void setGuid(String guid) {
-        this.guid = guid == null ? null : guid.trim();
+    public void setIccid(String iccid) {
+        this.iccid = iccid == null ? null : iccid.trim();
     }
 
     public String getPackagename() {
