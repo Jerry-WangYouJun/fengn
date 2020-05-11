@@ -16,6 +16,7 @@ public class User {
 	  private Integer groupId;
 	  private String openId;
 	  private String wxName;
+	  private String headimg;
 	  
 	  private Agent agent;
 	  
@@ -114,6 +115,12 @@ public class User {
 	}
 	public void setSonCode(String sonCode) {
 		this.sonCode = sonCode;
+	}
+	public String getHeadimg() {
+		return headimg;
+	}
+	public void setHeadimg(String headimg) {
+		this.headimg = headimg;
 	} 
 	 
 }

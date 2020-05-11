@@ -7,11 +7,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.model.InfoPackage;
-import net.sf.json.JSON;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONString;
-import net.sf.json.util.JSONUtils;
+import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,9 +22,8 @@ import com.dao.PackageMapper;
 import com.model.Grid;
 import com.model.Packages;
 import com.model.Pagination;
+import com.model.Rebate;
 import com.service.PackagesService;
-
-import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/pac")
@@ -77,6 +74,21 @@ public class PackageController {
         }
     }
     
+    @ResponseBody
+    @RequestMapping("/querySonPac")
+	public Grid   querySonPAc(HttpSession session, String pageNo, String pageSize, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+            String agentId = session.getAttribute("agentId").toString();
+            Pagination page = new Pagination(pageNo, pageSize, 100);
+            CodeUtil.initPagination(page);
+            List<Packages> list = service.getPacSonByAgentId(agentId,page);
+    		int total = service.getPacSonByAgentIdTotal(agentId);
+    		Grid grid = new Grid();
+    		grid.setRows(list);
+    		grid.setTotal((long)total);
+    		return grid;
+    }
+    
     @RequestMapping("/getPacAll")
     public void getPacAll(HttpSession session, HttpServletResponse response) {
         response.setCharacterEncoding("UTF-8");
@@ -117,6 +129,25 @@ public class PackageController {
 				json.put("msg", "操作成功");
 				json.put("success", true);
 			}
+			out = response.getWriter();			
+			out.println(json);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("/pac_cost_update")
+	public void pac_cost_update( Rebate rebate, HttpSession session,HttpServletResponse response) {
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out;
+		try {
+			////添加逻辑 先查询代理商下面是否有相同的套餐 
+			JSONObject json = new JSONObject();
+				service.updateSonPacCost(rebate);
+				json.put("msg", "操作成功");
+				json.put("success", true);
 			out = response.getWriter();			
 			out.println(json);
 			out.flush();

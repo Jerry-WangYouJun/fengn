@@ -124,6 +124,13 @@ public class PackageDao {
 		jdbcTemplate.update(sql);
 
 	}
+	
+	public void updateSonPacCost(Rebate rebate) {
+		String sql = "";
+		sql = "update t_package_ref SET paccost='"+rebate.getPaccost()+"' where agentid='"+rebate.getAgentId()+"' and pacid='"+rebate.getPackageId()+"'";
+		jdbcTemplate.update(sql);
+
+	}
 
 	public void insertChildsPacRef(Packages pac) {
 		String sql = "insert into t_package_ref(pacid,paccost,agentid,parentagentid,pacchildcost,pacrenew) select max(id),"+
@@ -131,7 +138,7 @@ public class PackageDao {
 		jdbcTemplate.update(sql);
 	}
 
-	public List<Packages> getPacListByAgentId(String agentId) {
+	public List<Packages> getPacListByAgentId(String agentId ) {
 		String sql = "SELECT * FROM t_package_ref r left join t_package p ON r.pacid=p.id where 1=1 and r.agentid ='"+agentId+"' " ;
 		final  List<Packages> list =   new ArrayList<>();
 		jdbcTemplate.query(sql, new RowMapper() {
@@ -152,13 +159,53 @@ public class PackageDao {
 		return list;
 	}
 	
-	public Rebate queryByIccId(String iccId) {
+	public List<Packages> getPacSonByAgentId(String agentId, Pagination page ) {
+		String sql = "SELECT  r.pacid , r.paccost, p.typename , p.discrip , a.id agentid , a.name "
+				+ " FROM t_package_ref r  , t_package p , a_agent a  where a.id = r.agentid and r.pacid=p.id "
+				+ " and r.agentid in (select id from a_agent where parentid= '"+agentId+"' )" ;
+		String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
+		final  List<Packages> list =   new ArrayList<>();
+		jdbcTemplate.query(finalSql, new RowMapper() {
+			public Object mapRow(ResultSet rs, int arg1) throws SQLException {
+				Packages  vo = new Packages();
+				vo.setId(rs.getInt("pacid"));
+				vo.setCost(rs.getDouble("paccost"));
+				vo.setTypename(rs.getString("typename"));
+				vo.setDiscrip(rs.getString("discrip"));
+				vo.setAgentId(rs.getString("agentid"));
+				vo.setAgentName(rs.getString("name"));
+				list.add(vo);
+				return null ;
+			}
+		});
+		return list;
+	}
+	
+
+
+
+
+	public int getPacSonByAgentIdTotal(String agentId) {
+		final Integer[] total =  {0} ;
+		String sql = "SELECT  count(*) total  "
+				+ " FROM t_package_ref r  , t_package p , a_agent a  where a.id = r.agentid and r.pacid=p.id "
+				+ " and r.agentid in (select id from a_agent where parentid= '"+agentId+"' )" ;
+		jdbcTemplate.query(sql, new RowMapper() {
+			public Object mapRow(ResultSet rs, int arg1) throws SQLException {
+				 total[0] = rs.getInt("total");
+				 return null ;
+			}
+		});
+		return total[0];
+	}
+	
+	public Rebate queryByIccId(String iccId , String table ) {
 		// TODO Auto-generated method stub
 		StringBuffer sb = new StringBuffer();
-		sb.append("select t_package_ref.*,a_user.openId,cmoit_card_agent.iccid,(t_package_ref.pacrenew - t_package_ref.paccost) as amount from cmoit_card_agent ");
-		sb.append(" left join t_package_ref on cmoit_card_agent.pacid = t_package_ref.pacid ");
-		sb.append(" left join a_user  on a_user.agentid = cmoit_card_agent.agentid ");
-		sb.append(" where  t_package_ref.agentid = cmoit_card_agent.agentid ");
+		sb.append("select t_package_ref.*,a_user.openId,"+table+"_card_agent.iccid,(t_package_ref.pacrenew - t_package_ref.paccost) as amount from "+table+"_card_agent ");
+		sb.append(" left join t_package_ref on "+table+"_card_agent.pacid = t_package_ref.pacid ");
+		sb.append(" left join a_user  on a_user.agentid = "+table+"_card_agent.agentid ");
+		sb.append(" where  t_package_ref.agentid = "+table+"_card_agent.agentid ");
 		sb.append("and iccid =? ");
 		String sql =sb.toString();
 		System.out.println("sql========"+sql); 
@@ -267,6 +314,8 @@ public class PackageDao {
 		},iccId);
 		return rebate;
 	}
+
+
 
 
 

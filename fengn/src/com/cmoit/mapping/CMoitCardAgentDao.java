@@ -47,7 +47,7 @@ public class CMoitCardAgentDao {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public List<CmoitCard> queryCmccDataList(String selectSql) {
+	public List<CmoitCard> queryCmoitDataList(String selectSql) {
 		final List<CmoitCard> list = new ArrayList<CmoitCard>();
 		jdbcTemplate.query(selectSql, new RowMapper() {
 			public Object mapRow(ResultSet rs, int arg1) throws SQLException {
@@ -71,6 +71,38 @@ public class CMoitCardAgentDao {
 				vo.setPacid(rs.getInt("pacid"));
 				vo.setUpdatetime(rs.getString("updatetime"));
 				vo.setUserstatus(rs.getString("userstatus"));
+				list.add(vo);
+				return null;
+			}
+		});
+		return list;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<CmoitCard> queryCmccDataList(String selectSql) {
+		final List<CmoitCard> list = new ArrayList<CmoitCard>();
+		jdbcTemplate.query(selectSql, new RowMapper() {
+			public Object mapRow(ResultSet rs, int arg1) throws SQLException {
+				CmoitCard vo = new CmoitCard();
+				vo.setId(rs.getInt("id"));
+				vo.setMsisdn(rs.getString("sim"));
+				vo.setIccid(rs.getString("iccid"));
+				vo.setCardstatus(rs.getString("bootstate"));
+				vo.setGprsused(rs.getString("monthusagedata"));
+				vo.setGprssum(rs.getString("flowleftvalue"));
+				//vo.setCompanyLevel(rs.getString("company_level"));
+				//vo.setWithGPRSService(rs.getString("withGPRSService"));
+				//vo.setPackageType(rs.getString("packagename"));
+				//vo.setPackageDetail(rs.getString("packageDetail"));
+				//vo.setMonthTotalStream(rs.getString("monthTotalStream"));
+				//vo.setUpdateTime(rs.getString("updateTime"));
+				//vo.setDeadline(rs.getString("oddtime"));
+				//vo.setExpireTime(rs.getString("expiretime"));
+				//vo.setOrderStatus(rs.getString("orderStatus"));
+				vo.setActivetime(rs.getString("activeTime"));
+				//vo.setRemark(rs.getString("remark"));
+				vo.setName(rs.getString("name"));
+				vo.setPacid(rs.getInt("pacid"));
 				list.add(vo);
 				return null;
 			}

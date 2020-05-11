@@ -5,26 +5,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.common.Dialect;
-import com.model.MlbCmccCard;
-import com.model.Pagination;
-import com.model.QueryData;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import com.cmoit.mapping.CMoitCardAgentDao;
 import com.cmoit.model.CmoitCard;
+import com.common.Dialect;
+import com.dao.UnicomCardAgentDao;
+import com.model.Pagination;
+import com.model.QueryData;
 
 @Service
 public class CMoitCardAgentService {
 	   
 		 @Autowired
 		 CMoitCardAgentDao dao ;
+		 @Autowired
+		 UnicomCardAgentDao cmccDao;
 		 
 		 
 		 public List<CmoitCard> queryCardInfo(Integer agentid , Pagination page, QueryData qo ){
@@ -67,11 +67,15 @@ public class CMoitCardAgentService {
 		 }
 		 
 		 public List<CmoitCard> queryCardInfo(Integer agentid , Pagination page, QueryData qo  , String table ){
-			 String sql =  "select c.* , ag.name , p.discrip , p.id pacid ";
+			 String sql =  " select c.* , ag.name , p.discrip , p.id pacid ";
 				sql = getSql(agentid,qo , table , sql);
 				sql+= " and c.iccid != ''   ORDER BY  c.iccid  " ;
 			 String finalSql = Dialect.getLimitString(sql, page.getPageNo(), page.getPageSize(), "MYSQL");
-					return dao.queryCmccDataList(finalSql);
+			 if("cmoit".equals(table)){
+				 return dao.queryCmoitDataList(finalSql);
+			 }else{
+				 return dao.queryCmccDataList(finalSql);
+			 }
 		 }
 		 
 		 
@@ -83,8 +87,8 @@ public class CMoitCardAgentService {
 		 }
 		 
 		 private String getSql(Integer agentid ,  QueryData qo  , String table , String sql  ) {
-			  sql  += "  from "+table+"_card_agent a , "+table+"_card c , a_agent ag , t_package p  "
-				 		+ "where a.iccid = c.iccid   and ag.id=a.agentid and p.id=a.pacid " ;
+			  sql  += "  from   "+table+"_card_agent a , "+ ("cmcc".equalsIgnoreCase(table)?"mlb_cmcc":"cmoit")+"_card c , a_agent ag , t_package p "
+				 		+ "where     a.iccid = c.iccid and  ag.id=a.agentid and p.id=a.pacid " ;
 			 String simstate = qo.getSimstate();
 			 
 			if(simstate != null) {
@@ -120,14 +124,26 @@ public class CMoitCardAgentService {
 			 if(StringUtils.isNotEmpty(qo.getAgentName())){
 				 sql += "and ag.name like '%"+qo.getAgentName().trim()+"%' ";
 			 }
-			 if(StringUtils.isNotEmpty(qo.getSimNum())){
-				 sql += "and c.msisdn='"+qo.getSimNum().trim()+"' ";
-			 }
-			 if(StringUtils.isNotEmpty(qo.getActiveStartTime())){
-					sql += "and c.openDate>='"+qo.getActiveStartTime().trim()+"' ";
-			 }
-			 if(StringUtils.isNotEmpty(qo.getActiveEndTime())){
+			 if("cmcc".equals(table)){
+				 if(StringUtils.isNotEmpty(qo.getSimNum())){
+					 sql += "and c.sim='"+qo.getSimNum().trim()+"' ";
+				 }
+				 if(StringUtils.isNotEmpty(qo.getActiveStartTime())){
+					 sql += "and c.createDate>='"+qo.getActiveStartTime().trim()+"' ";
+				 }
+				 if(StringUtils.isNotEmpty(qo.getActiveEndTime())){
+					 sql += "and c.createDate<='"+qo.getActiveEndTime().trim()+"' ";
+				 }
+			 }else{
+				 if(StringUtils.isNotEmpty(qo.getSimNum())){
+					 sql += "and c.msisdn='"+qo.getSimNum().trim()+"' ";
+				 }
+				 if(StringUtils.isNotEmpty(qo.getActiveStartTime())){
+					 sql += "and c.openDate>='"+qo.getActiveStartTime().trim()+"' ";
+				 }
+				 if(StringUtils.isNotEmpty(qo.getActiveEndTime())){
 					 sql += "and c.openDate<='"+qo.getActiveEndTime().trim()+"' ";
+				 }
 			 }
 			sql +="and ag.code like  CONCAT((select code from a_agent where id = "
 				+ agentid + "),'%' ) ";
@@ -136,6 +152,9 @@ public class CMoitCardAgentService {
 			}
 			if(StringUtils.isNotEmpty(qo.getIccidEnd())){
 				 sql += " and  c.iccid <= '" + qo.getIccidEnd() + "' " ;
+			}
+			if(StringUtils.isNotEmpty(qo.getIccid())){
+				 sql += " and  c.iccid = '" + qo.getIccid() + "' " ;
 			}
 			
 			return sql ;
@@ -196,12 +215,8 @@ public class CMoitCardAgentService {
 
 		public String queryTelByICCID(String iccid, String table) throws Exception {
 		 
-		String sql = "select a.telphone from "+table+"_card  c, "+ table+"_card_agent cca, a_agent a "
+		String sql = "select a.telphone from "+("cmcc".equalsIgnoreCase(table)?"mlb_cmcc":"cmoit")+"_card  c, "+ table+"_card_agent cca, a_agent a "
 				+ " where c.iccid = cca.iccid and  cca.agentid=a.id  and  c.iccid= '" + iccid + "'";
-		if("cmcc".equals(table)) {
-			sql = "select a.telphone from mlb_cmcc_card  c, cmcc_card_agent cca, a_agent a "
-					+ " where c.iccid = cca.iccid and  cca.agentid=a.id  and  c.iccid= '" + iccid + "'";
-		}
 		return  dao.queryTelphone(sql);
 		}
 		
@@ -209,7 +224,16 @@ public class CMoitCardAgentService {
 			String sql = "select pacid from "+table+"_card_agent  "
 					+ " where  iccid= '" + iccid + "'";
 			return  dao.queryTelphone(sql);
-			}
+		}
+		
+		public String queryTableByICCID(String iccid ) throws Exception {
+			String sql = "select 'cmoit' from  cmoit_card  "
+					+ " where  iccid= '" + iccid + "' "
+					+ "union "
+					+  "select 'cmcc' from  mlb_cmcc_card  "
+					+ " where  iccid= '" + iccid + "' ";
+			return  dao.queryTelphone(sql);
+		}
 		
 		
 		public CmoitCard getResultCmccFromMlb(JSONObject json) {

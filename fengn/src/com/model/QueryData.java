@@ -4,6 +4,7 @@ package com.model;
 public class QueryData {
 	//代理商套餐类型
 	  private String type ;
+	  private String iccid;
 	 //代理商iccid开始卡号
 	  private String iccidStart ; 
 	  //代理商iccid结束卡号
@@ -199,4 +200,11 @@ public class QueryData {
 	public void setActiveEndTime(String activeEndTime) {
 		this.activeEndTime = activeEndTime;
 	}
+	public String getIccid() {
+		return iccid;
+	}
+	public void setIccid(String iccid) {
+		this.iccid = iccid;
+	}
+	
 }

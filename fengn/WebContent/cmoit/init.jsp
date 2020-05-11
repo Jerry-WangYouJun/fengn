@@ -9,13 +9,16 @@
 <title>Insert title here</title>
 </head>
 <body>
+<h1>当前绑定账号：<img alt="" src="${logUser.headimg}" style="height: 50px;width: 50px">${logUser.wxName }</h1>
+<h3 style="color:red">扫描下方二维码，可修改绑定返佣进账的微信！请通过以上微信号确认未出现盗绑情况！！！</h3>
+<h3>扫描更换微信后，请刷新页面内容</h3>
 <input id="text" type="hidden" value="http://iot.iot10.cn/wx/init?userid=${userid}" style="width:80%" /><br />
 <div id="qrcode" style="width:500px; height:500px; margin-top:15px;"></div>
 
 <script type="text/javascript">
 var qrcode = new QRCode(document.getElementById("qrcode"), {
-	width : 500,
-	height : 500
+	width : 400,
+	height : 400
 });
 
 function makeCode () {		
@@ -42,5 +45,6 @@ $("#text").
 		}
 	});
 </script>
+	
 </body>
 </html>

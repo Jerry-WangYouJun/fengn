@@ -222,14 +222,18 @@
                             </li>
                              <c:if test="${roleid eq '1' }"><!-- roleid eq '1'  -->
 	                            <li><a href="#" class="st-bag" onclick='addTab("pac","${pageContext.request.contextPath}/pages/pac_list.jsp","套餐管理")'>
-								套餐管理</a>
+								管理套餐</a>
 	                            </li>
                             </c:if>
                             <c:if test="${roleid ne '1' }"><!-- roleid eq '1'  -->
-                            <li><a href="#" class="st-bag" onclick='addTab("packageMaintion","${pageContext.request.contextPath}/pages/pac_maintion.jsp","维护套餐")'>
-                                维护套餐</a>
+                            <li><a href="#" class="st-bag" onclick='addTab("packageMaintion","${pageContext.request.contextPath}/pages/pac_maintion.jsp","我的套餐")'>
+                              	  我的套餐</a>
                             </li>
                             </c:if>
+                            <li>
+                            	<a href="#" class="ec-users" onclick='addTab("packageSon","${pageContext.request.contextPath}/pages/pac_sonlist.jsp","下级套餐")'>
+								维护下级套餐</a>
+                            </li>
                         </ul>
                     </li>
                     <!-- <li><a href="#">联通物联卡 <i class="fa-file-text"></i></a>
@@ -490,6 +494,8 @@
 				}
 			//}
 		});
+		
+		addTab("packageMa","${pageContext.request.contextPath}/cmoit/init.jsp","当前绑定微信");
 	});
 	
 

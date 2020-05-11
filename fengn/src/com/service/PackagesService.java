@@ -63,15 +63,22 @@ public class PackagesService {
 		return dao.getPacListByAgentId(agentId);
 	}
 	
-	public Rebate getRebateByIccid(String iccid){
-		return dao.queryByIccId(iccid);
+	public List<Packages> getPacSonByAgentId(String agentId ,Pagination page ) {
+		return dao.getPacSonByAgentId(agentId , page);
 	}
 	
-	public List<Rebate> getRebatePersonList(String iccId) {
+	public Rebate getRebateByIccid(String iccid , String table){
+		return dao.queryByIccId(iccid , table  );
+	}
+	public int getPacSonByAgentIdTotal(String agentId) {
+		return dao.getPacSonByAgentIdTotal(agentId);
+	}
+	
+	public List<Rebate> getRebatePersonList(String iccId , String table ) {
 		// TODO Auto-generated method stub
 		List<Rebate> rebateList = new ArrayList<Rebate>();
 		//通过iccid 查询 cmcc_card_agent 表 获取 代理商id 与  套餐id 
-		Rebate rebatePerson = dao.queryByIccId(iccId);		
+		Rebate rebatePerson = dao.queryByIccId(iccId , table );		
 		rebateList.add(rebatePerson);
 		
 		if(rebatePerson.getParentAgentId() != 1)
@@ -136,4 +143,11 @@ public class PackagesService {
 			}	
 			return rebateList;
 	}
+
+	public void updateSonPacCost(Rebate rebate) {
+		dao.updateSonPacCost(rebate);
+		
+	}
+
+	
 }

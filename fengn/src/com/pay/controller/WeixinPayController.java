@@ -45,6 +45,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmoit.service.CMoitCardAgentService;
 import com.common.StringUtils;
 import com.model.History;
 import com.model.InfoVo;
@@ -80,6 +81,8 @@ public class WeixinPayController {
 	UserService userService;
 	@Autowired
 	PackagesService packagesService;
+	@Autowired
+    CMoitCardAgentService  ccaService;
 	
 	private static String baseUrl = "http://iot.iot10.cn";
 	Map<String,String>  excuteResultMap = new HashMap<>();
@@ -149,8 +152,9 @@ public class WeixinPayController {
 		try {
 			String orderId = request.getParameter("orderId");
 			System.out.println("in toPay,orderId:" + orderId);
-			
-			Rebate  rebate = packagesService.getRebateByIccid(orderId.substring(2, orderId.length()- 8));
+			String iccid = orderId.substring(2, orderId.length()- 8);
+			String table  = ccaService.queryTableByICCID(iccid);
+			Rebate  rebate = packagesService.getRebateByIccid(iccid ,table);
 			Packages pac = packagesService.selectPackagesById(rebate.getPackageId());
 			
 			pac.setRenew(rebate.getPacrenew());
@@ -271,10 +275,12 @@ public class WeixinPayController {
 			model.addAttribute("bizOrderId", orderId);
 			model.addAttribute("orderId", orderId);
 			model.addAttribute("payPrice", total_fee);
-			model.addAttribute("iccid", orderId.substring(2, orderId.length()- 8));
+			model.addAttribute("iccid", iccid);
 			model.addAttribute("pac", pac);
 			return "/jsapi";
 		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -298,17 +304,6 @@ public class WeixinPayController {
 		return openId ;
 	}
 	
-	private JSONObject getUserInfoByUnionID(String accessToken , String openId){
-		String  userJson = "";
-		String URL =  "https://api.weixin.qq.com/cgi-bin/user/info?access_token="+accessToken+"&openid="+openId+"&lang=zh_CN";
-		JSONObject jsonObject = CommonUtil.httpsRequest(URL, "GET", null);
-		if (null != jsonObject) {
-			openId = jsonObject.getString("openid");
-			System.out.println("userInfo:" + jsonObject.toString());
-			return jsonObject;
-		}
-		return null ;
-	}
 
 	/**
 	 * 微信异步回调，不会跳转页面
@@ -366,8 +361,10 @@ public class WeixinPayController {
                     			info.setICCID(iccid);
                     			info.setOrderNo(out_trade_no);
                     			service.queryHistoryList(info);
+                    			String table  = ccaService.queryTableByICCID(iccid); 
                     			if(info.getHistory().size() == 0) {
-                    				Rebate rebatePerson = packagesService.getRebateByIccid(iccid);
+                    				
+                    				Rebate rebatePerson = packagesService.getRebateByIccid(iccid,table);
                     				History  history = new History();
                     				history.setOrderNo(out_trade_no);
                     				history.setIccid(iccid);
@@ -382,7 +379,7 @@ public class WeixinPayController {
                     			
                     			//通过iccid 号码获取所有关联的返利人员
                     			
-                    			List<Rebate> rebateList = this.getRebatePersonList(iccid);
+                    			List<Rebate> rebateList = this.getRebatePersonList(iccid , table);
                     			if(rebateList.size()!=0 || rebateList != null)
                     			{
                     				int u = 1 ;
@@ -476,9 +473,9 @@ public class WeixinPayController {
 	 */
 //	@RequestMapping("/testRebatePerson")
 //	@ResponseBody
-	public List<Rebate> getRebatePersonList(String iccId)
+	public List<Rebate> getRebatePersonList(String iccId , String table )
 	{
-		return packagesService.getRebatePersonList(iccId);
+		return packagesService.getRebatePersonList(iccId ,table );
 	}
 	
 	
@@ -515,11 +512,27 @@ public class WeixinPayController {
 	        JSONObject jsonObject = WXAuthUtil.doGetJson(url);
 	        System.out.println(jsonObject);
 	        String openid = jsonObject.getString("openid");
-	        userService.updateOpenID(userid, openid);
+	        String access_token = jsonObject.getString("access_token");
+	        String infoUrl="https://api.weixin.qq.com/sns/userinfo?access_token="+access_token
+	        		+ "&openid="+openid
+	        		+ "&lang=zh_CN";
+	        JSONObject userinfo = CommonUtil.httpsRequest(infoUrl, "GET", null);
+	        System.out.println(userinfo);
+	        if (null != userinfo) {
+	        	System.out.println("userInfo:" + userinfo.toString());
+	        }
+	        userService.updateOpenID(userid, openid , userinfo.getString("nickname"), userinfo.getString("headimgurl"));
+	        
 	        return "cmoit/success";
 	}
 	
-	
+	private JSONObject getUserInfoByUnionID(String accessToken , String openId){
+		String  userJson = "";
+		/**
+		 * 拉取用户信息
+		 */
+		return null ;
+	}
 	
 	
 	

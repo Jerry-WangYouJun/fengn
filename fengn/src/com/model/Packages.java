@@ -11,6 +11,7 @@ public class Packages {
 
 	 //额外属性
 	 private String agentId;
+	 private String agentName;
 
 	public Integer getId() {
 		return id;
@@ -73,4 +74,11 @@ public class Packages {
 	public void setAgentId(String agentId) {
 		this.agentId = agentId;
 	}
+	public String getAgentName() {
+		return agentName;
+	}
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+	
 }

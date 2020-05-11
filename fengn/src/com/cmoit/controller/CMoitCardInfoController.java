@@ -21,11 +21,8 @@ import com.cmoit.service.CMoitCardAgentService;
 import com.common.CMOIT_API_Util;
 import com.common.ContextString;
 import com.common.DateUtils;
-import com.dao.MlbCmccCardMapper;
-import com.dao.MlbUnicomCardMapper;
 import com.dao.PackageMapper;
 import com.model.InfoVo;
-import com.model.MlbCmccCard;
 import com.model.Packages;
 import com.model.Pagination;
 import com.model.QueryData;
@@ -56,14 +53,14 @@ public class CMoitCardInfoController {
 	    	ModelAndView mv = new ModelAndView("cmoit/cardInfo");
 			try {
 				QueryData qo = new QueryData();
-				qo.setSimNum(iccid);
+				qo.setIccid(iccid);
 				 List<CmoitCard> list = ccaService.queryCardInfo(1, new Pagination(), qo , "cmoit");
 				 CmoitCard card =  new CmoitCard();
-				 if(list != null && list.size() > 0 && iccid.equals(list.get(0).getMsisdn())){
+				 if(list != null && list.size() > 0 ){
 					 card	= list.get(0);
 					 CMOIT_API_Util.queryCmoitDataInfo(card);
 					 mv.addObject("apitype", "cmoit");
-					 String tel = ccaService.queryTelByICCID(card.getIccid() , "cmoit");
+					 String tel = ccaService.queryTelByICCID( iccid , "cmoit");
 				    	mv.addObject("tel", tel);
 				 }else{
 					 card = ccaService.getResultCmccFromMlb(CMOIT_API_Util.doPost(ContextString.URL_NEW_QUERY, iccid));
@@ -89,41 +86,18 @@ public class CMoitCardInfoController {
 	    }
 	    
 	    
-	    @RequestMapping("/search")
-	    public ModelAndView searchHistory(String iccid){
-	    	ModelAndView mv = new ModelAndView("history");
-	    	InfoVo vo;
-			try {
-				vo = service.queryInfoByICCID(iccid);
-				if(vo!=null){
-					service.queryHistoryList(vo);
-					mv.addObject("info", vo);
-				}else{
-					InfoVo   wrongInfo = new InfoVo();
-					wrongInfo.setUserStatus("卡号信息异常");
-					mv.addObject("info", wrongInfo);
-				}
-			} catch (Exception e) {
-				InfoVo   wrongInfo = new InfoVo();
-				wrongInfo.setUserStatus("卡号信息异常:" + e.getMessage());
-				mv.addObject("info", wrongInfo);
-			}
-	    	return mv ;
-	    	
-	    }
-	    
 	    @RequestMapping("/xinfu_wechat_pay")
-	    public ModelAndView getPay(@RequestParam("iccid") String iccid , String apitype, HttpServletRequest request){
+	    public ModelAndView getPay(@RequestParam("iccid") String iccid , String apitype, HttpServletRequest request) throws Exception{
 	    	if(iccid==null){
 	    		iccid = request.getParameter("iccid");
 	    	}
 	    	QueryData qo = new QueryData();
-			qo.setSimNum(iccid);
-			 List<CmoitCard> list = ccaService.queryCardInfo(1, new Pagination(), qo , "cmoit");
+			qo.setIccid(iccid);
+			 List<CmoitCard> list = ccaService.queryCardInfo(1, new Pagination(), qo , apitype);
 			 CmoitCard card =  list.get(0);
 			 Packages  pac = pacDao.selectByPrimaryKey(card.getPacid());
 	    	ModelAndView mv = new ModelAndView("xfpay");
-	    	mv.addObject("iccid", card.getIccid());
+	    	mv.addObject("iccid", iccid);
 	    	mv.addObject("pac",pac);
 	    	return mv;
 	    }

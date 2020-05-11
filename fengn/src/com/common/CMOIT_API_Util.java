@@ -249,7 +249,7 @@ public class CMOIT_API_Util {
 			 * @author:wu
 			 * @createDate:2018年2月28日 下午4:36:55
 			 */
-			public static JSONObject doPost(String uri, String simid) throws ClientProtocolException, IOException{
+			public static JSONObject doPost(String uri, String iccid) throws ClientProtocolException, IOException{
 				 long timeStampSec = System.currentTimeMillis()/1000;
 			     String timestamp = String.format("%010d", timeStampSec);
 			     String id = "131416124";
@@ -259,8 +259,8 @@ public class CMOIT_API_Util {
 				 System.out.println("字符串"+str);
 				 System.out.println("sign:" + sign);
 				 Map map = new HashMap();
-				 map.put("num", simid);
-				 map.put("num_type", "sim");
+				 map.put("num", iccid);
+				 map.put("num_type", "iccid");
 				 map.put("userId", id);
 				 map.put("timestamp",timestamp);
 				 map.put("sign", sign.toUpperCase());

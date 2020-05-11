@@ -80,6 +80,10 @@
 								<input type="text" class="form-control" name="discrip">
 						</div>
 						<div class="form-group">
+							<label for="message-text" class="control-label">一级续费价:</label> 
+								<input type="text" class="form-control" name="renew">
+						</div>
+						<div class="form-group">
 							<label for="message-text" class="control-label">备注:</label> <input
 								class="form-control" name="remark"></input>
 						</div>
@@ -126,6 +130,8 @@
 			            field : 'typename',   title : '套餐名称',   align: 'center', valign: 'middle'  
 			        },{  
 			            field : 'discrip',title : '套餐描述',  align: 'center', valign: 'middle'  
+			        },{  
+			            field : 'renew',title : '一级续费价',  align: 'center', valign: 'middle'  
 			        }, {
                         field : 'remark',  title : '备注',  align: 'center',   valign: 'middle'
 			        }],  

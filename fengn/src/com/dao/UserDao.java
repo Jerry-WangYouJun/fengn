@@ -39,6 +39,8 @@ public class UserDao {
 					user.setAgentId(rs.getInt("agentid"));
 					user.setAgentCode(rs.getString("code"));
 					user.setGroupId(rs.getInt("gid"));
+					user.setWxName(rs.getString("wxname"));
+					user.setHeadimg(rs.getString("headimg"));
 				 return null ;
 			}
 		});
@@ -119,11 +121,11 @@ public class UserDao {
         });
 	}
 	
-	public void updateOpenID(Integer userid , String openid) {
+	public void updateOpenID(Integer userid , String openid , String name, String img) {
 		 jdbcTemplate.update(  
-	                "update a_user set  openid = ?  where id = ?",   
-	                new Object[]{openid,userid},   
-	                new int[]{java.sql.Types.VARCHAR , java.sql.Types.INTEGER});  
+	                "update a_user set  openid = ? , wxname=? , headimg=? where id = ?",   
+	                new Object[]{openid , name , img,userid},   
+	                new int[]{java.sql.Types.VARCHAR  ,java.sql.Types.VARCHAR ,java.sql.Types.VARCHAR , java.sql.Types.INTEGER});  
 	}
 	
 	public void delete(Integer id) {
