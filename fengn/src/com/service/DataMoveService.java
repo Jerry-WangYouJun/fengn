@@ -30,10 +30,10 @@ public interface DataMoveService {
 
 	public List<List<Object>> getDataList(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception;
 
-	public void insertDataToCmoitCart(List<List<Object>> listob);
+	public int insertDataToCmoitCart(List<List<Object>> listob);
 
-	public void uploadData(List<List<Object>> listob, String apiCode , String pacId);
+	public int uploadData(List<List<Object>> listob, String apiCode , String pacId);
 
-	public void insertDataToMlbIFixedCart(List<List<Object>> listob);
+	public int insertDataToMlbIFixedCart(List<List<Object>> listob);
 	
 }

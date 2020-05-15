@@ -195,28 +195,33 @@ public class DataMoveServiceImpl implements DataMoveService {
 	}
 
 	@Override
-	public void insertDataToCmoitCart(List<List<Object>> listob) {
-		dataMoveDao.insertDataTemp(listob , "");
+	public int insertDataToCmoitCart(List<List<Object>> listob) {
+		return dataMoveDao.insertDataTemp(listob , "");
 	}
 
 	@Override
-	public void uploadData(List<List<Object>> listob, String apiCode , String pacId) {
+	public int uploadData(List<List<Object>> listob, String apiCode , String pacId) {
+		int result = 0 ;
 		if("cmcc".equals(apiCode)) {
 			System.out.println("插入代理商卡数据开始：" + System.currentTimeMillis());
-			insertDataToMlbIFixedCart(listob );
+			result = insertDataToMlbIFixedCart(listob );
 		}else {
 			System.out.println("插入代理商卡数据开始：" + System.currentTimeMillis());
-			insertDataToCmoitCart(listob );
+			result = insertDataToCmoitCart(listob );
 		}
 		System.out.println("插入新数据开始：" + System.currentTimeMillis());
-		insertAgentCard(listob  , apiCode , pacId);
+		if(result > 0){
+			insertAgentCard(listob  , apiCode , pacId);
+		}
+		
+		return result;
 //		insertPacageRef(listob  , apiCode , pacId);
 		
 	}
 
 	@Override
-	public void insertDataToMlbIFixedCart(List<List<Object>> listob) {
-		dataMoveDao.insertDataMlbFixed(listob );
+	public int insertDataToMlbIFixedCart(List<List<Object>> listob) {
+		return dataMoveDao.insertDataMlbFixed(listob );
 		
 	}
 }

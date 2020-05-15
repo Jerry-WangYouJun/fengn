@@ -163,10 +163,12 @@ public class DataMoveDao {
 		return voList.size();
 	}
 
+	int result = 0;
 	public int insertDataTemp(List<List<Object>> listob, String apiCode) {
 		String insertsqlTemp = "INSERT INTO  cmoit_card ( msisdn ,iccid,imsi,opentime,activetime ) "
 				+ "VALUES (?,?, ?, ?, ? )";
 		objectList = listob;
+		result = 0;
 		// batchUpdate可以高效进行批量插入操作
 		try {
 			if (objectList != null && objectList.size() > 0) {
@@ -188,6 +190,7 @@ public class DataMoveDao {
 												.valueOf(valueList.get(3)).trim());
 										ps.setString(5, String
 												.valueOf(valueList.get(4)));
+										result ++;
 								} catch (Exception e) {
 									e.printStackTrace();
 									System.out.println("出错的" + i + e.getMessage());
@@ -204,7 +207,7 @@ public class DataMoveDao {
 					+ "<br>");
 			e.printStackTrace();
 		}
-		return objectList.size();
+		return result;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -478,11 +481,12 @@ public class DataMoveDao {
 			});
 			return map;
 	}
-
+	int resuslt = 0 ;
 	public int insertDataMlbFixed(List<List<Object>> listob) {
 		String insertsqlTemp = "INSERT INTO  mlb_cmcc_card ( sim ,iccid ,createtime,activetime ) "
 				+ "VALUES (?,?,  ?, ? )";
 		objectList = listob;
+		resuslt = 0 ;
 		// batchUpdate可以高效进行批量插入操作
 		try {
 			if (objectList != null && objectList.size() > 0) {
@@ -498,10 +502,19 @@ public class DataMoveDao {
 														.trim());
 										ps.setString(2, String
 												.valueOf(valueList.get(0)).trim());
-										ps.setString(3, String
-												.valueOf(valueList.get(12)).trim());
+										if(valueList.size() >= 13 ){
+											ps.setString(3, String
+													.valueOf(valueList.get(12)).trim());
+										}else{
+											ps.setString(3, "");
+										}
+										if(valueList.size() >= 12 ){
 										ps.setString(4, String
 												.valueOf(valueList.get(11)).trim());
+										}else{
+											ps.setString(4, "");
+										}
+										resuslt++;
 								} catch (Exception e) {
 									e.printStackTrace();
 									System.out.println("出错的" + i + e.getMessage());
@@ -518,7 +531,7 @@ public class DataMoveDao {
 					+ "<br>");
 			e.printStackTrace();
 		}
-		return objectList.size();
+		return resuslt;
 		
 	}
 }

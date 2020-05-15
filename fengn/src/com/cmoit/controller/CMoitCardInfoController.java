@@ -114,11 +114,11 @@ public class CMoitCardInfoController {
 			System.out.println("导入表数据开始：" + DateUtils.formatDate("MM-dd:HH-mm-ss"));
 			List<List<Object>> listob = moveDataServices.getDataList(multipartRequest, response);
 			System.out.println();
-			moveDataServices.uploadData(listob , apiCode , pacId);
+			int  result  = moveDataServices.uploadData(listob , apiCode , pacId);
 			
 //			int insertNum = moveDataServices.dataMoveSql2Oracle(apiCode);
 //			System.out.println("执行结束            ：" + System.currentTimeMillis());
-			out.print("新增数据" + listob.size()  + "条");
+			out.print("新增数据" + result  + "条");
 			out.flush();
 			out.close();
 		}
