@@ -22,9 +22,9 @@
 			            <button id="btn_edit" type="button" class="btn btn-default" onclick="updateData()">  
 			                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>修改  
 			            </button>  
-			            <button id="btn_delete" type="button" class="btn btn-default" onclick="delDish()">  
+			            <!-- <button id="btn_delete" type="button" class="btn btn-default" onclick="delDish()">  
 			                <span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>删除  
-			            </button>  
+			            </button>   -->
 			            <button id="btn_delete" type="button" class="btn btn-default" onclick="addInfo()">  
 			            	<span class="glyphicon glyphicon-plus" aria-hidden="true" ></span>新增
 			            </button>
