@@ -483,8 +483,8 @@ public class DataMoveDao {
 	}
 	int resuslt = 0 ;
 	public int insertDataMlbFixed(List<List<Object>> listob) {
-		String insertsqlTemp = "INSERT INTO  mlb_cmcc_card ( sim ,iccid ,createtime,activetime ) "
-				+ "VALUES (?,?,  ?, ? )";
+		String insertsqlTemp = "INSERT INTO  mlb_cmcc_card ( sim ,iccid ,createtime,activetime ,remark ) "
+				+ "VALUES (?,?,  ?, ? , ? )";
 		objectList = listob;
 		resuslt = 0 ;
 		// batchUpdate可以高效进行批量插入操作
@@ -514,6 +514,7 @@ public class DataMoveDao {
 										}else{
 											ps.setString(4, "");
 										}
+										ps.setString(5, DateUtils.getDate12());
 										resuslt++;
 								} catch (Exception e) {
 									e.printStackTrace();

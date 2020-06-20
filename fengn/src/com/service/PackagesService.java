@@ -115,7 +115,7 @@ public class PackagesService {
 			if(rebatePerson.getPacTypeName().indexOf("gd")!= -1)
 			{
 				/////固定套餐售价是15 
-				double amount = 15 - rebatePerson.getPaccost();
+				double amount = 20 - rebatePerson.getPaccost();
 				/////防止设置异常 出现负数
 				if(amount>0)
 				{

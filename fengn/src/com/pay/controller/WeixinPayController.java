@@ -127,6 +127,16 @@ public class WeixinPayController {
 			String pacid = request.getParameter("pacid");
 			//String totalFee = "0.01";
 			System.out.println("in userAuth,orderId:" + orderId);
+			String table;
+			try {
+				table = ccaService.queryTableByICCID(iccid);
+				Rebate  rebate = packagesService.getRebateByIccid(iccid ,table);
+			} catch (Exception e) {
+				InfoVo   wrongInfo = new InfoVo();
+				wrongInfo.setUserStatus("套餐绑定错误，请联系管理员");
+				request.setAttribute("info", wrongInfo);
+				return "cmoit/cardInfo";
+			}
 			
 			//授权后要跳转的链接
 			String backUri = baseUrl + "/wx/toPay";
@@ -245,15 +255,13 @@ public class WeixinPayController {
 			
 			String createOrderURL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 			String prepay_id="";
-			try {
-				prepay_id = WeixinPayUtil.getPayNo(createOrderURL, xml);
-				System.out.println("prepay_id:" + prepay_id);
-				if(prepay_id.equals("")){
-					request.setAttribute("ErrorMsg", "统一支付接口获取预支付订单出错");
-					response.sendRedirect("error.jsp");
-				}
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			prepay_id = WeixinPayUtil.getPayNo(createOrderURL, xml);
+			System.out.println("prepay_id:" + prepay_id);
+			if(prepay_id.equals("")){
+				InfoVo   wrongInfo = new InfoVo();
+				wrongInfo.setUserStatus("套餐绑定或定价错误，请联系管理员");
+				request.setAttribute("info", wrongInfo);
+				return "cmoit/cardInfo";
 			}
 			SortedMap<String, String> finalpackage = new TreeMap<String, String>();
 			String timestamp = Sha1Util.getTimeStamp();
@@ -278,12 +286,12 @@ public class WeixinPayController {
 			model.addAttribute("iccid", iccid);
 			model.addAttribute("pac", pac);
 			return "/jsapi";
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+		}  catch (Exception e) {
+			InfoVo   wrongInfo = new InfoVo();
+			wrongInfo.setUserStatus("套餐绑定或定价错误，请联系管理员");
+			request.setAttribute("info", wrongInfo);
+			return "cmoit/cardInfo";
 		}
-		return null;
 	}
 	
 	/**
@@ -521,7 +529,8 @@ public class WeixinPayController {
 	        if (null != userinfo) {
 	        	System.out.println("userInfo:" + userinfo.toString());
 	        }
-	        userService.updateOpenID(userid, openid , userinfo.getString("nickname"), userinfo.getString("headimgurl"));
+	        String  nickname =  URLEncoder.encode(userinfo.getString("nickname"), "utf-8");
+	        userService.updateOpenID(userid, openid , nickname, userinfo.getString("headimgurl"));
 	        
 	        return "cmoit/success";
 	}

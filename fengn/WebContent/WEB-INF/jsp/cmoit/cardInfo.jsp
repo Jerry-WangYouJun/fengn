@@ -171,7 +171,7 @@
 					</p>
 					<p class="flowTips pull-right">*26号月结清零</p>
 					<div class="pull-right date-info" style="display: block;">
-						使用<span class="lastDays">${cmoitInfo.gprsused}</span>
+						使用<span class="lastDays"><fmt:formatNumber value="${cmoitInfo.gprsused / 1024}" pattern="###,###.##"/></span>
 					</div>
 					<div class="pull-right state" style="display: block;">
 						<img src="${basePath }/images/offLine.png"> <span
@@ -202,7 +202,7 @@
 				</div>
 				<div class="leftFlowTxt row">
 							<span class="surplusFlowContent col-md-6" ><span>
-													${cmoitInfo.gprssum}|
+													<fmt:formatNumber value="${cmoitInfo.gprssum / 1024}" pattern="###.##"/>|
 													<fmt:formatNumber value="${cmoitInfo.gprsused / 1024}" pattern="###.##"/>
 													M
 										</span></span>
@@ -263,7 +263,7 @@
 			class="button button-raised button-primary button-pill btn-uncertification renewalBtn">充值续费</a>
 		<div class="f-link">
 			<a href="javascript:void(0);" onclick="toRenewalRecord()"
-				class="f-renewalRecord"> <i class="icon iconfont"></i>历史续费<span>￥15</span>
+				class="f-renewalRecord"> <i class="icon iconfont"></i>历史续费<span>￥20s</span>
 			</a> <a href="javascript:void(0);" onclick="toMonthAmount()"
 				class="f-flowDetail"> <i class="icon iconfont"></i>本月用量详情
 			</a> <a href="javascript:void(0);" onclick="toIntelligentDiagnosis()"

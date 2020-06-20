@@ -1,6 +1,8 @@
 package com.cmoit.controller;
 
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.common.DateUtils;
+import com.common.StringUtils;
 import com.model.User;
 import com.service.AgentService;
 import com.service.UserService;
@@ -31,7 +34,7 @@ public class CMoitUserController {
 	AgentService agentService ;
 	
 	@RequestMapping("/checkUser")
-	public String checkUser(User user , HttpServletRequest request , HttpSession session){
+	public String checkUser(User user , HttpServletRequest request , HttpSession session) throws UnsupportedEncodingException{
 		user = service.checkUser(user);
 		if(user.getAgentCode() != null ){
 			session.setAttribute("agentcode", user.getAgentCode());
@@ -40,6 +43,9 @@ public class CMoitUserController {
 			session.setAttribute("roleid", user.getRoleId());
 			session.setAttribute("groupId", user.getGroupId());
 			session.setAttribute("userid",  user.getId());
+			if(StringUtils.isNotEmpty(user.getWxName())){
+				user.setWxName(URLDecoder.decode(user.getWxName(), "utf-8"));
+			}
 			session.setAttribute("logUser", user);
 //			if(ContextString.ROLE_ADMIN.equals(user.getRoleId())
 //					|| ContextString.ROLE_AGENT.equals(user.getRoleId())) {

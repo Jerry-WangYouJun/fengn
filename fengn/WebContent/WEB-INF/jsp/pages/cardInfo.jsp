@@ -252,7 +252,7 @@
 			class="button button-raised button-primary button-pill btn-uncertification renewalBtn">充值续费</a>
 		<div class="f-link">
 			<a href="javascript:void(0);" onclick="toRenewalRecord()"
-				class="f-renewalRecord"> <i class="icon iconfont"></i>历史续费<span>￥15</span>
+				class="f-renewalRecord"> <i class="icon iconfont"></i>历史续费<span>￥20</span>
 			</a> <a href="javascript:void(0);" onclick="toMonthAmount()"
 				class="f-flowDetail"> <i class="icon iconfont"></i>本月用量详情
 			</a> <a href="javascript:void(0);" onclick="toIntelligentDiagnosis()"
