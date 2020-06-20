@@ -8,6 +8,7 @@ System.out.println("in jsapi.jsp");
 %>
 <!DOCTYPE html>
 <html>
+<!-- 充值最后一步 -->
 	<head>
 		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

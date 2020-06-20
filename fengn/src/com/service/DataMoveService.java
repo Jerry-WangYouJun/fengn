@@ -35,5 +35,7 @@ public interface DataMoveService {
 	public int uploadData(List<List<Object>> listob, String apiCode , String pacId);
 
 	public int insertDataToMlbIFixedCart(List<List<Object>> listob);
+
+	int queryIccidForUpload(String apiCode, String iccid);
 	
 }

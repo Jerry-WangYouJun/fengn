@@ -50,7 +50,7 @@ public class CMoitCardInfoController {
 	    
 	    @RequestMapping("/c")
 	    public ModelAndView getCmccCardInfo(String iccid){
-	    	ModelAndView mv = new ModelAndView("cmoit/cardInfo");
+	    	ModelAndView mv = new ModelAndView("cmoit/cardInfo_pay_first");
 			try {
 				QueryData qo = new QueryData();
 				qo.setIccid(iccid);
@@ -85,6 +85,21 @@ public class CMoitCardInfoController {
 	    	
 	    }
 	    
+	    @RequestMapping("/pay_second")
+	    public ModelAndView pay_second(@RequestParam("iccid") String iccid , String apitype, HttpServletRequest request) throws Exception{
+	    	if(iccid==null){
+	    		iccid = request.getParameter("iccid");
+	    	}
+	    	QueryData qo = new QueryData();
+			qo.setIccid(iccid);
+			 List<CmoitCard> list = ccaService.queryCardInfo(1, new Pagination(), qo , apitype);
+			 CmoitCard card =  list.get(0);
+			 Packages  pac = pacDao.selectByPrimaryKey(card.getPacid());
+	    	ModelAndView mv = new ModelAndView("cmoit/cardInfo_pay_second");
+	    	mv.addObject("iccid", iccid);
+	    	mv.addObject("pac",pac);
+	    	return mv;
+	    }
 	    
 	    @RequestMapping("/xinfu_wechat_pay")
 	    public ModelAndView getPay(@RequestParam("iccid") String iccid , String apitype, HttpServletRequest request) throws Exception{
@@ -114,13 +129,17 @@ public class CMoitCardInfoController {
 			System.out.println("导入表数据开始：" + DateUtils.formatDate("MM-dd:HH-mm-ss"));
 			List<List<Object>> listob = moveDataServices.getDataList(multipartRequest, response);
 			System.out.println();
-			int  result  = moveDataServices.uploadData(listob , apiCode , pacId);
-			
-//			int insertNum = moveDataServices.dataMoveSql2Oracle(apiCode);
-//			System.out.println("执行结束            ：" + System.currentTimeMillis());
-			out.print("新增数据" + result  + "条");
-			out.flush();
-			out.close();
+			String iccid =  listob.get(0).get("cmcc".equals(apiCode)?0:8).toString();
+			int testIccid = moveDataServices.queryIccidForUpload(apiCode, iccid);
+			if(testIccid > 0 ) {
+				out.print("存才重复卡号，请检查是否重复导入");
+				out.flush();
+			}else {
+				int  result  = moveDataServices.uploadData(listob , apiCode , pacId);
+				out.print("新增数据" + result  + "条");
+				out.flush();
+				out.close();
+			}
 		}
 	    
 }

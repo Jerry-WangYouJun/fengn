@@ -1,0 +1,685 @@
+﻿/*原模板css*/
+/*.cardState-stop{-webkit-animation:scaleout 3s infinite ease-in-out;animation:scaleout 3s infinite ease-in-out;}*/
+.authentication-animation{-webkit-animation:authentication 3s infinite ease-in-out;animation:authentication 3s infinite ease-in-out;}
+#amountUsageData{padding-left:10px;color:#353535;}
+@-webkit-keyframes scaleout{
+  0%{color:rgba(255,0,0,1);background:rgba(255,255,255,1);}
+  25%{color:rgba(255,0,0,1);background:rgba(255,0,0,0.6);}
+  50%{color:rgba(255,255,255,1);background:rgba(255,0,0,1);box-shadow:0px 0px 5px 5px rgba(255,0,0,0.5);}
+  75%{color:rgba(255,0,0,1);background:rgba(255,0,0,0.6);}
+  100%{color:rgba(255,0,0,1);background:rgba(255,255,255,1);}
+}
+@keyframes scaleout{
+  0%{color:rgba(255,0,0,1);background:rgba(255,255,255,1);}
+  25%{color:rgba(255,0,0,1);background:rgba(255,0,0,0.6);}
+  50%{color:rgba(255,255,255,1);background:rgba(255,0,0,1);box-shadow:0px 0px 5px 5px rgba(255,0,0,0.5);}
+  75%{color:rgba(255,0,0,1);background:rgba(255,0,0,0.6);}
+  100%{color:rgba(255,0,0,1);background:rgba(255,255,255,1);}
+}
+@keyframes authentication{
+  0%{color:rgba(245,129,14,1);background:rgba(255,255,255,1);}
+  25%{color:rgba(245,129,14,1);background:rgba(245,129,14,0.6);}
+  50%{color:rgba(255,255,255,1);background:rgba(245,129,14,1);box-shadow:0px 0px 5px 5px rgba(245,129,14,0.5);}
+  75%{color:rgba(245,129,14,1);background:rgba(245,129,14,0.6);}
+  100%{color:rgba(245,129,14,1);background:rgba(255,255,255,1);}
+}
+@-webkit-keyframes authentication{
+  0%{color:rgba(245,129,14,1);background:rgba(255,255,255,1);}
+  25%{color:rgba(245,129,14,1);background:rgba(245,129,14,0.6);}
+  50%{color:rgba(255,255,255,1);background:rgba(245,129,14,1);box-shadow:0px 0px 5px 5px rgba(245,129,14,0.5);}
+  75%{color:rgba(245,129,14,1);background:rgba(245,129,14,0.6);}
+  100%{color:rgba(245,129,14,1);background:rgba(255,255,255,1);}
+}
+
+/*新增状态图标样式*/
+.state{height:14px;line-height:14px;margin-top:7px;margin-right:8px;display:none;}
+.state img{width:14px;position:relative;top:-1px;}
+.notShowData{display:none;}
+.swiper-slide{height:auto!important;}
+.orange{color:#f0690f;}
+.modal-content{overflow:hidden}
+#tipBox .modal-body{margin:0px;padding:0px;}
+#tipBox .modal-body-text{padding-bottom:32px;background:#f0690f;color:#fff;}
+.realName-tip{padding:10px;padding-bottom:0px;}
+.realName-tip h6{color:#000;font-size:13px;margin-bottom:7px;}
+.realName-tip p{font-size:12px;}
+.zdl,.xczs{border:1px solid #ccc;background-color:#fff;color:#ccc;width:100%;padding:10px 20px;box-sizing:border-box;border-radius:5px;font-size:12px;}
+.zdl{background-color:#2088e8;color:#fff;}
+.yd-content{display:flex;padding:5px 0;}
+.yd-content .yd-content-item{flex:1;}
+.yd-content .yd-content-item:first-of-type{box-sizing:border-box;border-right:1px solid #ddd;}
+.yd-content .yd-content-item .yd-content-title{font-weight:normal;font-size:15px;color:#353535;}
+.yd-content .yd-content-item .yd-content-main{font-size:26px;padding:10px;}
+.yd-content .yd-content-item .yd-content-date{font-weight:normal;font-size:12px;color:#969696;}
+.marquee{font-size:12px;animation:marquee 8s linear;animation-iteration-count:infinite;}
+#no-limit{font-size:14px;color:#fff;font-weight:normal;}
+#no-limit .show-tip{line-height:30px;padding:5px 20px;color:#f5810e;background-image:url(../images/bg.png);background-repeat:no-repeat;background-position:center;background-size:100%;}
+@keyframes marquee{
+  from{transform:translate3d(100%,0,0);}
+  to{transform:translate3d(-100%,0,0);}
+}
+
+#LimitlessInfo{
+    font-size: 0.28rem;
+}
+#LimitlessInfo > p > img:nth-of-type(1){
+    height: 0.16rem;
+    top: -0.01rem;
+    margin-right: 0.02rem;
+}
+#LimitlessInfo .currentPackageInfo{
+  text-indent: 0;
+  padding-left: 10px;
+}
+.addPackageList > ul{
+    border-radius: 0.04rem;
+}
+.layer-speed ul{
+    border:0.06rem solid #feb391;
+}
+.layer-speed li{
+    padding-top:0.15rem;
+    padding-bottom:0.15rem;
+}
+.layer-speed p{
+    font-size:0.28rem;
+}
+.layer-speed .right{
+    font-size:0.30rem;
+}
+
+.close-layer{
+    width: 0.6rem;
+    height: 0.6rem;
+}
+
+
+html,body,.container,footer{
+  background: #f4f4f4;
+}
+/*内容套餐后css*/
+body{
+  font-size:14px !important;;
+  height: 100%;
+}
+.meal-container{
+  margin: 0.2rem 0.24rem;
+}
+.meal-wrap{
+  padding:0 0.3rem;
+  background: #fff;
+  border-radius: 0.08rem;
+}
+.meal-wrap .meal-item{
+  padding-top:0.2rem;
+  padding-bottom:0.22rem;
+  position: relative;
+
+}
+.meal-wrap-item{
+  max-height: 3.5rem;
+  overflow-y: auto;
+}
+
+#meal-history .month{
+  display: none;
+}
+#meal-history .meal-item:first-child .month{
+  display: block;
+}
+.all-normal-meal .meal-wrap-item .meal-item .month{
+  display: none;
+}
+.meal-item .title{
+  font-size: 0.3rem;
+  color:#333;
+  font-weight: normal;
+  height: 0.66rem;
+  line-height: 0.66rem;
+  display: inline-block;
+}
+.meal-item .total-flow{
+ font-size: 0.3rem;
+ color:#ff7113;
+ padding-left: 0.1rem;
+ color:#333;
+}
+.meal-item .progress-wrap{
+  width: 100%;
+  height: 0.1rem;
+  background: #ddd;
+  position: relative;
+}
+.meal-item .progress{
+  position: absolute;
+  top:0px;
+  left: 0px;
+  /*width: 50%;*/
+  height: 0.1rem;
+  background: #ffb17d;
+}
+.item-detail{
+  font-size:0.3rem;
+  color:#333; 
+  line-height: 0.54rem;
+  line-height: 0.54rem;
+}
+.item-detail .last-flow{
+  font-size:0.3rem;
+  /*padding-left: 0.05rem;*/
+}
+.item-detail .last-flows{
+  font-size:0.3rem;
+  /*padding-left: 0.05rem;*/
+}
+.item-detail .last-flow span{
+   color:#ff7113; 
+   padding-left: 0.1rem;
+   font-size:0.36rem;
+}
+.item-detail .last-flows span{
+   color:#ff7113; 
+   padding-left: 0.1rem;
+   font-size:0.36rem;
+}
+.item-detail .end-time{
+  float:right;
+}
+.meal-item .month{
+  position: absolute;
+  top:0.2rem;
+  right:0; 
+  color: #666;
+  background:#e1e1e1;
+  font-size:0.26rem;
+  padding: 0.02rem 0.05em;
+  border-radius: 0.06rem;
+}
+.meal-container{
+  display: none;
+}
+
+.meal-container .meal-detail{
+  background: #fff;
+  padding:0;
+  margin-top:0.2rem;
+  min-height: 4.2rem;
+  /*max-height: 5.0rem;*/
+  /*overflow-y: auto;*/
+}
+.detail-title{
+  /*overflow: hidden;*/
+  height: 42px;
+  line-height: 42px;
+  border-bottom:1px solid #ddd;
+}
+.meal-container .detail-item{
+  padding:0 0.3rem;
+}
+.meal-wrap .detail-info{
+  padding-bottom: 0.3rem;
+  /*height: 4rem;*/
+  overflow:auto;
+}
+.detail-title li{
+  float: left;
+  height: 42px;
+  line-height:42px;
+  margin:0 0.3rem;
+  font-size: 0.3rem;
+}
+.detail-info li{
+  display: none;
+}
+.meal-wrap .detail-info .show-active{
+  display: block;
+}
+.detail-title li:first-child{
+  margin-left:0;
+
+}
+.active{
+  color:#f5800e;
+  border-bottom:2px solid #f5800e;
+}
+.meal-wrap .detail-info .title{
+  font-size: 0.32rem;
+  color: #333;
+  padding-top: 0.18rem;
+  line-height:0.64rem; 
+}
+.meal-wrap .meal-descript{
+  font-size: 0.3rem;
+  font-color:#666;
+  line-height: 0.42rem;
+}
+.status {
+  line-height: 0.5rem;
+  font-size:0.28rem;
+  color:#333;
+}
+.meal-wrap .equipment-status{
+  margin-top: 0.2rem;
+}
+.meal-wrap .realname-link{
+  display: none;
+}
+
+.status .title{
+  font-size: 0.28rem;
+  color:#333;
+}
+.meal-wrap .card-separate-link{
+  color:#ff0000;
+}
+.line-img{
+  width:0.3rem;
+  height: 0.3rem; 
+}
+/*.meal-wrap.package-wrap{
+  overflow: hidden;
+  height: 0.32rem;
+}*/
+.meal-wrap .package-wrap .num{
+  float: right;
+  padding-right: 0.1rem;
+  padding-top: 0.12rem;
+
+}
+.meal-wrap .package-wrap .num span{
+  color:#f5800e;
+}
+.meal-wrap .package-wrap .num:before{
+  content:'[';
+}
+.meal-wrap .package-wrap .num:after{
+  content:']';
+}
+.card-separate-link{
+  display: none;
+}
+.green{
+  color:green;
+}
+.red{
+  color:#f00;
+}
+.no-history-list{
+  display: none;
+  text-align: center;
+}
+.meal-wrap .add-package{
+  height: 4rem;
+  overflow-y: auto; 
+  -webkit-overflow-scrolling: touch;
+
+}
+.meal-wrap .package-wrap .title{
+  font-size:0.28rem;
+  color:#999;
+
+}
+
+/*当前套餐描述*/
+
+.this-month{
+  display: none;
+}
+
+/*头部改版*/
+header .bg_wrap{
+  padding-top: 0.3rem;
+  padding-bottom: 0.2rem;
+  background: url(../images/head_bg.png) no-repeat center;
+  border-radius: 6px;
+  position: relative;
+  background-size: 100%;
+}
+.header-wrap{
+  padding-left: 0.24rem;
+}
+.operator-logo{
+  position: absolute;
+  left:0;
+  bottom:0;
+  width: 0.4rem;
+  height: 0.4rem;
+  background-size:100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.switch-bg{
+  position: absolute;
+  right:0;
+  top:0;
+  width: 0.74rem;
+  height: 0.74rem;
+  background: url(../images/switch_bg.png) no-repeat center;
+  background-size:100%;
+}
+.lt-part1-simInfo #cardNo{
+    color:#fff;
+    font-size: 0.38rem;
+}
+#IMEInum{
+  color:#fff;
+}
+.btns-container{
+  /*text-align: center;*/
+  padding-left: 1.5rem;
+  padding-top: 0;
+}
+.c-yellow{
+  background: #f36e0c;
+  color:#fff;
+  border:1px splid #f36e0c;
+  line-height: 0.45rem;
+  border-radius: 0.06rem;
+}
+.c-green{
+  background: #20c42f;
+  color:#fff;
+  border:1px splid #20c42f;
+  line-height: 0.45rem;
+  border-radius: 0.06rem;
+
+}
+.c-red{
+  background: #ff6161;
+  color:#fff;
+  border:1px splid #ff6161;
+  line-height: 0.45rem;
+  border-radius: 0.08rem;
+}
+.c-grey {
+  background-color: none;
+  color:#fff;
+  border-color:#fff;
+  line-height: 0.45rem;
+  border-radius: 0.08rem;
+
+}
+.use-img{
+    float: left;
+    text-align: center;
+    width: 1.1rem;
+    height: 1.1rem;
+    /*background:url(../images/no_headimg.png);*/
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:100%;
+    border-radius: 50%;
+}
+.lt-part1-simInfo{
+  padding-left: 1.3rem;
+}
+
+/*卡详情改版*/
+.meal-wrap{
+  background: #f4f4f4;
+  padding:0 0px;
+}
+.meal-wrap .meal-item{
+  background: #fff;
+  padding:0 10px;
+
+}
+.container{
+  padding:0 0.15rem;
+}
+
+/*老套餐改版*/
+#LimitlessInfo{
+  border-top: none;
+  margin-top: 2.5%;
+  background:#fff;
+}
+.mormal-meal-wrap{
+  margin-top:0.16rem;
+}
+.mormal-meal-wrap .meal-item .month{
+  right: .2rem;
+  top:0.1rem;
+}
+.content-slide{
+  padding:0 10px;
+}
+.Infinite-meal{
+  display: none;
+}
+.Infinite-meal .meal-wrap{
+  background: #f4f4f4;
+  padding:0 .15rem;
+}
+.Infinite-meal .meal-wrap .meal-item{
+  background: #fff;
+
+}
+.Infinite-meal  .Infinite-use{
+  padding-top: 0.25rem;
+  text-align: center;
+  font-size: 0.36rem;
+  color: #fc8134;
+}
+.Infinite-meal  .Infinite-use span{
+  font-size: 0.5rem;
+  padding-left: 0.12rem;
+}
+.Infinite-meal .end-Infinite-time{
+  font-size: 0.26rem;
+  margin-top: 0.25rem;
+  padding-bottom: 0.2rem;
+  text-align: center;
+
+}
+.normal-container-switch{
+  margin-top: 0.1rem;
+}
+
+.all-normal-meal h4.title{
+  padding-left:0.05rem;
+}
+.all-normal-meal .meal-wrap-item .meal-item{
+  padding-top:0.2rem;
+  padding-bottom: 0.2rem;
+}
+.all-normal-meal .allFlow{
+  color: #fc8134;
+}
+.all-normal-meal .last-flow{
+  color: #fc8134;
+
+}
+.all-normal-meal .last-flow sub{
+  color: #fc8134;
+  font-size: .3rem;
+
+}
+.all-normal-meal .item-detail{
+  padding-left:0.05rem;
+}
+.all-normal-meal{
+  background: #f4f4f4;
+  padding:0 0.15rem;
+  border-radius:0.06rem;
+  margin-bottom: 0.15rem;
+}
+.f-renewalRecord, .f-flowDetail, .f-znzd{
+  border-right: none;
+  border-left:1px solid #cacaca;
+}
+.f-renewalRecord{
+  border-left:none;
+}
+
+/*开详情套餐详情改版第三版*/
+.tabs{
+  border-bottom:1px solid #ddd;
+}
+.tabs a{
+  width: 30%;
+  border:none;
+  /*line-height: 39px;*/ 
+  font-size: 0.28rem;
+}
+.tabs a.active{
+  border-bottom:1px solid #f5800e;
+}
+.currentPackage{
+  font-size: 0.32rem;
+  color: #333;
+  padding-top: 0.18rem;
+  line-height:0.64rem; 
+
+}
+.currentPackageInfo{
+  font-size: 0.3rem;
+  font-color:#666;
+  line-height: 0.42rem;
+}
+.normal-currentPackageInfo{
+  padding-bottom: 0.12rem;
+}
+#LimitlessInfo .realname-status{
+  padding-top:0.12rem;
+}
+#LimitlessInfo .realname-link{
+  text-indent: 0;
+}
+#LimitlessInfo .card-separate-link{
+  text-indent: 0;
+}
+.solve-btn{
+  position: fixed;
+  bottom: 18%;
+  right:15px;
+  width: 1.16rem;
+  height: 1.16rem;
+  background: url(../images/solve_btn_new.png) no-repeat center;
+  background-size: 100%;
+}
+.solve-layer-wrap{
+  display: none;
+}
+.solve-layer{
+  overflow: hidden;
+  position: fixed;
+  bottom:0%;
+  right:10px;
+  width: 2.52rem;
+}
+.solve-layer .wrap{
+  float: right;
+  background: transparent;
+}
+.solve-layer .wrap div{
+ width: 1.0rem;
+ height: 1.0rem;
+ float: right;
+ margin-top:0.15rem;
+ background-size:100%;
+ background-repeat: no-repeat;
+ background-position: center;
+}
+.solve-layer .wrap span{
+  font-size: 0.26rem;
+  color:#fff;
+  float: left;
+  width: 1.2rem;
+  height: 1.0rem;
+  line-height: 1.4rem;
+  text-align: right;
+  padding-right: 0.2rem;
+
+}
+.solve-layer .wrap .diagnosis-btn{
+  background-image: url(../images/diagnosis_btn.png);
+
+}
+.solve-layer .wrap .server-btn{
+  background-image: url(../images/server_btn.png);
+
+}
+.solve-layer .wrap .faq-btn{
+  background-image: url(../images/faq_btn.png);
+
+}
+.solve-layer .supplement-card {
+  display: none;
+}
+.solve-layer .wrap .supplement-card-btn{
+  background-image: url(../images/supplement_card_btn.png);
+
+}
+.solve-layer .wrap .use-amount-btn{
+  background-image: url(../images/use_amount_btn.png);
+
+}
+.solve-layer .wrap .closer-btn{
+  background-image: url(../images/closer_btn.png);
+}
+.limit-systerm-detail-wrap,.systerm-detail-wrap{
+  overflow:auto;
+}
+.cardState-normal{
+  display: inline-block;
+}
+#tipBox {
+  color:#fff;
+}
+#tipBox .modal-dialog{
+  margin:0.6rem;
+}
+#tipBox .close-btn{
+  color:#999 ;
+
+}
+#tipBox .img-bg{
+  width: 100%;
+  height: 1.61rem;
+  background:url(../images/name_img_bg.png) no-repeat center;
+  background-size:2.55rem 1.61rem;
+
+}
+#tipBox .modal-body-text{
+  color:#333;
+  font-size:0.3rem;
+  background:#fff;
+  text-indent: 0;
+  line-height: 0.52rem;
+  padding-bottom: 0;
+}
+#tipBox .realName-tip{
+  display: none;
+  border:1px dashed #d2d2d2;
+  margin: 0.2rem 5%;
+  padding:0.2rem 0.3rem;
+  border-radius: 4px;
+}
+#tipBox .realName-tip p{
+  color:#666;
+  font-size:0.24rem;
+  line-height: 0.46rem;
+  text-indent: 0;
+
+
+}
+#tipBox .real-name-title{
+  color:#5791c9;
+  font-size: 0.26rem;
+  padding: 0.2rem 10%;
+  position: relative;
+  text-decoration:underline;
+}
+#tipBox .modal-footer{
+  padding:0;
+  background-color:#f1f1f1;
+  margin-top:0.16rem;
+}
+#tipBox .modal-footer .btn-right{
+  background-color:#f1f1f1;
+  color:#f5800e;
+  border-radius: 0;
+  font-size: 0.34rem;
+
+}

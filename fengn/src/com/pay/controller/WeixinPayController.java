@@ -285,7 +285,7 @@ public class WeixinPayController {
 			model.addAttribute("payPrice", total_fee);
 			model.addAttribute("iccid", iccid);
 			model.addAttribute("pac", pac);
-			return "/jsapi";
+			return "cmoit/cardInfo_pay_third";
 		}  catch (Exception e) {
 			InfoVo   wrongInfo = new InfoVo();
 			wrongInfo.setUserStatus("套餐绑定或定价错误，请联系管理员");

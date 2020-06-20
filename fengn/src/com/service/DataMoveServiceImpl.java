@@ -139,6 +139,13 @@ public class DataMoveServiceImpl implements DataMoveService {
 		String selectSql = "select count(1) total from cmtp where 1=1 " + wheresql ; 
 		return  dataMoveDao.queryTotal(selectSql );
 	}
+	
+	@Override
+	public int queryIccidForUpload( String apiCode ,String iccid ) {
+		String table = "cmcc".equals(apiCode)?"mlb_cmcc_card":"cmoit_card";
+		String selectSql = "select count(1) total from " +table+" where iccid  = '" + iccid  + "'"; 
+		return  dataMoveDao.queryTotal(selectSql );
+	}
 
 	@Override
 	public void updateDataStatus(String id , String color) {

@@ -73,15 +73,15 @@
 					 <input  class="form-control" name="id" type="hidden"></input>
 						<div class="form-group">
 							<label for="recipient-name" class="control-label">套餐名:</label> <input
-								type="text" class="form-control" name="typename">
+								type="text" class="form-control" name="typename" id="typename">
 						</div>
 						<div class="form-group">
 							<label for="message-text" class="control-label">套餐描述:</label> 
-								<input type="text" class="form-control" name="discrip">
+								<input type="text" class="form-control" name="discrip" >
 						</div>
 						<div class="form-group">
 							<label for="message-text" class="control-label">一级续费价:</label> 
-								<input type="text" class="form-control" name="renew">
+								<input type="text" class="form-control" name="renew"  id="renew">
 						</div>
 						<div class="form-group">
 							<label for="message-text" class="control-label">备注:</label> <input
@@ -141,6 +141,16 @@
 
 
         function subInfo(){
+        	var typename = $("#typename").val();
+        	var renew = $("#renew").val();
+        	if(typename == '' ||renew == '' ){
+        		 alert("套餐名或者续费价不能为空")
+        		 return;
+        	}
+        	if(isNaN(renew) || Number(renew) == 0){
+        		 alert("续费价必须为数字且大于0")
+        		 return;
+        	}
             subInfoAll("pac");
         }
 
