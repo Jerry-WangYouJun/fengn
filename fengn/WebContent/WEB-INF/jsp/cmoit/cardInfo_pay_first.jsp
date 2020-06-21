@@ -122,7 +122,7 @@
               <div class="swiper-wrapper" style="width: 740px; height: 1164px;">
                 <div class="swiper-slide swiper-slide-visible swiper-slide-active" style="width: 370px; height: 1164px;">
                   <div class="content-slide" id="nowPackageList" style="overflow: auto; position: relative; height: 371px;">
-                    <p class="currentPackage">120M(一年)F</p>
+                    <p class="currentPackage">${cmoitInfo.discrip} ${unicomCard.packagename}</p>
                     <p class="currentPackageInfo normal-currentPackageInfo"></p>
                     <div class="status equipment-status" style="display: none;">
                       <span class="title">设备状态：</span>

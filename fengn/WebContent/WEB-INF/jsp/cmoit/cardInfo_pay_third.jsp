@@ -9,9 +9,9 @@
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>订单支付</title>
-    <link href="css/main.min.css" rel="stylesheet">
-    <link href="css/buttons.css" rel="stylesheet">
-    <link href="css/renewals-new.css" rel="stylesheet">
+    <link href="${basePath}/mlbcss/css/main.min.css" rel="stylesheet">
+    <link href="${basePath}/mlbcss/css/buttons.css" rel="stylesheet">
+    <link href="${basePath}/mlbcss/css/renewals-new.css" rel="stylesheet">
     <style>
         body {
             background-color: #fbf9fe;
@@ -218,7 +218,7 @@
             }
         }
     </style>
-    <script src="js/fundebug.1.2.3.min.js" apikey="8eb9c14645825f8abe6d769f9122f95d77344a9ec242558bb23343e6ad490947"></script>
+    <script src="${basePath}/mlbcss/js/fundebug.1.2.3.min.js" apikey="8eb9c14645825f8abe6d769f9122f95d77344a9ec242558bb23343e6ad490947"></script>
     <style id="__WXWORK_INNER_SCROLLBAR_CSS">::-webkit-scrollbar { width: 12px !important; height: 12px !important; }::-webkit-scrollbar-track:vertical {  }::-webkit-scrollbar-thumb:vertical { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-scrollbar-track:horizontal {  }::-webkit-scrollbar-thumb:horizontal { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-resizer { display: none !important; }</style>
 </head>
 <body>
@@ -251,31 +251,31 @@
 			}
 		</script>
 	<div class="wx-simrenewals-container wx-simrenewals-part1" style="border-top:0;">
-    <div class="wx-simrenewals-num"><span>订单号:</span><a href="#">&nbsp;&nbsp;202006101628184101862</a></div>
+    <div class="wx-simrenewals-num"><span>订单号:</span><a href="#">&nbsp;&nbsp;${orderId}</a></div>
 </div>
 <div class="wx-simrenewals-container-confirm">
 
     <div class="wx-simrenewals-num-confirm">
         <div class="name">
-            <div>SIM卡号</div>
+            <div>ICCID卡号</div>
             <div class="left"></div>
             <div class="right"></div>
         </div>
         <div class="number-box">
             <input type="hidden" value="1440322166950">
-            <p class="number weight"><span>14403</span>&nbsp;&nbsp;<span class="highlighted">2216</span>&nbsp;&nbsp;<span class="highlighted">6950</span></p>
-            <p class="tip">请仔细核对SIM卡号，支付后将无法撤回</p>
+            <p class="number weight"><span>${iccid} </span></p>
+            <p class="tip">请仔细核对ICCID卡号，支付后将无法撤回</p>
         </div>
     </div>
 
 </div>
 <div class="wx-simrenewals-part1">
     <div class="wx-simrenewals-container" style="border-bottom-width: 0;">
-        <div class="wx-simrenewals-pk"><span id="typeTip">续费套餐:</span><label class="fee-label highlighted weight">120M(一年)F</label></div>
+        <div class="wx-simrenewals-pk"><span id="typeTip">续费套餐:</span><label class="fee-label highlighted weight">${pac.typename }</label></div>
         <div class="wx-simrenewals-peroid"></div>
     </div>
     <div class="wx-simrenewals-container" style="border-bottom:1px solid #ddd;">
-        <div class="wx-simrenewals-num"><span>支付金额:</span><label class="fee-label highlighted weight">￥20</label></div>
+        <div class="wx-simrenewals-num"><span>支付金额:</span><label class="fee-label highlighted weight">￥${pac.renew }</label></div>
     </div>
 </div>
 <div class="wx-remind-pk">

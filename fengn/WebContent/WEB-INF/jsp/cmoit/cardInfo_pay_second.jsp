@@ -140,11 +140,11 @@
        	<ul>
         <li class="list-group-item  active"  style="display: block;height: 65px">
 			<div class=" originTopImage  leftBox" style="width: 60px;">
-				<div class="topContent" style="font-size: 14px"> 120.0M</div>
+				<div class="topContent" style="font-size: 14px"> </div>
 				<div class="bottomContent" style="font-size: 14px">365天</div>
 			</div>
-			<div class="middleBox"><div class="packageName" style="font-size: 14px">120M(一年)F</div>
-			<div class="isPrice text-left" style="font-size: 14px"><span>￥20</span><span class="unitPriceHide">￥170.67/GB</span></div><div class="notShow"><p>当月</p><p>使用</p></div></div>
+			<div class="middleBox"><div class="packageName" style="font-size: 14px">${pac.typename }</div>
+			<div class="isPrice text-left" style="font-size: 14px"><span>￥${pac.renew}</span><span class="unitPriceHide">￥170.67/GB</span></div><div class="notShow"><p>当月</p><p>使用</p></div></div>
 			</li>
        	</ul>
 			</div>

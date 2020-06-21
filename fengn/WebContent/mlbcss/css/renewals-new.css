@@ -3,7 +3,7 @@
      font-size: 20px;
      font-family: MicrosoftYaHei;
 }
-/*包年套餐*/
+/*鍖呭勾濂楅*/
 .packageName{/*margin-left:5px;*/    font-family:PingFang-SC-Regular-regular;  font-size:0.4rem;  /*font-weight: bold;*/    color:#333333}
 
 .isPrice{float:right;display:block;color:#fe8d2e;font-size:0.55rem;  margin-top:5px;  box-sizing: border-box; /* width: 80%; */ float: left; font-family:PingFang-SC-Regular-bold; width:100%;}
@@ -21,7 +21,7 @@
     animation-name: package-glowing;
 }
 .originTopImage{
-    background:#fff url(../images/commendleft@2x.png) no-repeat;
+    background:#fff url(../images/commendLeft@2x.png) no-repeat;
     background-size: 100% 100%;
 }
 .originMonthAdd{
@@ -174,14 +174,14 @@ h5{font-weight:normal;}
 
 
 li.list-group-item, button.list-group-item{color:#999;}
-/*提交订单*/
+/*鎻愪氦璁㈠崟*/
 footer{padding:10px 15px;background-color:#fff;border-top:1px solid #ddd;margin-bottom:0.4rem; height:6rem}
 /*.tjBtn{display:block;width:100%;padding:10px;text-align:center;box-sizing:border-box;border-radius:5px;border:1px solid #fe8d2e;color:#fe8d2e;font-size:16px;background-color:#fff;}*/
 .button-raised.button-primary.tjBtn{width:100%;font-size:0.4rem;font-family:"Microsoft YaHei";border-color: #f86044;
   background: -webkit-gradient(linear, left top, left bottom, from(#fe8930), to(#f86044));
   background: linear-gradient(#fe8930, #f86044);}
 .button-raised.button-primary:active.tjBtn{background: -webkit-gradient(linear, left top, left bottom, from(#f86044), to(#fe8930));background: linear-gradient(#f86044, #fe8930);border-color: #fe8930;color:#da4428;}
-/*模态框*/
+/*妯℃�佹*/
 .modal{position:absolute;}
 #myModal .close{Font-size:31px;}
 #myModal .modal-header,#myModal .modal-body{padding:10px;}
@@ -206,11 +206,11 @@ footer{padding:10px 15px;background-color:#fff;border-top:1px solid #ddd;margin-
     border-color:#ccc;
     color: #ccc;
 }
-/*移动4G提示*/
+/*绉诲姩4G鎻愮ず*/
 .tips_yd4G{padding: 5px 15px;
   background-color: #fcf3c8;
   color: #fb6c42;}
-/*推荐套餐发光样式*/			  
+/*鎺ㄨ崘濂楅鍙戝厜鏍峰紡*/			  
 @-webkit-keyframes package-glowing{
   from {
     -webkit-box-shadow: 0 0 0 rgba(228, 24, 52, 0.3) inset;
@@ -231,7 +231,7 @@ footer{padding:10px 15px;background-color:#fff;border-top:1px solid #ddd;margin-
   to {
     -webkit-box-shadow: 0 0 0 rgba(228, 24, 52, 0.3) inset;
             box-shadow: 0 0 0 rgba(228, 24, 52, 0.3) inset; } }
-/* 移动端媒体查询像素比 */
+/* 绉诲姩绔獟浣撴煡璇㈠儚绱犳瘮 */
 @media only screen and (-webkit-min-device-pixel-ratio: 2),
 only screen and (min--moz-device-pixel-ratio: 2),
 only screen and (-o-min-device-pixel-ratio: 2/1),
