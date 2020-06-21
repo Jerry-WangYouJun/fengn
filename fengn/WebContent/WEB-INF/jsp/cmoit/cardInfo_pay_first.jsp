@@ -43,7 +43,7 @@
             <div class="operator-logo" style="background-image: url(images/yd_new_logo.png)"></div>
 
             
-                  <div class="switchNo switch-bg"><!-- 切换按钮 --> </div>
+                  <div class="switchNo switch-bg" onclick="window.location.href='${basePath}/card/searchInit'"><!-- 切换按钮 --> </div>
                 
             <div class="header-wrap">
               <div class="use-img" style="background-image:url(images/no_headImg.png)">

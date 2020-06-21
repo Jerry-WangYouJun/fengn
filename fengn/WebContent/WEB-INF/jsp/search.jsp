@@ -53,11 +53,11 @@
 							<input name="iccid"  type="text" class="form-control input"   required>
 							<a class="clear" onclick="cleardiv()"></a>
 							<span class="input-group-btn">
-								<button class="btn btn-default"  onclick="scan()" type="button"><span class="glyphicon glyphicon-camera"></span></button>
+								<button class="btn btn-default"  onclick="scan()" type="button" ><span class="glyphicon glyphicon-camera"></span></button>
 							</span>
 						</div>
 						<!-- /input-group -->
-						<button type="submit" class="btn btn-primary btn-lg btn-block" style="border: none;" onclick="window.location.href=''" >查询续费</button>
+						<button type="submit" class="btn btn-primary btn-lg btn-block" style="border: none;background-color: #f86044;"  onclick="window.location.href=''" >查询续费</button>
 						<div class="img-box">
 							<img src="${basePath}/img/img.png"  onclick="scan()" />
 							<h5>点击此处，对着卡的条形码扫一扫</h5>

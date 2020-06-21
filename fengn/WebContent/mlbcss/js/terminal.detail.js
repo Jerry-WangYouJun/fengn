@@ -82,11 +82,6 @@ var simId = $("#hid_simId").val(),
     searchURL = $("#hid_url").val(),
     userName;
 
-$(".switchNo").click(function() {
-    var _iccid = $('#hid_iccid').val();
-    window.location.href = searchURL + '&iccid=' + _iccid; //切换记住号码
-});
-
 $(".complaint-link").click(function() {
     var _iccid = $('#hid_iccid').val();
     window.location.href = '../complaint/index.html?wxchatId=' + wxchatId + '&iccid=' + _iccid;
