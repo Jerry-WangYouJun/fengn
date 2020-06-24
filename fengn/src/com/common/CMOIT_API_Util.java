@@ -1,15 +1,11 @@
 package com.common;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
@@ -20,13 +16,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.apache.http.util.TextUtils;
-import org.jsoup.Connection;
-import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 import com.cmoit.model.CmoitCard;
 import com.pay.util.MD5Util;
@@ -36,8 +25,7 @@ import net.sf.json.JSONObject;
 
 public class CMOIT_API_Util {
 	public static String token = "";
-	private static String appid = "QIQNEFAB7K1QDX";
-	private static String password = "9jYT2le2T";
+
 	
 	/**CMIOT_API23S00  卡基本信息
 	 * msisdn  transid  token 
@@ -100,23 +88,23 @@ public class CMOIT_API_Util {
 	
 	public static String  getURLByMSISDNS(String msisdn , String baseUrl , String ebid) throws Exception{
 		String transid =  getTransid(msisdn.substring(5, 13)) ;
-		String token = getSHA256( appid+password+transid );
+		String token = getSHA256( ContextString.CMOIT_APPID+ContextString.CMOIT_PASSWORD+transid );
 		System.out.println("token:" + token);
-		return  baseUrl+  "?appid="+appid+"&transid="+transid+"&ebid="+ebid+"&token=" +  token + "&msisdns=" +  msisdn ;
+		return  baseUrl+  "?appid="+ContextString.CMOIT_APPID+"&transid="+transid+"&ebid="+ebid+"&token=" +  token + "&msisdns=" +  msisdn ;
 	}
 	
 	public static String  getURLByMSISDN(String msisdn , String baseUrl , String ebid) throws Exception{
 		String transid =  getTransid(msisdn.substring(5, 13)) ;
-		String token = getSHA256( appid+password+transid );
+		String token = getSHA256( ContextString.CMOIT_APPID+ContextString.CMOIT_PASSWORD+transid );
 		System.out.println("token:" + token);
-		return  baseUrl+  "?appid="+appid+"&transid="+transid+"&ebid="+ebid+"&token=" +  token + "&msisdn=" +  msisdn ;
+		return  baseUrl+  "?appid="+ContextString.CMOIT_APPID+"&transid="+transid+"&ebid="+ebid+"&token=" +  token + "&msisdn=" +  msisdn ;
 	}
 	
 	public static String  getCardInfoByMSISDN(String msisdn , String baseUrl , String ebid) throws Exception{
 		String transid =  getTransid(msisdn.substring(5, 13)) ;
-		String token = getSHA256( appid+password+transid );
+		String token = getSHA256( ContextString.CMOIT_APPID+ContextString.CMOIT_PASSWORD+transid );
 		System.out.println("token:" + token);
-		return  baseUrl+  "?appid="+appid+"&transid="+transid+"&ebid="+ebid+"&token=" +  token + "&card_info=" +  msisdn  +"&type=0";
+		return  baseUrl+  "?appid="+ContextString.CMOIT_APPID+"&transid="+transid+"&ebid="+ebid+"&token=" +  token + "&card_info=" +  msisdn  +"&type=0";
 	}
 	
 	
@@ -146,13 +134,13 @@ public class CMOIT_API_Util {
     }  
     
     public static String getTransid(String seqid){
-    	return appid + DateUtils.formatDate("yyyyMMddHHmmss")+ seqid;
+    	return ContextString.CMOIT_APPID + DateUtils.formatDate("yyyyMMddHHmmss")+ seqid;
     }
     
     
     public static String getToken(String transid) throws Exception{
 		String  urlString = "https://api.iot.10086.cn/v5/ec/get/token"
-				+ "?appid="+appid+"&password="+password+"&transid="+transid;
+				+ "?appid="+ContextString.CMOIT_APPID+"&password="+ContextString.CMOIT_PASSWORD+"&transid="+transid;
 		String msg = getReturnData(urlString);
 		JSONObject  json  = JSONObject.fromObject(msg);  
 		String  token= null;
@@ -252,8 +240,8 @@ public class CMOIT_API_Util {
 			public static JSONObject doPost(String uri, String iccid) throws ClientProtocolException, IOException{
 				 long timeStampSec = System.currentTimeMillis()/1000;
 			     String timestamp = String.format("%010d", timeStampSec);
-			     String id = "131416124";
-			     String key ="DF459BBED5D2E9B024B7AC6C5D80DC5B";
+			     String id = ContextString.MLB_USER_ID ;
+			     String key = ContextString.MLB_KEY;
 			     String str = id+key+timestamp;
 				 String sign = MD5Util.md5(str);
 				 System.out.println("字符串"+str);

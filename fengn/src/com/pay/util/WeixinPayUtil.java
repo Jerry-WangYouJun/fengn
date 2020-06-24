@@ -34,9 +34,9 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import com.common.ContextString;
 import com.common.ResponseURLDataUtil;
 import com.common.StringUtils;
-import com.pay.config.WxPayConfig;
 import com.pay.dto.WeixinInfoDTO;
 import com.pay.util.http.HttpClientConnectionManager;
 
@@ -238,7 +238,7 @@ public class WeixinPayUtil {
 				sb.append(k + "=" + v + "&");
 			}
 		}
-		sb.append("key=" + WxPayConfig.partnerkey);
+		sb.append("key=" + ContextString.partnerkey);
 		String sign = MD5Util.MD5Encode(sb.toString(), "UTF-8").toUpperCase();
 		return sign;
 
@@ -319,13 +319,13 @@ public class WeixinPayUtil {
 		String sign = "";
 		SortedMap<String, String> storeMap = new TreeMap<String, String>();
 		storeMap.put("out_trade_no", orderId); // 商户 后台的贸易单号
-		storeMap.put("appid", WxPayConfig.appid); // appid
-		storeMap.put("mch_id", WxPayConfig.partner); // 商户号
+		storeMap.put("appid", ContextString.appid); // appid
+		storeMap.put("mch_id", ContextString.partner); // 商户号
 		storeMap.put("nonce_str", nonce_str); // 随机数
 		System.out.println("nonce_str" + nonce_str );
 		sign = createSign(storeMap);
 		System.out.println(sign);
-		String xml = "<xml><appid>" + WxPayConfig.appid + "</appid><mch_id>" + WxPayConfig.partner + "</mch_id>"+
+		String xml = "<xml><appid>" + ContextString.appid + "</appid><mch_id>" + ContextString.partner + "</mch_id>"+
 					"<nonce_str>" + nonce_str + "</nonce_str>"+
                     "<out_trade_no>"+orderId+"</out_trade_no>"+
                     "<sign>"+sign+"</sign></xml>";
@@ -366,9 +366,9 @@ public class WeixinPayUtil {
 	
     public static String getAccessToken() throws UnsupportedEncodingException{
 
-        String appid=  WxPayConfig.appid;//应用ID
+        String appid=  ContextString.appid;//应用ID
 
-        String appSecret= WxPayConfig.appsecret;//(应用密钥)
+        String appSecret= ContextString.appsecret;//(应用密钥)
 
         String url ="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+appid+"&secret="+appSecret+"";
 

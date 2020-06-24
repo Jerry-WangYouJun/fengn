@@ -20,7 +20,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import com.pay.config.WxPayConfig;
+import com.common.ContextString;
 import com.pay.dto.MyX509TrustManager;
 
 import net.sf.json.JSONObject;
@@ -44,8 +44,8 @@ public class WXAuthUtil {
 	public static  String getAccessToken() throws ClientProtocolException, IOException{  
         String requestUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
         
-        requestUrl=requestUrl.replace("APPID", WxPayConfig.appid);  
-        requestUrl=requestUrl.replace("APPSECRET", WxPayConfig.appsecret);
+        requestUrl=requestUrl.replace("APPID", ContextString.appid);  
+        requestUrl=requestUrl.replace("APPSECRET", ContextString.appsecret);
         
         JSONObject jsonObject = WXAuthUtil.httpRequest(requestUrl, "GET", null);
         System.out.println("jsonObject" + jsonObject);

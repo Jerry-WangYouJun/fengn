@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.pay.config.WxPayConfig;
+import com.common.ContextString;
   
 /** 
  * 官方给的使用js的验证工具 
@@ -41,7 +41,7 @@ public class JsSignUtil {
         ret.put("nonceStr", nonce_str);  
         ret.put("timestamp", timestamp);  
         ret.put("signature", getSha1(string1));  
-        ret.put("appId",  WxPayConfig.appid);  
+        ret.put("appId",  ContextString.appid);  
   
        /* System.out.println("1.ticket(原始)="+jsapi_ticket);  
         System.out.println("2.url="+ret.get("url"));  

@@ -31,8 +31,6 @@ import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.http.ssl.SSLContexts;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +44,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cmoit.service.CMoitCardAgentService;
+import com.common.ContextString;
 import com.common.StringUtils;
 import com.model.History;
 import com.model.InfoVo;
 import com.model.Packages;
 import com.model.Rebate;
 import com.model.User;
-import com.pay.config.WxPayConfig;
 import com.pay.util.CommonUtil;
 import com.pay.util.OrderUtils;
 import com.pay.util.RequestHandler;
@@ -63,6 +61,8 @@ import com.pay.util.WeixinPayUtil;
 import com.service.CardInfoService;
 import com.service.PackagesService;
 import com.service.UserService;
+
+import net.sf.json.JSONObject;
 
 /**
  * 微信支付Controller
@@ -145,7 +145,7 @@ public class WeixinPayController {
 			backUri = URLEncoder.encode(backUri);
 			//scope 参数视各自需求而定，这里用scope=snsapi_base 不弹出授权页面直接授权目的只获取统一支付接口的openid
 			String url = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
-					"appid=" + WxPayConfig.appid +
+					"appid=" + ContextString.appid +
 					"&redirect_uri=" +
 					 backUri+
 					"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
@@ -222,25 +222,25 @@ public class WeixinPayController {
 			String notify_url = baseUrl + "/wx/notifyUrl";
 			
 			SortedMap<String, String> packageParams = new TreeMap<String, String>();
-			packageParams.put("appid", WxPayConfig.appid);
-			packageParams.put("mch_id", WxPayConfig.partner);
+			packageParams.put("appid", ContextString.appid);
+			packageParams.put("mch_id", ContextString.partner);
 			packageParams.put("nonce_str", nonce_str);
 			packageParams.put("body", body);
 			packageParams.put("out_trade_no", out_trade_no);
 			packageParams.put("total_fee", total_fee+"");
 			packageParams.put("spbill_create_ip", spbill_create_ip);
 			packageParams.put("notify_url", notify_url);
-			packageParams.put("trade_type", WxPayConfig.trade_type);  
+			packageParams.put("trade_type", ContextString.trade_type);  
 			packageParams.put("openid", openId);  
 
 			RequestHandler reqHandler = new RequestHandler(request, response);
-			reqHandler.init(WxPayConfig.appid, WxPayConfig.appsecret, WxPayConfig.partnerkey);
+			reqHandler.init(ContextString.appid, ContextString.appsecret, ContextString.partnerkey);
 			
 			String sign = reqHandler.createSign(packageParams);
 			System.out.println("sign:"+sign);
 			String xml="<xml>"+
-					"<appid>"+WxPayConfig.appid+"</appid>"+
-					"<mch_id>"+WxPayConfig.partner+"</mch_id>"+
+					"<appid>"+ContextString.appid+"</appid>"+
+					"<mch_id>"+ContextString.partner+"</mch_id>"+
 					"<nonce_str>"+nonce_str+"</nonce_str>"+
 					"<sign>"+sign+"</sign>"+
 					"<body><![CDATA["+body+"]]></body>"+
@@ -248,7 +248,7 @@ public class WeixinPayController {
 					"<total_fee>"+total_fee+""+"</total_fee>"+
 					"<spbill_create_ip>"+spbill_create_ip+"</spbill_create_ip>"+
 					"<notify_url>"+notify_url+"</notify_url>"+
-					"<trade_type>"+WxPayConfig.trade_type+"</trade_type>"+
+					"<trade_type>"+ContextString.trade_type+"</trade_type>"+
 					"<openid>"+openId+"</openid>"+
 					"</xml>";
 			System.out.println("xml："+xml);
@@ -266,15 +266,15 @@ public class WeixinPayController {
 			SortedMap<String, String> finalpackage = new TreeMap<String, String>();
 			String timestamp = Sha1Util.getTimeStamp();
 			String packages = "prepay_id="+prepay_id;
-			finalpackage.put("appId", WxPayConfig.appid);
+			finalpackage.put("appId", ContextString.appid);
 			finalpackage.put("timeStamp", timestamp);
 			finalpackage.put("nonceStr", nonce_str);
 			finalpackage.put("package", packages);
-			finalpackage.put("signType", WxPayConfig.signType);
+			finalpackage.put("signType", ContextString.signType);
 			String finalsign = reqHandler.createSign(finalpackage);
-			System.out.println("/jsapi?appid="+WxPayConfig.appid+"&timeStamp="+timestamp+"&nonceStr="+nonce_str+"&package="+packages+"&sign="+finalsign);
+			System.out.println("/jsapi?appid="+ContextString.appid+"&timeStamp="+timestamp+"&nonceStr="+nonce_str+"&package="+packages+"&sign="+finalsign);
 			
-			model.addAttribute("appid", WxPayConfig.appid);
+			model.addAttribute("appid", ContextString.appid);
 			model.addAttribute("timeStamp", timestamp);
 			model.addAttribute("nonceStr", nonce_str);
 			model.addAttribute("packageValue", packages);
@@ -302,7 +302,7 @@ public class WeixinPayController {
 	private String getOpenId(String code) {
 		String openId = "";
 		String URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="
-				+ WxPayConfig.appid + "&secret=" + WxPayConfig.appsecret + "&code=" + code + "&grant_type=authorization_code";
+				+ ContextString.appid + "&secret=" + ContextString.appsecret + "&code=" + code + "&grant_type=authorization_code";
 		System.out.println("URL:"+URL);
 		JSONObject jsonObject = CommonUtil.httpsRequest(URL, "GET", null);
 		if (null != jsonObject) {
@@ -334,7 +334,7 @@ public class WeixinPayController {
 				String sign_receive = (String)resultMap.get("sign");
 				System.out.println("sign_receive:"+sign_receive);
 				resultMap.remove("sign");
-				String checkSign = WeixinPayUtil.getSign(resultMap,WxPayConfig.partnerkey);
+				String checkSign = WeixinPayUtil.getSign(resultMap,ContextString.partnerkey);
 				System.out.println("checkSign:"+checkSign);
 
 				//签名校验成功
@@ -498,7 +498,7 @@ public class WeixinPayController {
 		backUri = URLEncoder.encode(backUri);
 		//scope 参数视各自需求而定，这里用scope=snsapi_base 不弹出授权页面直接授权目的只获取统一支付接口的openid
 		String url = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
-				"appid=" + WxPayConfig.appid +
+				"appid=" + ContextString.appid +
 				"&redirect_uri=" +
 				 backUri+
 				"&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
@@ -512,8 +512,8 @@ public class WeixinPayController {
 		String code =request.getParameter("code");
 		String user = request.getParameter("userid");
 	      //第二步：通过code换取网页授权access_token
-	         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="+WxPayConfig.appid
-	                + "&secret="+WxPayConfig.appsecret
+	         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="+ContextString.appid
+	                + "&secret="+ContextString.appsecret
 	                + "&code="+code
 	                + "&grant_type=authorization_code";
 	        System.out.println("url:"+url);
@@ -613,8 +613,8 @@ public class WeixinPayController {
 		String desc = "返利";	
 		
 		SortedMap<String, String> packageParams = new TreeMap<String, String>();
-		packageParams.put("mch_appid", WxPayConfig.appid);
-		packageParams.put("mchid", WxPayConfig.partner);
+		packageParams.put("mch_appid", ContextString.appid);
+		packageParams.put("mchid", ContextString.partner);
 		packageParams.put("nonce_str", nonce_str);
 		packageParams.put("partner_trade_no", partner_trade_no);
 		packageParams.put("openid", openId);
@@ -624,13 +624,13 @@ public class WeixinPayController {
 		packageParams.put("spbill_create_ip", String.valueOf(InetAddress.getLocalHost().getHostAddress()));
 		
 		RequestHandler reqHandler = new RequestHandler(request, response);
-		reqHandler.init(WxPayConfig.appid, WxPayConfig.appsecret, WxPayConfig.partnerkey);
+		reqHandler.init(ContextString.appid, ContextString.appsecret, ContextString.partnerkey);
 		
 		String sign = reqHandler.createSign(packageParams);
 		System.out.println("sign:"+sign+"========packageParams===="+packageParams.toString());
 		String xml="<xml>"+
-						"<mch_appid>"+WxPayConfig.appid+"</mch_appid>"+
-						"<mchid>"+WxPayConfig.partner+"</mchid>"+
+						"<mch_appid>"+ContextString.appid+"</mch_appid>"+
+						"<mchid>"+ContextString.partner+"</mchid>"+
 						"<nonce_str>"+nonce_str+"</nonce_str>"+					
 						"<partner_trade_no>"+partner_trade_no+"</partner_trade_no>"+
 						"<openid>"+openId+"</openid>"+
@@ -667,7 +667,7 @@ public class WeixinPayController {
             e.printStackTrace();
         }
         try{
-            keyStore.load(instream, WxPayConfig.partner.toCharArray());
+            keyStore.load(instream, ContextString.partner.toCharArray());
         } catch (CertificateException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
@@ -684,7 +684,7 @@ public class WeixinPayController {
         SSLContext sslcontext = null;
 
         try {
-            sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore,  WxPayConfig.partner.toCharArray()).build();
+            sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore,  ContextString.partner.toCharArray()).build();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (KeyManagementException e) {
@@ -728,8 +728,8 @@ public class WeixinPayController {
 		
 		//企业付款备注	 		
 		SortedMap<String, String> packageParams = new TreeMap<String, String>();
-		packageParams.put("mch_appid", WxPayConfig.appid);
-		packageParams.put("mchid", WxPayConfig.partner);
+		packageParams.put("mch_appid", ContextString.appid);
+		packageParams.put("mchid", ContextString.partner);
 		packageParams.put("nonce_str", nonce_str);
 		packageParams.put("partner_trade_no", partner_trade_no);
 		packageParams.put("openid", rebate.getOpenId());
@@ -739,13 +739,13 @@ public class WeixinPayController {
 		packageParams.put("spbill_create_ip", String.valueOf(InetAddress.getLocalHost().getHostAddress()));
 		
 		RequestHandler reqHandler = new RequestHandler(request,response);
-		reqHandler.init(WxPayConfig.appid, WxPayConfig.appsecret, WxPayConfig.partnerkey);
+		reqHandler.init(ContextString.appid, ContextString.appsecret, ContextString.partnerkey);
 		
 		String sign = reqHandler.createSign(packageParams);
 		
 		String xml="<xml>"+
-						"<mch_appid>"+WxPayConfig.appid+"</mch_appid>"+
-						"<mchid>"+WxPayConfig.partner+"</mchid>"+
+						"<mch_appid>"+ContextString.appid+"</mch_appid>"+
+						"<mchid>"+ContextString.partner+"</mchid>"+
 						"<nonce_str>"+nonce_str+"</nonce_str>"+					
 						"<partner_trade_no>"+partner_trade_no+"</partner_trade_no>"+
 						"<openid>"+rebate.getOpenId()+"</openid>"+
@@ -779,7 +779,7 @@ public class WeixinPayController {
             e.printStackTrace();
         }
         try{
-            keyStore.load(instream, WxPayConfig.partner.toCharArray());
+            keyStore.load(instream, ContextString.partner.toCharArray());
         } catch (CertificateException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
@@ -796,7 +796,7 @@ public class WeixinPayController {
         SSLContext sslcontext = null;
 
         try {
-            sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore,  WxPayConfig.partner.toCharArray()).build();
+            sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore,  ContextString.partner.toCharArray()).build();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (KeyManagementException e) {

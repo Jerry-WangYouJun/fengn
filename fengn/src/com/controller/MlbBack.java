@@ -24,8 +24,6 @@ import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.http.ssl.SSLContexts;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +34,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.common.ContextString;
 import com.common.DateUtils;
 import com.dao.HistoryMapper;
 import com.model.History;
 import com.model.Rebate;
 import com.model.UnicomHistory;
-import com.pay.config.WxPayConfig;
 import com.pay.util.RequestHandler;
 import com.pay.util.WeixinPayUtil;
 import com.service.CardInfoService;
 import com.service.PackagesService;
+
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/mlb")
@@ -132,8 +132,8 @@ public class MlbBack {
 			
 			//企业付款备注	 		
 			SortedMap<String, String> packageParams = new TreeMap<String, String>();
-			packageParams.put("mch_appid", WxPayConfig.appid);
-			packageParams.put("mchid", WxPayConfig.partner);
+			packageParams.put("mch_appid", ContextString.appid);
+			packageParams.put("mchid", ContextString.partner);
 			packageParams.put("nonce_str", nonce_str);
 			packageParams.put("partner_trade_no", partner_trade_no);
 			packageParams.put("openid", rebate.getOpenId());
@@ -143,13 +143,13 @@ public class MlbBack {
 			packageParams.put("spbill_create_ip", String.valueOf(InetAddress.getLocalHost().getHostAddress()));
 			
 			RequestHandler reqHandler = new RequestHandler(request,response);
-			reqHandler.init(WxPayConfig.appid, WxPayConfig.appsecret, WxPayConfig.partnerkey);
+			reqHandler.init(ContextString.appid, ContextString.appsecret, ContextString.partnerkey);
 			
 			String sign = reqHandler.createSign(packageParams);
 			
 			String xml="<xml>"+
-							"<mch_appid>"+WxPayConfig.appid+"</mch_appid>"+
-							"<mchid>"+WxPayConfig.partner+"</mchid>"+
+							"<mch_appid>"+ContextString.appid+"</mch_appid>"+
+							"<mchid>"+ContextString.partner+"</mchid>"+
 							"<nonce_str>"+nonce_str+"</nonce_str>"+					
 							"<partner_trade_no>"+partner_trade_no+"</partner_trade_no>"+
 							"<openid>"+rebate.getOpenId()+"</openid>"+
@@ -183,7 +183,7 @@ public class MlbBack {
 	            e.printStackTrace();
 	        }
 	        try{
-	            keyStore.load(instream, WxPayConfig.partner.toCharArray());
+	            keyStore.load(instream, ContextString.partner.toCharArray());
 	        } catch (CertificateException e) {
 	            e.printStackTrace();
 	        } catch (NoSuchAlgorithmException e) {
@@ -200,7 +200,7 @@ public class MlbBack {
 	        SSLContext sslcontext = null;
 
 	        try {
-	            sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore,  WxPayConfig.partner.toCharArray()).build();
+	            sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore,  ContextString.partner.toCharArray()).build();
 	        } catch (NoSuchAlgorithmException e) {
 	            e.printStackTrace();
 	        } catch (KeyManagementException e) {

@@ -63,7 +63,7 @@ public class CMoitCardInfoController {
 					 String tel = ccaService.queryTelByICCID( iccid , "cmoit");
 				    	mv.addObject("tel", tel);
 				 }else{
-					 card = ccaService.getResultCmccFromMlb(CMOIT_API_Util.doPost(ContextString.URL_NEW_QUERY, iccid));
+					 card = ccaService.getResultCmccFromMlb(CMOIT_API_Util.doPost(ContextString.MLB_URL_NEW_QUERY, iccid));
 					 if(card == null) {
 						 throw new Exception("卡号错误，请重新输入或联系管理员");
 					 }
