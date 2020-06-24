@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.cmoit.mapping.CMoitCardAgentDao;
 import com.cmoit.model.CmoitCard;
+import com.common.DateUtils;
 import com.common.Dialect;
 import com.dao.UnicomCardAgentDao;
 import com.model.Pagination;
@@ -250,6 +251,9 @@ public class CMoitCardAgentService {
 					vo.setIccid(rs.getString("iccid"));
 					vo.setMsisdn(rs.getString("sim"));
 					vo.setOpentime(rs.getString("open_time"));
+					if(StringUtils.isNotEmpty(rs.getString("active_time"))){
+						vo.setEndtime(DateUtils.getNextYearAndLastMonth());
+					}
 			  return vo ;
 		}
 }

@@ -38,6 +38,8 @@ public class CmoitCard {
     private String discrip ;
     
     private Integer pacid ;
+    
+    private String endtime;
 
     public Integer getId() {
         return id;
@@ -189,6 +191,14 @@ public class CmoitCard {
 
 	public void setPacid(Integer pacid) {
 		this.pacid = pacid;
+	}
+
+	public String getEndtime() {
+		return endtime;
+	}
+
+	public void setEndtime(String endtime) {
+		this.endtime = endtime;
 	}
     
 }

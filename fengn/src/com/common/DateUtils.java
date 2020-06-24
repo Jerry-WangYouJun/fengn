@@ -327,9 +327,25 @@ public class DateUtils {
         cal.add(Calendar.MONTH, 1);
         cal.add(Calendar.DATE, -1);
         // 指定年月的最后一天
-        return yearMM + String.valueOf(cal.get(Calendar.DATE));
+        return yearMM  + String.valueOf(cal.get(Calendar.DATE));
     }
-
+    
+    public static String  getNextYearAndLastMonth(){
+    	SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
+    	Date date = new Date();
+    	Calendar calendar = Calendar.getInstance();
+    	calendar.setTime(date); // 设置为当前时间
+    	calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1); // 设置为上一个月
+    	calendar.add(Calendar.YEAR, 1);
+    	date = calendar.getTime();
+        String accDate = format.format(date);
+        String endtime = getEndDate(accDate);
+        return  formatDate("yyyy-MM-dd", endtime + "0000");
+    }
+    
+    public static void main(String[] args) {
+		System.out.println(getNextYearAndLastMonth());
+	}
     /**
      * 获取一个8位的当前日期字符串，例：20050816。
      * 

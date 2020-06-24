@@ -58,15 +58,8 @@
             </div>
             <div class="btns-container">
               
-              <span class="btn-top pointer c-yellow uncertification" id="uncertification" data-target="#tipBox" data-toggle="modal" style="display: inline-block; padding: 1px 15px;">企业实名</span>
-              <span class="btn-top pointer c-yellow infoNeedPerfected" id="infoNeedPerfected" data-target="#infoNeedBox" data-toggle="modal" style="padding: 1px 15px;">信息待完善</span>
-              <span class="btn-top c-blue companyCertification" style="padding: 1px 15px;">企业实名</span>
-              <span class="btn-top c-green certification taoModal" style="padding: 1px 15px;">个人实名</span>
-              <span class="btn-top pointer c-green hasBind" style="padding: 1px 15px;">机卡已绑定</span>
-              <span class="btn-top c-grey noBind" style="padding: 1px 15px;">机卡未绑定</span>
-              <span class="btn-top pointer c-green cardState-normal" onclick="toIntelligentDiagnosis()" style="padding: 1px 15px; display: inline-block;">已激活</span>
-              <span class="btn-top c-red cardState-stop" onclick="toIntelligentDiagnosis()" style="padding: 1px 15px; display: none;">停机</span>
-              <span class="btn-top c-grey cardState-unused" style="padding: 1px 15px; display: none;">已失效</span>
+              <span class="btn-top pointer c-yellow uncertification" id="uncertification" data-target="#tipBox" data-toggle="modal" style="display: inline-block; padding: 1px 15px;">实名</span>
+              <span class="btn-top pointer c-green cardState-normal" onclick="toIntelligentDiagnosis()" style="padding: 1px 15px; display: inline-block;">${cmoitInfo.cardstatus }</span>
             </div>
         </div>
         </div>
@@ -81,7 +74,12 @@
             <div class="meal-wrap meal-use meal-wrap-item">
               <div class="meal-item">
                 <h4 class="title">总量
-                  <span class="allFlow">${cmoitInfo.gprssum}MB</span>
+                  <span class="allFlow">
+                    <%-- <c:if test="${cmoitInfo.gprssum*1.0 > 1024*1.0 }"><fmt:formatNumber value="${cmoitInfo.gprssum / 1024 /1024}" pattern="###,###.##"/>G</c:if>
+                 	<c:if test="${cmoitInfo.gprssum*1.0 <= 1024*1.0 }"> ${cmoitInfo.gprssum}MB</c:if>--%>
+                 	 <fmt:formatNumber value="${cmoitInfo.gprssum / 1024}" pattern="###,###.##"/>MB 
+                 	 
+                 </span>
                 </h4>
                 <div class="progress-wrap" attr-allflow="120">
                   <span class="progress" attr-flow="8" attr-allflow="120" style="width: 100%;"></span>
@@ -89,7 +87,7 @@
                 <div class="item-detail">
                   使用
                   <span class="last-flow"><fmt:formatNumber value="${cmoitInfo.gprsused / 1024}" pattern="###,###.##"/><sub>MB</sub></span>
-                  <span class="end-time">剩余：<span>-- <sub>天</sub></span></span>
+                  <span class="end-time">到期日期：<span> <sub>${cmoitInfo.endtime}</sub></span></span>
                 </div>
                 <div class="month" style="display: block;">${info.userStatus }</div>
               </div>
@@ -175,7 +173,7 @@
 		    		  alert('无效的iccid，请点击【切换】按钮获得iccid');
 		    		  return false ;
 		    	}
-			    window.location.href='${basePath}/cmoit/info/pay_second?iccid=${cmoitInfo.iccid}&apitype=${apitype}';
+			    window.location.href='${basePath}/cmoit/info/pay_second?iccid=${cmoitInfo.iccid}&apitype=${apitype}&datetime=”+new Date().getTime();';
 		}
 	</script>
     <script src="${basePath}/mlbcss/js/jquery.min.js"></script>
