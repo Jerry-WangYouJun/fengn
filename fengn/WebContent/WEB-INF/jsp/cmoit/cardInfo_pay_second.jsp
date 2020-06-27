@@ -127,15 +127,15 @@
         </ul>
     </header>
     <!--包月套餐-->
-    <div id="list_month" class="tab-container container" style="padding-top: 0px; display: none; height: 75%;min-height: 500px;">
+    <div id="list_month" class="tab-container container" style="padding-top: 0px; display: none; height: 75%;">
         <div class="list-group month_list"></div>
     </div>
     <!--当月叠加套餐-->
-    <div id="list_monthAdd" class="tab-container container" style="padding-top: 0px; height: 75%;min-height: 500px;">
+    <div id="list_monthAdd" class="tab-container container" style="padding-top: 0px; height: 75%;">
         <div class="list-group month_addlist"></div>
     </div>
     <!--包年套餐-->
-    <div id="list_year" class="tab-container container" style="display: block; height: 75%;min-height: 500px;">
+    <div id="list_year" class="tab-container container" style="display: block; height: 75%;">
         <div class="list-group year_list">
        	<ul>
         <li class="list-group-item  active"  style="display: block;height: 65px">
@@ -154,7 +154,7 @@
         </div>
     </div>
     <!--无限流量套餐-->
-    <div id="list_infinite" class="tab-container container" style="padding-top: 0px; height: 75%;min-height: 300px;">
+    <div id="list_infinite" class="tab-container container" style="padding-top: 0px; height: 75%;">
         <div class="list-group infinite_list"></div>
     </div>
     <!--底部提交订单-->

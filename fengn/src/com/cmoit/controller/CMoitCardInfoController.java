@@ -26,8 +26,10 @@ import com.model.InfoVo;
 import com.model.Packages;
 import com.model.Pagination;
 import com.model.QueryData;
+import com.model.Rebate;
 import com.service.CardInfoService;
 import com.service.DataMoveService;
+import com.service.PackagesService;
 
 
 @Controller
@@ -45,6 +47,9 @@ public class CMoitCardInfoController {
 	    @Autowired
 		@Qualifier("dataMoveService")
 		private DataMoveService moveDataServices;
+	    
+		@Autowired
+		PackagesService packagesService;
 	    
 	    
 	    
@@ -95,6 +100,9 @@ public class CMoitCardInfoController {
 			 List<CmoitCard> list = ccaService.queryCardInfo(1, new Pagination(), qo , apitype);
 			 CmoitCard card =  list.get(0);
 			 Packages  pac = pacDao.selectByPrimaryKey(card.getPacid());
+			 String table  = ccaService.queryTableByICCID(iccid);
+			Rebate  rebate = packagesService.getRebateByIccid(iccid ,table);
+			pac.setRenew(rebate.getPacrenew());
 	    	ModelAndView mv = new ModelAndView("cmoit/cardInfo_pay_second");
 	    	mv.addObject("iccid", iccid);
 	    	mv.addObject("pac",pac);
